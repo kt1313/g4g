@@ -21,6 +21,7 @@ public class Player {
     private String firstName;
     private String lastName;
     private int age;
+    private String playersTeam;
     private PlayerPosition playerPosition;
 
     private boolean firstSquadPlayer;
@@ -37,81 +38,39 @@ public class Player {
     }
 
     public Player(String firstName,
-                  String lastName, int age,
+                  String lastName,
+                  int age,
+                  String playersTeam,
                   PlayerPosition playerPosition,
                   boolean firstSquadPlayer
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
+        this.playersTeam = playersTeam;
         this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
-    }
-
-    public Player(String firstName,
-                  String lastName,
-                  int  age,
-                  PlayerPosition playerPosition,
-                  boolean firstSquadPlayer,
-                  int attacking
-            , int ballControl
-            , int passing
-            , int tackling
-            , int goalkeeping
-
-    ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.playerPosition = playerPosition;
-        this.firstSquadPlayer = firstSquadPlayer;
-        this.attacking = attacking;
-        this.ballControl = ballControl;
-        this.passing = passing;
-        this.tackling = tackling;
-        this.goalkeeping = goalkeeping;
-    }
-
-    public Player(String firstName,
-                  String lastName,
-                  int age,
-                  PlayerPosition playerPosition,
-                  int attacking
-            , int ballControl
-            , int passing
-            , int tackling
-            , int goalkeeping
-
-    ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.playerPosition = playerPosition;
-        this.attacking = attacking;
-        this.ballControl = ballControl;
-        this.passing = passing;
-        this.tackling = tackling;
-        this.goalkeeping = goalkeeping;
-
     }
 
     public Player(long id,
                   String firstName,
                   String lastName,
                   int age,
-                  PlayerPosition playerPosition
-            , boolean firstSquadPlayer
-            , int attacking
-            , int ballControl
-            , int passing
-            , int tackling
-            , int goalkeeping
+                  String playersTeam,
+                  PlayerPosition playerPosition,
+                  boolean firstSquadPlayer,
+                  int attacking,
+                  int ballControl,
+                  int passing,
+                  int tackling,
+                  int goalkeeping
     ) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
+        this.playersTeam = playersTeam;
         this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
         this.attacking = attacking;
@@ -121,6 +80,7 @@ public class Player {
         this.goalkeeping = goalkeeping;
 
     }
+
     //ponizej dla PlayerServiceu generowanie randomowego grajka
     public Player(String firstName,
                   String lastName,
@@ -142,29 +102,8 @@ public class Player {
 
     }
 
-    public void update(String firstName,
-                       String lastName,
-                       int age,
-                       PlayerPosition playerPosition
-            , boolean firstSquadPlayer, int attacking
-            , int ballControl
-            , int passing
-            , int tackling
-            , int goalkeeping
-    ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.playerPosition = playerPosition;
-        this.firstSquadPlayer = firstSquadPlayer;
-        this.attacking = attacking;
-        this.ballControl = ballControl;
-        this.passing = passing;
-        this.tackling = tackling;
-        this.goalkeeping = goalkeeping;
-
+    public Player(String firstName, String lastName, int age, String playersTeam, PlayerPosition playerPosition, boolean firstSquadPlayer, int attacking, int ballControl, int passing, int tackling, int goalkeeping) {
     }
-
 
 
     public void setFirstSquadPlayer(boolean firstSquadPlayer) {
@@ -181,7 +120,8 @@ public class Player {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", birthDate=" + age +
+                ", age=" + age +
+                ", playersTeam=" + playersTeam +
                 ", position=" + playerPosition +
                 ", firstSquadPlayer=" + firstSquadPlayer +
                 ", attacking=" + attacking +

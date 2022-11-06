@@ -14,6 +14,7 @@ import java.time.LocalDate;
         private final String firstName;
         private final String lastName;
         private final int age;
+        private final String playersTeam;
         private final PlayerPosition playerPosition;
         private final boolean firstSquadPlayer=false;
         private final int attacking;

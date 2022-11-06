@@ -14,21 +14,6 @@
 <body>
 <p id="demo"></p>
 
-<!--<script>-->
-<!--    document.getElementById("demo").innerHTML = "My First JS";-->
-<!--</script>-->
-<!--<p id="demo2"></p>-->
-
-<!--<script>-->
-<!--    document.getElementById("demo2").innerHTML = "My First JavaScript";-->
-<!--    response.setIntHeader("players", 2);-->
-<!--DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");-->
-<!--Calendar cal = Calendar.getInstance();-->
-<!--out.println("-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;"+dateFormat.format(cal.getTime()));-->
-
-<!--</script>-->
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Goal4Goal - Manager Panel</a>
 
@@ -49,9 +34,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/match">Match</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/growStar">Grow a Star</a>
-            </li>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/growStar">Grow a Star</a>-->
+<!--            </li>-->
             <li class="nav-item">
                 <a class="nav-link"
                    href="/reservations/create/stepone">Hire player</a>
@@ -72,7 +57,7 @@
             <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Date of Birth</th>
+                <th>Age</th>
                 <th>Position</th>
                 <th>First 11</th>
                 <th></th>
@@ -83,7 +68,7 @@
             <tr th:each="player : ${players}">
                 <td th:text="${player.firstName}"/>
                 <td th:text="${player.lastName}"/>
-                <td th:text="${player.birthDate}"/>
+                <td th:text="${player.age}"/>
                 <td th:text="${player.position}"/>
                 <td>
                     <input type="checkbox" th:name="firstSquadPlayer"
