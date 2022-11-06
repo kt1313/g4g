@@ -1,6 +1,13 @@
 package pl.com.k1313.g4g.domain.player;
 
-import java.time.LocalDate;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @Setter(value = AccessLevel.NONE)
@@ -13,8 +20,8 @@ public class Player {
 
     private String firstName;
     private String lastName;
-    private LocalDate birthDate;
-    private Position position;
+    private int age;
+    private PlayerPosition playerPosition;
 
     private boolean firstSquadPlayer;
 
@@ -30,20 +37,21 @@ public class Player {
     }
 
     public Player(String firstName,
-                  String lastName, LocalDate birthDate,
-                  Position position,
+                  String lastName, int age,
+                  PlayerPosition playerPosition,
                   boolean firstSquadPlayer
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.position = position;
+        this.age = age;
+        this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
     }
 
     public Player(String firstName,
-                  String lastName, LocalDate birthDate,
-                  Position position,
+                  String lastName,
+                  int  age,
+                  PlayerPosition playerPosition,
                   boolean firstSquadPlayer,
                   int attacking
             , int ballControl
@@ -54,8 +62,8 @@ public class Player {
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.position = position;
+        this.age = age;
+        this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
         this.attacking = attacking;
         this.ballControl = ballControl;
@@ -65,8 +73,9 @@ public class Player {
     }
 
     public Player(String firstName,
-                  String lastName, LocalDate birthDate,
-                  Position position,
+                  String lastName,
+                  int age,
+                  PlayerPosition playerPosition,
                   int attacking
             , int ballControl
             , int passing
@@ -76,8 +85,8 @@ public class Player {
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.position = position;
+        this.age = age;
+        this.playerPosition = playerPosition;
         this.attacking = attacking;
         this.ballControl = ballControl;
         this.passing = passing;
@@ -88,9 +97,11 @@ public class Player {
 
     public Player(long id,
                   String firstName,
-                  String lastName, LocalDate birthDate,
-                  Position position
-            , boolean firstSquadPlayer, int attacking
+                  String lastName,
+                  int age,
+                  PlayerPosition playerPosition
+            , boolean firstSquadPlayer
+            , int attacking
             , int ballControl
             , int passing
             , int tackling
@@ -100,8 +111,8 @@ public class Player {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.position = position;
+        this.age = age;
+        this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
         this.attacking = attacking;
         this.ballControl = ballControl;
@@ -112,7 +123,8 @@ public class Player {
     }
     //ponizej dla PlayerServiceu generowanie randomowego grajka
     public Player(String firstName,
-                  String lastName, LocalDate birthDate
+                  String lastName,
+                  int age
             , int attacking
             , int ballControl
             , int passing
@@ -121,7 +133,7 @@ public class Player {
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
+        this.age = age;
         this.attacking = attacking;
         this.ballControl = ballControl;
         this.passing = passing;
@@ -131,8 +143,9 @@ public class Player {
     }
 
     public void update(String firstName,
-                       String lastName, LocalDate birthDate,
-                       Position position
+                       String lastName,
+                       int age,
+                       PlayerPosition playerPosition
             , boolean firstSquadPlayer, int attacking
             , int ballControl
             , int passing
@@ -141,8 +154,8 @@ public class Player {
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.position = position;
+        this.age = age;
+        this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
         this.attacking = attacking;
         this.ballControl = ballControl;
@@ -158,8 +171,8 @@ public class Player {
         this.firstSquadPlayer = firstSquadPlayer;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPlayerPosition(PlayerPosition playerPosition) {
+        this.playerPosition = playerPosition;
     }
 
     @Override
@@ -168,8 +181,8 @@ public class Player {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", birthDate=" + birthDate +
-                ", position=" + position +
+                ", birthDate=" + age +
+                ", position=" + playerPosition +
                 ", firstSquadPlayer=" + firstSquadPlayer +
                 ", attacking=" + attacking +
                 ", ballControl=" + ballControl +
