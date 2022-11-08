@@ -17,13 +17,20 @@ public class AppUserService {
         this.repository = repository;
     }
 
-    public void AppUserRegistration(long appUserId, String username, String password, String email) {
-        AppUser newUser = new AppUser(appUserId, username, password, email);
-        this.repository.save(newUser);
-        AppUserRegistrationEvent event=new AppUserRegistrationEvent(username, email);
+//    public void AppUserRegistration(long appUserId, String username, String password, String email) {
+//        AppUser newUser = new AppUser(appUserId, username, password, email);
+//        this.repository.save(newUser);
+//        AppUserRegistrationEvent event=new AppUserRegistrationEvent(username, email);
+//        publisher.publishEvent(event);
+//
+//    }
+
+
+    public void createTempAppUser(String appusername, String email, String password) {
+        AppUser tmpUser = new AppUser(appusername, email, password);
+        this.repository.save(tmpUser);
+         AppUserRegistrationEvent event = new AppUserRegistrationEvent(appusername, email,password);
         publisher.publishEvent(event);
-
+        System.out.println("UDALO SIE ZAREJESTROWAC UZYTKOWNIKA");
     }
-
-
 }

@@ -9,12 +9,14 @@ import java.time.LocalDateTime;
 @Data
 public class AppUserRegistrationEvent {
     public final LocalDateTime registrationTime;
-    public final String userName;
-    public final String userEmail;
+    public final String appUserName;
+    public final String appUserEmail;
+    public final String appUserPassword;
 
-    public AppUserRegistrationEvent(String userName, String userEmail){
+    public AppUserRegistrationEvent(String userName, String userEmail, String appUserPassword){
         this.registrationTime=LocalDateTime.now();
-        this.userName=userName;
-        this.userEmail=userEmail;
+        this.appUserName=userName;
+        this.appUserEmail=userEmail;
+        this.appUserPassword=appUserPassword;
     }
 }

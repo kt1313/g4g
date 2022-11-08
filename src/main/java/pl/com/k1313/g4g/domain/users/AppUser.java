@@ -16,15 +16,21 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long appUserId;
 
-    private String userName;
-    private String userPassword;
+    private String appUserName;
+    private String appUserPassword;
     private String userEmail;
 
     AppUser(){}
-    AppUser (long appUserId, String userName, String userPassword, String userEmail){
+    AppUser (long appUserId, String appUserName, String userPassword, String userEmail){
         this.appUserId=appUserId;
-        this.userName=userName;
-        this.userPassword=userPassword;
+        this.appUserName = appUserName;
+        this.appUserPassword=userPassword;
         this.userEmail=userEmail;
+    }
+
+    public AppUser(String appusername, String userEmail, String password) {
+        this.appUserName=appusername;
+        this.userEmail=userEmail;
+        this.appUserPassword=password;
     }
 }
