@@ -1,9 +1,9 @@
-package pl.com.k1313.g4g.domain.users;
+package pl.com.k1313.g4g.domain.appuser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import pl.com.k1313.g4g.domain.users.events.AppUserRegistrationEvent;
+import pl.com.k1313.g4g.domain.appuser.events.AppUserRegistrationEvent;
 
 @Service
 public class AppUserService {
@@ -32,5 +32,6 @@ public class AppUserService {
          AppUserRegistrationEvent event = new AppUserRegistrationEvent(appusername, email,password);
         publisher.publishEvent(event);
         System.out.println("UDALO SIE ZAREJESTROWAC UZYTKOWNIKA");
+        System.out.println(tmpUser);
     }
 }

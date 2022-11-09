@@ -1,4 +1,4 @@
-package pl.com.k1313.g4g.domain.users;
+package pl.com.k1313.g4g.domain.appuser;
 
 
 import lombok.AccessLevel;

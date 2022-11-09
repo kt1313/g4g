@@ -2,7 +2,7 @@ package pl.com.k1313.g4g.domain.reports;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import pl.com.k1313.g4g.domain.users.events.AppUserRegistrationEvent;
+import pl.com.k1313.g4g.domain.appuser.events.AppUserRegistrationEvent;
 
 @Component
 public class HandleEvents {

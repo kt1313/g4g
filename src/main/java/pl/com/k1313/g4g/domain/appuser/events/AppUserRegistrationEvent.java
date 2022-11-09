@@ -1,9 +1,8 @@
-package pl.com.k1313.g4g.domain.users.events;
+package pl.com.k1313.g4g.domain.appuser.events;
 
 
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
