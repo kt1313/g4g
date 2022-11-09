@@ -20,7 +20,7 @@ public class AppUser {
     private String appUserPassword;
     private String userEmail;
 
-    AppUser(){}
+
     AppUser (long appUserId, String appUserName, String userPassword, String userEmail){
         this.appUserId=appUserId;
         this.appUserName = appUserName;
@@ -32,5 +32,9 @@ public class AppUser {
         this.appUserName=appusername;
         this.userEmail=userEmail;
         this.appUserPassword=password;
+    }
+
+    public AppUser() {
+
     }
 }

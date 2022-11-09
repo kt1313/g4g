@@ -6,20 +6,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.com.k1313.g4g.domain.appuser.AppUser;
+import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.appuser.AppUserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/appuser")
 public class AppUserController {
 
     private AppUserService appUserService;
+    private AppUserRepository repository;
 
     @Autowired
-    public AppUserController(AppUserService appUserService) {
+    public AppUserController(AppUserService appUserService, AppUserRepository repository) {
         this.appUserService = appUserService;
+        this.repository = repository;
     }
 
     @GetMapping("/registration/stepone")
@@ -34,12 +39,19 @@ public class AppUserController {
                                             String password_confirm,
                                             Model model) {
         List<String> errors = new ArrayList<>();
+        boolean userexists = this.repository.findByAppUserName(appusername).isPresent();
+        if (userexists) {
+            errors.add("Username already exists");
+        }
+
         if (!password.equals(password_confirm)) {
             errors.add("Check Password and Password_Confirm typing");
         }
 
         if (errors.isEmpty()) {
             this.appUserService.createTempAppUser(appusername, email, password);
+            long appuserid = this.repository.findByAppUserName(appusername).get().getAppUserId();
+            model.addAttribute("appuserid", appuserid);
             return "registrationConfirmed";
         } else {
             model.addAttribute("errors", errors);
@@ -47,4 +59,28 @@ public class AppUserController {
         }
     }
 
+    @GetMapping("/logged")
+    public String loginConfirmed(long appuserid, String appusername, String password, Model model) {
+
+
+        //skonczylem tutaj
+        //przesylam appuserid jako hidden
+
+
+        List<String> errors = new ArrayList<>();
+        Optional<AppUser> appUser = this.repository.findById(appuserid);
+
+        if (!appUser.get().getAppUserName().equals(appusername) || !appUser.get().getAppUserPassword().equals(password)) {
+            errors.add("Wrong password or username");
+        }
+        if (errors.isEmpty()) {
+            boolean loginsuccess = true;
+            model.addAttribute("appusername", appusername);
+            model.addAttribute("loginsuccess", loginsuccess);
+            return "team";
+        } else {
+            model.addAttribute("errors", errors);
+            return "login";
+        }
+    }
 }
