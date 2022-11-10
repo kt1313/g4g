@@ -46,19 +46,20 @@
                     <form role="form" th:action="@{/logged}" method="post">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Username" name="username" type="text" autofocus="" required>
+                                <input class="form-control" placeholder="Username"
+                                       name="username" type="text" autofocus="" required>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Password" name="password" type="password" value="" required>
+                                <input class="form-control" placeholder="Password"
+                                       name="password" type="password" value="" required>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                 </label>
                             </div>
-                            <input type="hidden" name="roomId" id="roomId" th:value="${room.id}" />
 
-                            <input type="hidden" name="appuserid" id="appuserid" th:value="${appusername.id}">
+<!--                            <input type="hidden" name="appuserid" id="appuserid" th:value="${appuserid}">-->
                             <!-- Change this to a button or input when using this as a form -->
                             <a href="/team" class="btn btn-sm btn-success">Login</a>
                             <a class="nav-link" href="/team">Login</a>

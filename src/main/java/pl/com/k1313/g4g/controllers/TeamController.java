@@ -31,4 +31,7 @@ public class TeamController {
         return "registrationStepOne";
     }
 
+    @GetMapping
+    public String teamhomepage(){return "appuser";}
+
 }

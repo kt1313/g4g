@@ -39,8 +39,8 @@ public class AppUserController {
                                             String password_confirm,
                                             Model model) {
         List<String> errors = new ArrayList<>();
-        boolean userexists = this.repository.findByAppUserName(appusername).isPresent();
-        if (userexists) {
+        boolean usernameexists = this.repository.findByAppUserName(appusername).isPresent();
+        if (usernameexists) {
             errors.add("Username already exists");
         }
 
@@ -51,6 +51,7 @@ public class AppUserController {
         if (errors.isEmpty()) {
             this.appUserService.createTempAppUser(appusername, email, password);
             long appuserid = this.repository.findByAppUserName(appusername).get().getAppUserId();
+            System.out.println("appuserid= "+appuserid);
             model.addAttribute("appuserid", appuserid);
             return "registrationConfirmed";
         } else {
@@ -60,24 +61,19 @@ public class AppUserController {
     }
 
     @GetMapping("/logged")
-    public String loginConfirmed(long appuserid, String appusername, String password, Model model) {
-
-
-        //skonczylem tutaj
-        //przesylam appuserid jako hidden
-
+    public String loginConfirmed( String appusername, String password, Model model) {
 
         List<String> errors = new ArrayList<>();
-        Optional<AppUser> appUser = this.repository.findById(appuserid);
+        Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
 
-        if (!appUser.get().getAppUserName().equals(appusername) || !appUser.get().getAppUserPassword().equals(password)) {
+        if (appUser.isEmpty() || !appUser.get().getAppUserPassword().equals(password)) {
             errors.add("Wrong password or username");
         }
         if (errors.isEmpty()) {
             boolean loginsuccess = true;
             model.addAttribute("appusername", appusername);
             model.addAttribute("loginsuccess", loginsuccess);
-            return "team";
+            return "appuser";
         } else {
             model.addAttribute("errors", errors);
             return "login";
