@@ -20,12 +20,23 @@ public class AppUser {
     private String appUserPassword;
     private String userEmail;
 
+    private boolean registered=false;
+
+
+
 
     AppUser (long appUserId, String appUserName, String userPassword, String userEmail){
         this.appUserId=appUserId;
         this.appUserName = appUserName;
         this.appUserPassword=userPassword;
         this.userEmail=userEmail;
+    }
+    AppUser (long appUserId, String appUserName, String userPassword, String userEmail, boolean registered){
+        this.appUserId=appUserId;
+        this.appUserName = appUserName;
+        this.appUserPassword=userPassword;
+        this.userEmail=userEmail;
+        this.registered=registered;
     }
 
     public AppUser(String appusername, String userEmail, String password) {
@@ -36,5 +47,9 @@ public class AppUser {
 
     public AppUser() {
 
+    }
+
+    public void confirmRegistry(){
+         this.registered=true;
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.appuser.events.AppUserRegistrationEvent;
 
+import java.util.Optional;
+
 @Service
 public class AppUserService {
 
@@ -29,9 +31,21 @@ public class AppUserService {
     public void createTempAppUser(String appusername, String email, String password) {
         AppUser tmpUser = new AppUser(appusername, email, password);
         this.repository.save(tmpUser);
-         AppUserRegistrationEvent event = new AppUserRegistrationEvent(appusername, email,password);
+        AppUserRegistrationEvent event = new AppUserRegistrationEvent(this, appusername, email, password);
         publisher.publishEvent(event);
         System.out.println("UDALO SIE ZAREJESTROWAC UZYTKOWNIKA");
         System.out.println(tmpUser);
+    }
+
+    public boolean confirmRegistration(String appUserName) {
+
+        Optional<AppUser> byAppUserName = this.repository.findByAppUserName(appUserName);
+
+        if (byAppUserName.isPresent()) {
+            byAppUserName.get().confirmRegistry();
+            return true;
+        } else {
+            return false;
+        }
     }
 }

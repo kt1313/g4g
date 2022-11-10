@@ -63,13 +63,28 @@
                     <form role="form">
                         <fieldset>
                             <div class="form-group">
-                                <div class="text-center">
-                                    <h2 class="mb-3">Thank you for your registry!</h2>
-                                    <h2 class="mb-3">We sent you confirmation email.</h2>
-                                    <br>
+
+                                <div th:if="${success}">
                                     <div class="text-center">
-                                        <div class="h2">
-                                            <a class="nav-link" href="/login">Login!</a>
+                                        <h2 class="mb-3">Thank you for your registry!</h2>
+                                        <h2 class="mb-3">We sent you confirmation email.</h2>
+                                        <br>
+                                        <div class="text-center">
+                                            <div class="h2">
+                                                <a class="nav-link" href="/login">Login!</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:if="!${success}">
+                                    <div class="text-center">
+                                        <h2 class="mb-3">We're sorry!</h2>
+                                        <h2 class="mb-3">Registration failed. Try again!</h2>
+                                        <br>
+                                        <div class="text-center">
+                                            <div class="h2">
+                                                <a class="nav-link" href="/appuser/registration/stepone">Register!</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

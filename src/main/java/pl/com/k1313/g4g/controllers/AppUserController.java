@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.appuser.AppUserService;
 
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,17 +53,28 @@ public class AppUserController {
         if (errors.isEmpty()) {
             this.appUserService.createTempAppUser(appusername, email, password);
             long appuserid = this.repository.findByAppUserName(appusername).get().getAppUserId();
-            System.out.println("appuserid= "+appuserid);
+            boolean success = this.appUserService.confirmRegistration(appusername);
+            System.out.println("appuserid= " + appuserid);
             model.addAttribute("appuserid", appuserid);
+            model.addAttribute("success", success);
             return "registrationConfirmed";
         } else {
             model.addAttribute("errors", errors);
             return "registrationStepOne";
         }
     }
+//do wykorzystania kiedy user jest zalogowany(??)
+    @GetMapping("/registration/confirmed/{appUserName}")
+    public String confirmRegistration(@PathVariable String appUserName, Model model) {
 
-    @GetMapping("/logged")
-    public String loginConfirmed( String appusername, String password, Model model) {
+        boolean success = this.appUserService.confirmRegistration(appUserName);
+        model.addAttribute("success", success);
+        model.addAttribute("appUserId", this.repository.findByAppUserName(appUserName).get().getAppUserId());
+        return "/registrationConfirmed";
+    }
+
+    @PostMapping("/loggedin")
+    public String loginConfirmed(String appusername, String password, Model model) {
 
         List<String> errors = new ArrayList<>();
         Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
