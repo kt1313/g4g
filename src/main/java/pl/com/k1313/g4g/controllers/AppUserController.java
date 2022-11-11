@@ -29,6 +29,22 @@ public class AppUserController {
         this.repository = repository;
     }
 
+    @PostMapping
+    public String appUserpage(String appusername, String password, Model model) {
+
+        List<String> errors = new ArrayList<>();
+        Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
+        if (!appUser.get().getAppUserPassword().equals(password)) {
+            errors.add("Check username or passwword");
+        }
+        if (errors.isEmpty()) {
+            String clubname = this.repository.findByAppUserName(appusername).get().getClubname();
+            model.addAttribute("appusername", appusername);
+            model.addAttribute("clubname", clubname);
+            return "appuser";
+        }else return "login";
+    }
+
     @GetMapping("/registration/stepone")
     public String beginRegistrationWizard() {
         return "registrationStepOne";
@@ -36,6 +52,7 @@ public class AppUserController {
 
     @PostMapping("/registration/steptwo")
     public String registrationWizardStepTwo(String appusername,
+                                            String clubname,
                                             String email,
                                             String password,
                                             String password_confirm,
@@ -51,11 +68,15 @@ public class AppUserController {
         }
 
         if (errors.isEmpty()) {
-            this.appUserService.createTempAppUser(appusername, email, password);
+            this.appUserService.createTempAppUser(appusername, clubname, email, password);
+            Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
             long appuserid = this.repository.findByAppUserName(appusername).get().getAppUserId();
+            String appuserclubname = this.repository.findByAppUserName(appusername).get().getClubname();
             boolean success = this.appUserService.confirmRegistration(appusername);
-            System.out.println("appuserid= " + appuserid);
+
+            model.addAttribute("appuser", appUser);
             model.addAttribute("appuserid", appuserid);
+            model.addAttribute("clubname", appuserclubname);
             model.addAttribute("success", success);
             return "registrationConfirmed";
         } else {
@@ -63,7 +84,8 @@ public class AppUserController {
             return "registrationStepOne";
         }
     }
-//do wykorzystania kiedy user jest zalogowany(??)
+
+    //do wykorzystania kiedy user jest zalogowany(??)
     @GetMapping("/registration/confirmed/{appUserName}")
     public String confirmRegistration(@PathVariable String appUserName, Model model) {
 
@@ -73,18 +95,19 @@ public class AppUserController {
         return "/registrationConfirmed";
     }
 
-    @PostMapping("/loggedin")
+    @PostMapping("/login")
     public String loginConfirmed(String appusername, String password, Model model) {
 
         List<String> errors = new ArrayList<>();
         Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
-
+        String clubname = appUser.get().getClubname();
         if (appUser.isEmpty() || !appUser.get().getAppUserPassword().equals(password)) {
             errors.add("Wrong password or username");
         }
         if (errors.isEmpty()) {
             boolean loginsuccess = true;
             model.addAttribute("appusername", appusername);
+            model.addAttribute("clubname", clubname);
             model.addAttribute("loginsuccess", loginsuccess);
             return "appuser";
         } else {

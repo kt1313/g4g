@@ -10,13 +10,15 @@ import java.time.LocalDateTime;
 public class AppUserRegistrationEvent extends ApplicationEvent {
     public final LocalDateTime registrationTime;
     public final String appUserName;
+    public final String clubname;
     public final String appUserEmail;
     public final String appUserPassword;
 
-    public AppUserRegistrationEvent(Object context,String userName, String userEmail, String appUserPassword){
+    public AppUserRegistrationEvent(Object context,String userName, String clubname, String userEmail, String appUserPassword){
         super(context);
         this.registrationTime=LocalDateTime.now();
         this.appUserName=userName;
+        this.clubname=clubname;
         this.appUserEmail=userEmail;
         this.appUserPassword=appUserPassword;
     }

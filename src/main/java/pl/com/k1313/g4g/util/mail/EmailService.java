@@ -26,7 +26,7 @@ public class EmailService {
         this.sender = sender;
     }
 
-    public void sendRegistryConfirmationEmail(String appUserEmail, String appUserName, String appUserPassword) {
+    public void sendRegistryConfirmationEmail(String appUserEmail, String appUserName, String clubname, String appUserPassword) {
 
         System.out.println(protocol+" "+ domain+" "+ port+" "+ confirmationEndpoint);
         String endpoint = String.format("%s://%s:%s/%s/%s", protocol, domain, port, confirmationEndpoint, appUserName);
@@ -34,7 +34,7 @@ public class EmailService {
         email.setTo(appUserEmail);
         email.setFrom("k1313coding@gmail.com");
         email.setSubject("G4G - registration confirmed");
-        email.setText("Thank you for joining us! ");
+        email.setText("Thank you for joining us!" +appUserName+" \n Your "+clubname+" is waiting for you.");
         System.out.println("To login click: " + endpoint);
         this.sender.send(email);
 

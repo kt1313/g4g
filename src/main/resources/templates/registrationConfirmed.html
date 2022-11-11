@@ -60,35 +60,37 @@
             <div class="modal-content">
 
                 <div class="panel-body">
-                    <form role="form">
+
+                    <form role="form" th:action="@{/login}" method="get">
                         <fieldset>
                             <div class="form-group">
-
-                                <div th:if="${success}">
+<!--                                <div th:if="${success}">-->
                                     <div class="text-center">
                                         <h2 class="mb-3">Thank you for your registry!</h2>
                                         <h2 class="mb-3">We sent you confirmation email.</h2>
                                         <br>
-                                        <div class="text-center">
-                                            <div class="h2">
-                                                <a class="nav-link" href="/login">Login!</a>
+<!--                                        <input type="hidden" name="clubname" id="clubname">-->
+                                        <div class="control-group">
+                                            <!-- Button -->
+                                            <div class="controls">
+                                                <button class="btn btn-success">Login!</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div th:if="!${success}">
-                                    <div class="text-center">
-                                        <h2 class="mb-3">We're sorry!</h2>
-                                        <h2 class="mb-3">Registration failed. Try again!</h2>
-                                        <br>
-                                        <div class="text-center">
-                                            <div class="h2">
-                                                <a class="nav-link" href="/appuser/registration/stepone">Register!</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<!--                                <div th:if="!${success}">-->
+<!--                                    <div class="text-center">-->
+<!--                                        <h2 class="mb-3">We're sorry!</h2>-->
+<!--                                        <h2 class="mb-3">Registration failed. Try again!</h2>-->
+<!--                                        <br>-->
+<!--                                        <div class="text-center">-->
+<!--                                            <div class="h2">-->
+<!--                                                <a class="nav-link" href="/appuser/registration/stepone">Register!</a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </fieldset>
                     </form>
                 </div>

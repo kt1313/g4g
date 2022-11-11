@@ -28,10 +28,10 @@ public class AppUserService {
 //    }
 
 
-    public void createTempAppUser(String appusername, String email, String password) {
-        AppUser tmpUser = new AppUser(appusername, email, password);
+    public void createTempAppUser(String appusername, String clubname, String email, String password) {
+        AppUser tmpUser = new AppUser(appusername, clubname, email, password);
         this.repository.save(tmpUser);
-        AppUserRegistrationEvent event = new AppUserRegistrationEvent(this, appusername, email, password);
+        AppUserRegistrationEvent event = new AppUserRegistrationEvent(this, appusername, clubname, email, password);
         publisher.publishEvent(event);
         System.out.println("UDALO SIE ZAREJESTROWAC UZYTKOWNIKA");
         System.out.println(tmpUser);

@@ -18,7 +18,8 @@ public class HandleMailAppUserRegistrationEvent implements ApplicationListener<A
     @Override
     public void onApplicationEvent(AppUserRegistrationEvent event) {
         System.out.println("EMAIL- handle event by implementing AppListener");
-        this.emailService.sendRegistryConfirmationEmail(event.appUserEmail, event.appUserName, event.appUserPassword);
+        this.emailService.sendRegistryConfirmationEmail(
+                event.appUserEmail, event.appUserName, event.clubname, event.appUserPassword);
     }
 }
 

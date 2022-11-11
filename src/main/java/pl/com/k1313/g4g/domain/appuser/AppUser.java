@@ -17,6 +17,7 @@ public class AppUser {
     private long appUserId;
 
     private String appUserName;
+    private String clubname;
     private String appUserPassword;
     private String userEmail;
 
@@ -39,8 +40,9 @@ public class AppUser {
         this.registered=registered;
     }
 
-    public AppUser(String appusername, String userEmail, String password) {
+    public AppUser(String appusername, String clubname, String userEmail, String password) {
         this.appUserName=appusername;
+        this.clubname=clubname;
         this.userEmail=userEmail;
         this.appUserPassword=password;
     }

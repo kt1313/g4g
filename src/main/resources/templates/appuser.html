@@ -70,7 +70,7 @@
                             <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
                                  class="rounded-circle" width="150">
                             <div class="mt-3">
-                                <h4>John Doe</h4>
+                                <h4><span th:text="${appusername}">appusername</span></h4>
                                 <p class="text-secondary mb-1">Club Head Coach</p>
                                 <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                                 <button class="btn btn-primary">Follow</button>
@@ -92,7 +92,7 @@
                                 </svg>
                                 Website
                             </h6>
-                            <span class="text-secondary">https://bootdey.com</span>
+                            <span class="text-secondary">https://g4g.com</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">
@@ -103,7 +103,7 @@
                                 </svg>
                                 Github
                             </h6>
-                            <span class="text-secondary">bootdey</span>
+                            <span class="text-secondary">g4g</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">
@@ -114,7 +114,7 @@
                                 </svg>
                                 Twitter
                             </h6>
-                            <span class="text-secondary">@bootdey</span>
+                            <span class="text-secondary">@g4g</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">
@@ -128,7 +128,7 @@
                                 </svg>
                                 Instagram
                             </h6>
-                            <span class="text-secondary">bootdey</span>
+                            <span class="text-secondary">g4g</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">
@@ -140,7 +140,7 @@
                                 </svg>
                                 Facebook
                             </h6>
-                            <span class="text-secondary">bootdey</span>
+                            <span class="text-secondary">g4g</span>
                         </li>
                     </ul>
                 </div>
@@ -153,16 +153,16 @@
                                 <h6 class="mb-0">User Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                John Doe
+                                <h2><span th:text="${appusername}">appusername</span></h2>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Team Name</h6>
+                                <h6 class="mb-0">Club Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                FC Crack Team
+                                <h2><span th:text="${clubname}">clubname</span></h2>
                             </div>
                         </div>
                         <hr>
