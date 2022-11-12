@@ -18,7 +18,7 @@ public class PlayerService {
     public Player autoCreatePlayer() {
         String firstName = randomFirstName();
         String lastName = randomLastName();
-        //wiek zalezny bedzie czy Mlodzik czy nie. ustaw w metodzie randomBirthDate
+        //wiek zalezny bedzie czy Mlodzik czy nie. ustaw w metodzie randomAge
         int age = randomAge();
         int attacking = randomFrom100();
         int ballControl = randomFrom100();
@@ -64,13 +64,12 @@ public class PlayerService {
 
     public int randomAge() {
         Random r = new Random();
-        int result = r.nextInt(30);
+        int result = r.nextInt(20)+19;
         return result;
     }
     //tworzy goalkeepera - inny rozdzaj zawodnika
     public Player autoCreateGoalkeeper() {
         Player newPlayer=autoCreatePlayer();
-        int newGoalkeeping=newPlayer.getGoalkeeping()*2;
         Player newGoalkeeper=new Player(
                 newPlayer.getFirstName(), newPlayer.getLastName(),
                 newPlayer.getAge(),newPlayer.getAttacking()/2,

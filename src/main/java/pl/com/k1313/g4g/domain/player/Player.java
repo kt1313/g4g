@@ -3,11 +3,9 @@ package pl.com.k1313.g4g.domain.player;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import pl.com.k1313.g4g.domain.club.Club;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Setter(value = AccessLevel.NONE)
@@ -21,7 +19,8 @@ public class Player {
     private String firstName;
     private String lastName;
     private int age;
-    private String playersTeam;
+    @OneToOne
+    private Club playerClub;
     private PlayerPosition playerPosition;
 
     private boolean firstSquadPlayer;
@@ -40,14 +39,14 @@ public class Player {
     public Player(String firstName,
                   String lastName,
                   int age,
-                  String playersTeam,
+                  Club playerClub,
                   PlayerPosition playerPosition,
                   boolean firstSquadPlayer
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.playersTeam = playersTeam;
+        this.playerClub = playerClub;
         this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
     }
@@ -56,7 +55,7 @@ public class Player {
                   String firstName,
                   String lastName,
                   int age,
-                  String playersTeam,
+                  Club playerClub,
                   PlayerPosition playerPosition,
                   boolean firstSquadPlayer,
                   int attacking,
@@ -70,7 +69,7 @@ public class Player {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.playersTeam = playersTeam;
+        this.playerClub = playerClub;
         this.playerPosition = playerPosition;
         this.firstSquadPlayer = firstSquadPlayer;
         this.attacking = attacking;
@@ -102,7 +101,16 @@ public class Player {
 
     }
 
-    public Player(String firstName, String lastName, int age, String playersTeam, PlayerPosition playerPosition, boolean firstSquadPlayer, int attacking, int ballControl, int passing, int tackling, int goalkeeping) {
+    public Player(String firstName,
+                  String lastName,
+                  int age, String playerClub,
+                  PlayerPosition playerPosition,
+                  boolean firstSquadPlayer,
+                  int attacking,
+                  int ballControl,
+                  int passing,
+                  int tackling,
+                  int goalkeeping) {
     }
 
 
@@ -114,6 +122,10 @@ public class Player {
         this.playerPosition = playerPosition;
     }
 
+    public void setPlayerClub(Club playerClub) {
+        this.playerClub = playerClub;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
@@ -121,7 +133,7 @@ public class Player {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
-                ", playersTeam=" + playersTeam +
+                ", playerClub=" + playerClub +
                 ", position=" + playerPosition +
                 ", firstSquadPlayer=" + firstSquadPlayer +
                 ", attacking=" + attacking +

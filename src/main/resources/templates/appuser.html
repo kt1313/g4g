@@ -157,14 +157,15 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Club Name</h6>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Club Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
+                                            th:text="${clubname}">clubname</span></a></h2>
+                                </div>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <h2><span th:text="${clubname}">clubname</span></h2>
-                            </div>
-                        </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
@@ -187,7 +188,7 @@
                                 <h6 class="mb-0">Youth Squad</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <a class="nav-link" href="/team/youth">Youth Stars - not active</a>                            </div>
+                                <a class="nav-link" href="/team/youth">Youth Stars - not active</a></div>
                         </div>
                         <hr>
                         <div class="row">

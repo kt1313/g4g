@@ -6,25 +6,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
-import pl.com.k1313.g4g.domain.team.TeamRepository;
-import pl.com.k1313.g4g.domain.team.TeamService;
+import pl.com.k1313.g4g.domain.club.ClubRepository;
+import pl.com.k1313.g4g.domain.club.ClubService;
 
 @Controller
 @RequestMapping("/team")
 public class TeamController {
     private PlayerRepository playerRepository;
-    private TeamRepository teamRepository;
+    private ClubRepository clubRepository;
     private PlayerService playerService;
-    private TeamService teamService;
+    private ClubService clubService;
 
     @Autowired
     public TeamController(
             PlayerRepository playerRepository, PlayerService playerService,
-            TeamRepository teamRepository, TeamService teamService) {
+            ClubRepository clubRepository, ClubService clubService) {
         this.playerRepository = playerRepository;
         this.playerService = playerService;
-        this.teamRepository = teamRepository;
-        this.teamService = teamService;
+        this.clubRepository = clubRepository;
+        this.clubService = clubService;
     }
     @GetMapping("/takeover")
     public String teakeoverTeam() {

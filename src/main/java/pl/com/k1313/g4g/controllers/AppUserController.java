@@ -3,13 +3,14 @@ package pl.com.k1313.g4g.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.appuser.AppUserService;
+import pl.com.k1313.g4g.domain.club.Club;
+import pl.com.k1313.g4g.domain.club.ClubRepository;
+import pl.com.k1313.g4g.domain.club.ClubService;
 
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
@@ -22,11 +23,16 @@ public class AppUserController {
 
     private AppUserService appUserService;
     private AppUserRepository repository;
+    private ClubRepository clubRepository;
+    private ClubService clubService;
 
     @Autowired
-    public AppUserController(AppUserService appUserService, AppUserRepository repository) {
+    public AppUserController(AppUserService appUserService, AppUserRepository repository,
+                             ClubRepository clubRepository, ClubService clubService) {
         this.appUserService = appUserService;
         this.repository = repository;
+        this.clubRepository = clubRepository;
+        this.clubService = clubService;
     }
 
     @PostMapping
@@ -39,10 +45,13 @@ public class AppUserController {
         }
         if (errors.isEmpty()) {
             String clubname = this.repository.findByAppUserName(appusername).get().getClubname();
+            long clubId = this.clubRepository.findByClubName(clubname).get().getClubId();
+            Optional<Club> club = this.clubRepository.findByClubName(clubname);
             model.addAttribute("appusername", appusername);
             model.addAttribute("clubname", clubname);
+            model.addAttribute("clubId", clubId);
             return "appuser";
-        }else return "login";
+        } else return "login";
     }
 
     @GetMapping("/registration/stepone")
@@ -68,7 +77,7 @@ public class AppUserController {
         }
 
         if (errors.isEmpty()) {
-            this.appUserService.createTempAppUser(appusername, clubname, email, password);
+            this.appUserService.createAppUser(appusername, clubname, email, password);
             Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
             long appuserid = this.repository.findByAppUserName(appusername).get().getAppUserId();
             String appuserclubname = this.repository.findByAppUserName(appusername).get().getClubname();
@@ -115,4 +124,21 @@ public class AppUserController {
             return "login";
         }
     }
+
+    @GetMapping("/club/{clubId}")
+    public String clubPage(@PathVariable long clubId, Model model) {
+
+        Optional<Club> byId = this.clubRepository.findById(clubId);
+        String clubname = byId.get().getClubName();
+        String appUser = byId.get().getAppUser().getAppUserName();
+        model.addAttribute("clubname", clubname);
+        model.addAttribute("club", byId);
+        model.addAttribute("appuser", appUser);
+
+        return "club";
+
+    }
+
+
 }
+

@@ -1,14 +1,26 @@
-package pl.com.k1313.g4g.domain.team;
+package pl.com.k1313.g4g.domain.club;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.player.Player;
-import pl.com.k1313.g4g.domain.player.PlayerPosition;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
-public class TeamService {
+public class ClubService {
+    public ClubService(ClubRepository clubRepository) {
+        this.clubRepository = clubRepository;
+    }
+
+    private ClubRepository clubRepository;
+//
+    public Club clubCreation(AppUser appUser, String clubname){
+        Club newClub=new Club(appUser, clubname);
+        this.clubRepository.save(newClub);
+        return newClub;
+    }
     public String[][] setUpFirst11(List<Player> firstsquadplayers) {
             String[][] first11Table = new String[5][4];
             first11Table[0][0] = "0";

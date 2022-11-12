@@ -8,7 +8,7 @@ import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
 import pl.com.k1313.g4g.domain.player.dto.PlayerUpdateDTO;
-import pl.com.k1313.g4g.domain.team.TeamService;
+import pl.com.k1313.g4g.domain.club.ClubService;
 
 import java.util.List;
 
@@ -17,14 +17,14 @@ import java.util.List;
 public class PlayerController {
 
     private PlayerService playerService;
-    private TeamService teamService;
+    private ClubService clubService;
 
     private PlayerRepository playerRepository;
 
     @Autowired
     public PlayerController(PlayerRepository playerRepository,
                             PlayerService playerService,
-                            TeamService teamService
+                            ClubService clubService
                             ) {
         this.playerRepository = playerRepository;
         this.playerService = playerService;
@@ -108,7 +108,7 @@ public class PlayerController {
             firstsquadplayers = this.playerService.createFirst11(ids);
 
             model.addAttribute("firstsquadplayers", firstsquadplayers);
-            String[][] first11FinalTable = this.teamService.setUpFirst11(firstsquadplayers);
+            String[][] first11FinalTable = this.clubService.setUpFirst11(firstsquadplayers);
             model.addAttribute("first11FinalTable", first11FinalTable);
 
             return "firstsquadplayers";
