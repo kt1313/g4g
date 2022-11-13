@@ -74,7 +74,7 @@ public class PlayerService {
                 newPlayer.getFirstName(), newPlayer.getLastName(),
                 newPlayer.getAge(),newPlayer.getAttacking()/2,
                 newPlayer.getBallControl()/2, newPlayer.getPassing()/2,
-                newPlayer.getTackling()/2,
+                newPlayer.getInterception()/2,
                 //potem sprawdz bo nie moze byc wiecej niz 100
                 newPlayer.getGoalkeeping()*2
         );

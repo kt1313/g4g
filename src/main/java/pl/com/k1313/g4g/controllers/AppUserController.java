@@ -127,16 +127,13 @@ public class AppUserController {
 
     @GetMapping("/club/{clubId}")
     public String clubPage(@PathVariable long clubId, Model model) {
-
         Optional<Club> byId = this.clubRepository.findById(clubId);
         String clubname = byId.get().getClubName();
         String appUser = byId.get().getAppUser().getAppUserName();
         model.addAttribute("clubname", clubname);
         model.addAttribute("club", byId);
         model.addAttribute("appuser", appUser);
-
         return "club";
-
     }
 
 

@@ -52,8 +52,7 @@ public class AppUserService {
         this.appUserRepository.save(appUser);
         AppUserRegistrationEvent event = new AppUserRegistrationEvent(this, appusername, clubname, email, password);
         publisher.publishEvent(event);
-        System.out.println("UDALO SIE ZAREJESTROWAC UZYTKOWNIKA: ");
-        System.out.println(appUser);
+
         Club newClub=this.clubService.clubCreation(appUser,clubname);
         for (int i=0; i<18;i++) {
             Player newPlayer=this.playerService.autoCreatePlayer();
@@ -67,6 +66,8 @@ public class AppUserService {
             this.playerRepository.save(newGoalkeeper);
             System.out.println(" Goalkeeper nr "+i+" "+newGoalkeeper);
         }
+        System.out.println("UWAGA!UWAGA!UWAGA!UWAGA!");
+        System.out.println("ALL PLAYERS FROM CLUB: "+this.playerRepository.findAllByPlayerClub(newClub));
     }
 
     public boolean confirmRegistration(String appUserName) {

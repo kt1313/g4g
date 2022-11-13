@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.com.k1313.g4g.domain.club.Club;
+import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
@@ -11,6 +13,7 @@ import pl.com.k1313.g4g.domain.player.dto.PlayerUpdateDTO;
 import pl.com.k1313.g4g.domain.club.ClubService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/players")
@@ -18,47 +21,28 @@ public class PlayerController {
 
     private PlayerService playerService;
     private ClubService clubService;
-
+    private ClubRepository clubRepository;
     private PlayerRepository playerRepository;
 
     @Autowired
     public PlayerController(PlayerRepository playerRepository,
                             PlayerService playerService,
-                            ClubService clubService
-                            ) {
+                            ClubService clubService,
+                            ClubRepository clubRepository
+    ) {
         this.playerRepository = playerRepository;
         this.playerService = playerService;
+        this.clubService = clubService;
+        this.clubRepository = clubRepository;
     }
-
-//    @Autowired
-//    public TeamService teamService;
 
     //unit test done- not working
-    @GetMapping
-    public String players(Model model) {
-        model.addAttribute("players",
-                this.playerRepository.findAll());
+    @GetMapping("/{clubId}")
+    public String players(@PathVariable long clubId, Model model) {
+        Club club = this.clubRepository.findByClubId(clubId);
+        model.addAttribute("players", this.playerRepository.findAllByPlayerClub(club));
         return "players";
     }
-
-//    @GetMapping("/hire")
-//    public String createNewPlayer() {
-//        return "playerform";
-//    }
-
-//kontraktowanie nowych zawodnkow poznije, bo ma wiele opcji (mlody lub kupno np)
-//    @PostMapping
-//    public String handleContractNewPlayer
-//            (@Valid PlayerContractingDTO playerDTO,
-//             BindingResult result, Model model) {
-//        if (result.hasErrors()) {
-//            model.addAttribute("errors", result.getAllErrors());
-//            return "playerform";
-//        } else {
-//            this.playerService.contractNewPlayer(playerDTO);
-//            return "redirect:/players";
-//        }
-//    }
 
     //unit test done-  working
     @GetMapping("/delete/{id}")

@@ -28,7 +28,7 @@ public class Player {
     private int attacking;
     private int ballControl;
     private int passing;
-    private int tackling;
+    private int interception;
     private int goalkeeping;
 
 
@@ -61,7 +61,7 @@ public class Player {
                   int attacking,
                   int ballControl,
                   int passing,
-                  int tackling,
+                  int interception,
                   int goalkeeping
     ) {
 
@@ -75,7 +75,7 @@ public class Player {
         this.attacking = attacking;
         this.ballControl = ballControl;
         this.passing = passing;
-        this.tackling = tackling;
+        this.interception = interception;
         this.goalkeeping = goalkeeping;
 
     }
@@ -87,7 +87,7 @@ public class Player {
             , int attacking
             , int ballControl
             , int passing
-            , int tackling
+            , int interception
             , int goalkeeping
     ) {
         this.firstName = firstName;
@@ -96,7 +96,7 @@ public class Player {
         this.attacking = attacking;
         this.ballControl = ballControl;
         this.passing = passing;
-        this.tackling = tackling;
+        this.interception = interception;
         this.goalkeeping = goalkeeping;
 
     }
@@ -109,7 +109,7 @@ public class Player {
                   int attacking,
                   int ballControl,
                   int passing,
-                  int tackling,
+                  int interception,
                   int goalkeeping) {
     }
 
@@ -139,7 +139,7 @@ public class Player {
                 ", attacking=" + attacking +
                 ", ballControl=" + ballControl +
                 ", passing=" + passing +
-                ", tackling=" + tackling +
+                ", tackling=" + interception +
                 ", goalkeeping=" + goalkeeping +
                 '}';
     }
