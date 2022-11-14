@@ -38,7 +38,8 @@ public class Club {
 
     }
 
-//    public long getClubId(){
-//        return this.clubId;
-//    }
+    @Override
+    public String toString() {
+        return  clubName ;
+    }
 }
