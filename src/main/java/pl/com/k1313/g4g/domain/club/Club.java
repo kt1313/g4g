@@ -15,13 +15,15 @@ public class Club {
     private long clubId;
 
     private String clubName;
+
     @OneToOne
     private AppUser appUser;
 
     @ElementCollection(targetClass = Player.class)
     private List<Player> clubPlayers;
 
-
+    @ElementCollection(targetClass = Player.class)
+    private List<Player> clubFirst11;
 
     public Club(String clubName, AppUser appUser, List<Player> clubPlayers) {
         this.clubName = clubName;

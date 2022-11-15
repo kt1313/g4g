@@ -181,7 +181,8 @@
                             </div>
                             <div class="col-sm-9 text-secondary">
                                 <h2><a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a></h2>
-<!--                                <a class="nav-link" href="/players">Players</a></div>-->
+                                <input type="hidden" th:value="${clubId}">
+                            </div>
                         </div>
                         <hr>
                         <div class="row">

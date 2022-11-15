@@ -13,7 +13,6 @@ import pl.com.k1313.g4g.domain.player.dto.PlayerUpdateDTO;
 import pl.com.k1313.g4g.domain.club.ClubService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/players")
@@ -41,6 +40,7 @@ public class PlayerController {
     public String players(@PathVariable long clubId, Model model) {
         Club club = this.clubRepository.findByClubId(clubId);
         model.addAttribute("players", this.playerRepository.findAllByPlayerClub(club));
+        model.addAttribute("clubId", clubId);
         return "players";
     }
 
@@ -84,20 +84,20 @@ public class PlayerController {
     //pobiera wszystkie checkboxy o nazwie firstsquadplayer i sprawdza czy tickniete
     //wtedy tworzy pierwsza 11
     //a potem tworzy tabele first11FinalTable z wybranymi nazwiskami na odpowiednich pozycjach
-    @PostMapping("/firstsquadplayers")
-    public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids
-            , Model model) {
-        if (ids != null) {
-            List<Player> firstsquadplayers;
-            firstsquadplayers = this.playerService.createFirst11(ids);
-
-            model.addAttribute("firstsquadplayers", firstsquadplayers);
-            String[][] first11FinalTable = this.clubService.setUpFirst11(firstsquadplayers);
-            model.addAttribute("first11FinalTable", first11FinalTable);
-
-            return "firstsquadplayers";
-        } else {
-            return "redirect:/players";
-        }
-    }
+//    @PostMapping("/firstsquadplayers")
+//    public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids
+//            , Model model) {
+//        if (!ids.isEmpty()) {
+//            this.playerService.confirmFirst11(ids);
+//            List<Player> firstsquadplayers=this.clubService.setUpFirstEleven(Club club);
+//
+//            model.addAttribute("firstsquadplayers", firstsquadplayers);
+//            String[][] first11FinalTable = this.clubService.setUpFirst11(firstsquadplayers);
+//            model.addAttribute("first11FinalTable", first11FinalTable);
+//
+//            return "firstsquadplayers";
+//        } else {
+//            return "redirect:/players";
+//        }
+//    }
 }

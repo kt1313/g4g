@@ -81,19 +81,18 @@ public class PlayerService {
         this.playerRepository.save(newGoalkeeper);
         return newGoalkeeper;
     }
-    public List<Player> createFirst11(List<String> ids) {
+    public void confirmFirst11(List<String> ids) {
         List<Player> firstSquadPlayers = new ArrayList<>();
 
-        if (ids != null) {
-            for (String idplayer : ids) {
-                long l = Long.parseLong(idplayer);
+        if (!ids.isEmpty()) {
+            for (String playerId : ids) {
+                long l = Long.parseLong(playerId);
                 Player first11Player = this.playerRepository.getById(l);
                 first11Player.setFirstSquadPlayer(true);
                 firstSquadPlayers.add(first11Player);
                 this.playerRepository.save(first11Player);
             }
         }
-        return firstSquadPlayers;
     }
 
 

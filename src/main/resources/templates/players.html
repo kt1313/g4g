@@ -59,7 +59,8 @@
         display: flex;
         flex-direction: column;
     }
-    .red div{
+
+    .red div {
         font-size: 2vw;
     }
 
@@ -91,159 +92,86 @@
         display: flex;
     }
 </style>
-<div th:each="player : ${players}">
-    <div class="container">
-        <div class="red">
-            <div class="yellow">
-                <div class="green">
-                    <div class="red">
-                        <div><b><span th:text="${player.firstName}">playerfirstname</span></b></div>
-                        <div><b><span th:text="${player.lastName}">playerlastname</span></b></div>
-                    </div>
-                    <div class="gray">
-                        <div>Age:</div>
-                        <div><span th:text="${player.age}">playerage</span></div>
+<div class="container">
+    <form method="POST" th:action="@{/team/firstsquadplayers}">
+        <div th:each="player : ${players}">
+            <div class="container">
+                <div class="red">
+                    <div class="yellow">
+                        <div class="green">
+                            <div class="red">
+                                <div><b><span th:text="${player.firstName}">playerfirstname</span></b></div>
+                                <div><b><span th:text="${player.lastName}">playerlastname</span></b></div>
+                            </div>
+                            <div class="gray">
+                                <div>Age:</div>
+                                <div><span th:text="${player.age}">playerage</span></div>
+                            </div>
+                        </div>
+                        <div class="blue">
+                            <div class="form-group">
+                                <label for="createnewplayerposition">Position: </label>
+                                <select name="position" class="form-control" id="createnewplayerposition" required>
+                                    <option value="GK">Goalkeeper</option>
+                                    <option value="RWB">Right Wingback</option>
+                                    <option value="RCB">Right Centre-back</option>
+                                    <option value="CB">Centre back</option>
+                                    <option value="LCB">Left Centre-back</option>
+                                    <option value="LWB">Left Wing-back</option>
+                                    <option value="RW">Right Winger</option>
+                                    <option value="CMD">Centre Midfielder Defending</option>
+                                    <option value="CM">Centre Midfielder</option>
+                                    <option value="CMA">Centre Midfielder Attacking</option>
+                                    <option value="LW">Left Winger</option>
+                                    <option value="RF">Right Forward</option>
+                                    <option value="CF">Centre Forward</option>
+                                    <option value="LF">Left Forward</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="blue">
-                    <div class="form-group">
-                        <label for="createnewplayerposition">Position: </label>
-                        <select name="position" class="form-control" id="createnewplayerposition" required>
-                            <option value="GK">Goalkeeper</option>
-                            <option value="RWB">Right Wingback</option>
-                            <option value="RCB">Right Centre-back</option>
-                            <option value="CB">Centre back</option>
-                            <option value="LCB">Left Centre-back</option>
-                            <option value="LWB">Left Wing-back</option>
-                            <option value="RW">Right Winger</option>
-                            <option value="CMD">Centre Midfielder Defending</option>
-                            <option value="CM">Centre Midfielder</option>
-                            <option value="CMA">Centre Midfielder Attacking</option>
-                            <option value="LW">Left Winger</option>
-                            <option value="RF">Right Forward</option>
-                            <option value="CF">Centre Forward</option>
-                            <option value="LF">Left Forward</option>
-                        </select>
+                    <div class="gray">
+                        <div>Goalkeeping</div>
+                        <div><span th:text="${player.goalkeeping}">playergoalkeeping</span></div>
+                    </div>
+                    <div class="green">
+                        <div>Defending</div>
+                        <div><span th:text="${player.interception}">playerinterception</span></div>
+                    </div>
+                    <div class="gray">
+                        <div>Ball Control</div>
+                        <div><span th:text="${player.ballControl}">playerballcontrol</span></div>
+                    </div>
+                    <div class="green">
+                        <div>Passing</div>
+                        <div><span th:text="${player.passing}">playerpassing</span></div>
+                    </div>
+                    <div class="gray">
+                        <div>Attacking</div>
+                        <div><span th:text="${player.attacking}">playerattacking</span></div>
+                    </div>
+                </div>
+                <div class="green">
+                    <div class="gray"><b><span th:text="${player.playerClub}">playerClubname</span></b></div>
+                    <div class="blue">
+                        <div>First 11:</div>
+                        <input type="checkbox" th:name="firstSquadPlayer"
+                               th:value="${player.id}"/>
                     </div>
                 </div>
             </div>
+
+            <hr>
         </div>
-        <div class="blue">
-            <div class="gray">
-                <div>Goalkeeping</div>
-                <div><span th:text="${player.goalkeeping}">playergoalkeeping</span></div>
-            </div>
-            <div class="green">
-                <div>Defending</div>
-                <div><span th:text="${player.interception}">playerinterception</span></div>
-            </div>
-            <div class="gray">
-                <div>Ball Control</div>
-                <div><span th:text="${player.ballControl}">playerballcontrol</span></div>
-            </div>
-            <div class="green">
-                <div>Passing</div>
-                <div><span th:text="${player.passing}">playerpassing</span></div>
-            </div>
-            <div class="gray">
-                <div>Attacking</div>
-                <div><span th:text="${player.attacking}">playerattacking</span></div>
-            </div>
-        </div>
-        <div class="green">
-            <div class="gray"><b><span th:text="${player.playerClub}">playerattacking</span></b></div>
-            <div class="blue">
-                <div>First 11: </div>
-                <input type="checkbox" th:name="firstSquadPlayer"
-                       th:value="${player.id}"/></div>
-        </div>
-    </div>
-    <hr>
-</div>
-
-<!---->
-<!---->
-
-
-<div class="container">
-    <form method="POST" th:action="@{/players/firstsquadplayers}">
-
-        <table class="table table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Age</th>
-                <!--                <th>Position</th>-->
-                <th>First 11</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <div th:each="player : ${players}">
-                <tr>
-                    <!--                <tr>-->
-                    <td th:text="${player.firstName}"/>
-                    <td th:text="${player.lastName}"/>
-                    <td th:text="${player.age}"/>
-                    <!--                </tr>-->
-                <tr>
-                    <td></td>
-                    <td>Goalkeeping</td>
-                    <td th:text="${player.goalkeeping}"></td>
-                    <td></td>
-                    <td>Defence</td>
-                    <td th:text="${player.interception}"></td>
-                    <td></td>
-                    <td>Ball Control</td>
-                    <td th:text="${player.ballControl}"></td>
-                    <td></td>
-                    <td>Passing</td>
-                    <td th:text="${player.passing}"></td>
-                    <td></td>
-                    <td>Attacking</td>
-                    <td th:text="${player.attacking}"></td>
-                </tr>
-                <tr>
-                    <td>
-<!--                        <div class="form-group">-->
-<!--                            <label for="createnewplayerposition">Position: </label>-->
-<!--                            <select name="position" class="form-control" id="createnewplayerposition" required>-->
-<!--                                <option value="GK">Goalkeeper</option>-->
-<!--                                <option value="RWB">Right Wingback</option>-->
-<!--                                <option value="RCB">Right Centre-back</option>-->
-<!--                                <option value="CB">Centre back</option>-->
-<!--                                <option value="LCB">Left Centre-back</option>-->
-<!--                                <option value="LWB">Left Wing-back</option>-->
-<!--                                <option value="RW">Right Winger</option>-->
-<!--                                <option value="CMD">Centre Midfielder Defending</option>-->
-<!--                                <option value="CM">Centre Midfielder</option>-->
-<!--                                <option value="CMA">Centre Midfielder Attacking</option>-->
-<!--                                <option value="LW">Left Winger</option>-->
-<!--                                <option value="RF">Right Forward</option>-->
-<!--                                <option value="CF">Centre Forward</option>-->
-<!--                                <option value="LF">Left Forward</option>-->
-<!--                            </select>-->
-<!--                        </div>-->
-                    </td>
-                    <td>
-                        <input type="checkbox" th:name="firstSquadPlayer"
-                               th:value="${player.id}"/>
-                    </td>
-                    <td>
-                        <a th:href="@{/players/delete/{id}(id=${player.id})}">Fire</a>
-                    </td>
-
-                </tr>
-                </tr>
-            </div>
-            </tbody>
-        </table>
-        <p></p>
+        <input type="hidden" th:name="clubId" th:value="${clubId}"/>
         <input type="submit" class="btn-primary" style="background-color: #0040ff"
                value="Confirm first 11"/>
+        <!---->
+        <!---->
     </form>
 </div>
+
 </body>
 </html>
