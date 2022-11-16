@@ -128,7 +128,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return firstName+" "+lastName+" Id: "+id;
+        return firstName+" "+lastName+" Id: "+id+"first Squad player: "+firstSquadPlayer+" position: "+playerPosition;
     }
 
 }

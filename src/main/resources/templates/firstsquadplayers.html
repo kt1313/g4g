@@ -53,9 +53,8 @@
     <div class="container">
 
         <form th:action="@{/team/firstsquadplayers}" method="post">
-            <br>
+
             <div>
-                <br><br><br>
                 <table style="table-layout: fixed; width: 90%;  text-align: center; color: cornsilk"
                        class="table flex-row borderless "
                        th:name="first11">
@@ -65,35 +64,49 @@
                             class="table-hover"/>
                         <td style="width: 20%;" th:id="line1cell2" }
                             class="table-hover"/>
-                        <td style="width: 20%;" th:id="goalkeeper" >
-                            <span th:text="${goalkeeper.get().getFirstName()}">goalkeeper</span></td>
-                            class="table-hover"/>
+                        <td style="width: 20%;"class="table-hover" th:id="goalkeeper" >
+                            <span th:if="${goalkeeper !=null}" th:text="${goalkeeper.get().getFirstName()}">goalkeeper</span></td>
                         <td style="width: 20%;" th:id="line1cell4" }
                             class="table-hover"/>
                         <td style="width: 20%;" th:id="line1cell5" }
                             class="table-hover"/>
-
-<!--                    </tr>-->
-<!--                    <tr style="height: 120px">-->
-<!--                        <td align="right" th:id="rightWingback" th:text=${firssquadplayers}/>-->
-<!--                        <td th:id="rightCentreback" th:text=${first11FinalTable[1][1]}/>-->
-<!--                        <td th:id="centreback" th:text=${first11FinalTable[2][1]}/>-->
-<!--                        <td th:id="leftCentreback" th:text=${first11FinalTable[3][1]}/>-->
-<!--                        <td th:id="leftWingback" th:text=${first11FinalTable[4][1]}/>-->
-<!--                    </tr>-->
-<!--                    <tr style="height: 120px">-->
-<!--                        <td th:id="rightWinger" th:text=${first11FinalTable[0][2]}/>-->
-<!--                        <td th:id="centreMidfielderDefending" th:text=${first11FinalTable[1][2]}/>-->
-<!--                        <td th:id="centreMidfielder" th:text=${first11FinalTable[2][2]}/>-->
-<!--                        <td th:id="centreMidfielderAttacking" th:text=${first11FinalTable[3][2]}/>-->
-<!--                        <td th:id="leftWinger" th:text=${first11FinalTable[4][2]}/>-->
-<!--                    </tr>-->
-<!--                    <tr style="height: 120px">-->
-<!--                        <td th:id="line4cell1" th:text=${first11FinalTable[0][3]}/>-->
-<!--                        <td th:id="rightForward" th:text=${first11FinalTable[1][3]}/>-->
-<!--                        <td th:id="centreForward" th:text=${first11FinalTable[2][3]}/>-->
-<!--                        <td th:id="leftForward" th:text=${first11FinalTable[3][3]}/>-->
-<!--                        <td th:id="line4cell5" th:text=${first11FinalTable[4][3]}/>-->
+                    </tr>
+                    <tr style="height: 120px">
+                        <td style="width: 20%;"class="table-hover" th:id="rightWingback" >
+                            <span th:if="${rightWingback !=null}" th:text="${rightWingback.get().getFirstName()}">rightWingback</span></td>
+                        <td style="width: 20%;"class="table-hover" th:id="rightCentreback" >
+                            <span th:if="${rightCentreback !=null}" th:text="${rightCentreback.get().getFirstName()} ">rightCentreback</span></td>
+                        <td style="width: 20%;"class="table-hover" th:id="centreback" >
+                            <span th:if="${centreback !=null}" th:text="${centreback.get().getFirstName()} ">centreback</span></td>
+                        <td style="width: 20%;"class="table-hover" th:id="leftCentreback" >
+                            <span th:if="${leftCentreback !=null}" th:text="${leftCentreback.get().getFirstName()} ">leftCentreback</span></td>
+                        <td style="width: 20%;"class="table-hover" th:id="leftWingback" >
+                            <span th:if="${leftWingback !=null}" th:text="${leftWingback.get().getFirstName()} ">leftWingback</span></td>
+                    </tr>
+                    <tr style="height: 120px">
+                        <td style="width: 20%;"class="table-hover" th:id="rightWinger" >
+                            <span th:if="${rightWinger !=null}" th:text="${rightWinger.get().getFirstName()}">rightWinger</span></td>
+                        <td style="width: 20%;"class="table-hover" th:id="centreMidDef" >
+                            <span th:if="${centreMidDef !=null}" th:text="${centreMidDef.get().getFirstName()}">centreMidDef</span></td>
+                        <td style="width: 20%;" th:id="centreMid" >
+                            <span th:if="${centreMid !=null}" th:text="${centreMid.get().getFirstName()} ">centreMid</span></td>
+                        <td style="width: 20%;"class="table-hover" th:id="centreMidAtt" >
+                            <span th:if="${centreMidAtt !=null}" th:text="${centreMidAtt.get().getFirstName()}">centreMidAtt</span></td>
+                        <td style="width: 20%;"class="table-hover" th:id="leftWinger" >
+                            <span th:if="${leftWinger !=null}" th:text="${leftWinger.get().getFirstName()}">leftWinger</span></td>
+                    </tr>
+                    <tr style="height: 120px">
+                        <td style="width: 20%;" th:id="line4cell1" }
+                            class="table-hover"/>
+                        <td style="width: 20%;"class="table-hover" th:id="rightForward" >
+                            <span th:if="${rightForward !=null}" th:text="${rightForward.get().getFirstName()}">rightForward</span></td>
+                        <td style="width: 20%;" th:id="centreForward" >
+                            <span th:if="${centreForward !=null}" th:text="${centreForward.get().getFirstName()}">centre Forward</span>
+                        </td>
+                        <td style="width: 20%;"class="table-hover" th:id="leftForward" >
+                            <span th:if="${leftForward !=null}" th:text="${leftForward.get().getFirstName()}">leftForward</span></td>
+                        <td style="width: 20%;" th:id="line4cell5" }
+                            class="table-hover"/>
                     </tr>
                     </tbody>
                 </table>
@@ -149,79 +162,3 @@
 </div>
 </body>
 </html>
-<!--<head>-->
-<!--    <meta charset="utf-8" />-->
-<!--    <title></title>-->
-<!--    <script src="https://kit.fontawesome.com/a076d05399.js"></script>-->
-<!--    <link href="StyleSheet.css" rel="stylesheet" />-->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
-<!--</head>-->
-
-<!--<body>-->
-
-
-<!--&lt;!&ndash; footer &ndash;&gt;-->
-<!--<div class="footer">-->
-<!--    <div class="container">-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-4 col-xs-12">-->
-<!--                <div class="first">-->
-<!--                    <h4>My Skills</h4>-->
-<!--                    <p> Analytical Skills</p>-->
-<!--                    <p> Problem-solving skills</p>-->
-<!--                    <p> Critical-thinking skills</p>-->
-<!--                    <p> Detail-oriented</p>-->
-<!--                    <p> Multitasking</p>-->
-<!--                    <p> Self-motivated</p>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="col-md-4 col-xs-12">-->
-<!--                <div class="second">-->
-<!--                    <h4> Navigate</h4>-->
-<!--                    <ul>-->
-<!--                        <li><a href="#">Home</a></li>-->
-<!--                        <li><a href="#">Projects</a></li>-->
-<!--                        <li><a href="#">About</a></li>-->
-<!--                        <li><a href="#">Contact</a></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="col-md-4 col-xs-12">-->
-<!--                <div class="third">-->
-<!--                    <h4> Contact</h4>-->
-<!--                    <ul>-->
-<!--                        <li>Andreea Mihaela Bunget </li>-->
-<!--                        <li></li>-->
-
-
-<!--                        <li><i class="far fa-envelope"></i> andreea@andreeabunget.co.uk</li>-->
-<!--                        <li><i class="far fa-envelope"></i> email@yahoo.com</li>-->
-
-
-<!--                        <li><i class="fas fa-map-marker-alt"></i> London, UK </li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="container">-->
-<!--        <div class="row">-->
-<!--            <div class="col-12">-->
-<!--                <div class="line"></div>-->
-<!--                <div class="second2">-->
-<!--                    <a href="https://codepen.io/AndreeaBunget" target="_blank"> <i class="fab fa-codepen fa-2x margin"></i></a>-->
-<!--                    <a href="https://github.com/WebDeveloperCodeRep" target="_blank"> <i class="fab fa-github fa-2x margin"></i></a>-->
-<!--                    <a href="https://www.linkedin.com/in/andreea-mihaela-bunget-a4248812b/" target="_blank"> <i class="fab fa-linkedin fa-2x margin"></i></a>-->
-<!--                    <a href="https://www.youtube.com/channel/UCX674BUbomzBCakbb75lhfA?view_as=subscriber" target="_blank"><i class="fab fa-youtube fa-2x margin" ></i></a>-->
-
-<!--                </div>-->
-
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-
-<!--</body>-->
