@@ -91,6 +91,14 @@ public class PlayerService {
                 first11Player.setFirstSquadPlayer(true);
                 firstSquadPlayers.add(first11Player);
                 this.playerRepository.save(first11Player);
+                System.out.println("--------------------------------------");
+                System.out.println("--------------------------------------");
+                System.out.println("--------------------------------------");
+                System.out.println("Listuje pierwszy sklad:   "+this.playerRepository.findAllByFirstSquadPlayer(true));
+                System.out.println("--------------------------------------");
+                System.out.println("--------------------------------------");
+                System.out.println("--------------------------------------");
+
             }
         }
     }

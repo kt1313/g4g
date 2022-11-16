@@ -15,6 +15,8 @@ import pl.com.k1313.g4g.domain.player.PlayerService;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,7 +51,18 @@ public class ClubController {
 
     @PostMapping("/firstsquadplayers")
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids
-            , @RequestParam(value = "clubId", required = true) String stringClubId, Model model) {
+            , @RequestParam(value = "clubId", required = true) String stringClubId, Model model, HttpSession session, HttpServletRequest request) {
+
+//        @RequestMapping(value={"/sendAddress"},method = RequestMethod.POST)
+//        public String messageCenterHome(Model model,HttpSession session,HttpServletRequest request) {
+//
+//            String selectedCity= request.getParameter("nameOfCity")
+//            //return view
+//        }
+
+        //musi w players po wybraniu pozycji kazdemu playerowi
+        //isc do kazdego z osobna playera i mu zmienic pozycje i save w repo zrobic
+        String playerPos=request.getParameter("position");
         try {
             long clubId = Long.parseLong(stringClubId);
 

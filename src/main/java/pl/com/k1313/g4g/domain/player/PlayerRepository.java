@@ -10,7 +10,7 @@ import java.util.List;
 public interface PlayerRepository extends JpaRepository<Player, Long>{
 
     List<Player> findAllByPlayerClub(Club club);
-
+    List<Player> findAllByFirstSquadPlayer(boolean first11Player);
     //przyklad ..jakich komand? nwm..sprawdz
 //    Optional<Guest> findTop1ByCustomerIdAndFirstNameAndLastNameAndBirthDate(
 //            String customerId,
