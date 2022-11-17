@@ -10,6 +10,7 @@ import pl.com.k1313.g4g.domain.club.ClubService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class LeagueService {
 
@@ -21,7 +22,7 @@ public class LeagueService {
     public LeagueService(LeagueRepository leagueRepository, ClubRepository clubRepository, ClubService clubService) {
         this.leagueRepository = leagueRepository;
         this.clubRepository = clubRepository;
-        this.clubService=clubService;
+        this.clubService = clubService;
     }
 
     public League createLeague(long userClubId) {
@@ -29,13 +30,26 @@ public class LeagueService {
         Club userClub = this.clubRepository.findByClubId(userClubId);
         League userLeague = checkAvailableLeague();
         List<Club> leagueTeams = userLeague.getLeagueTeams();
-        for (Club c:leagueTeams
-             ) {if (c.getAppUser()==null){this.clubRepository.delete(c);
-             break;}
-             }
-        leagueTeams.add(userClub);
-        while (userLeague.getLeagueTeams().size()<8){
-            this.clubRepository.save( this.clubService.botClubCreation());
+        if (leagueTeams != null) {
+            for (Club c : leagueTeams
+            ) {
+                if (c.getAppUser() == null) {
+                    this.clubRepository.delete(c);
+                    break;
+                }
+            }
+            leagueTeams.add(userClub);
+            while (userLeague.getLeagueTeams().size() < 8) {
+                this.clubRepository.save(this.clubService.botClubCreation());
+            }
+        } else {
+            leagueTeams=new ArrayList<>();
+            leagueTeams.add(userClub);
+            while (leagueTeams.size() < 8) {
+                Club newBotClub=this.clubService.botClubCreation();
+                leagueTeams.add(newBotClub);
+                this.clubRepository.save(newBotClub);
+            }
         }
         this.leagueRepository.save(userLeague);
         return userLeague;

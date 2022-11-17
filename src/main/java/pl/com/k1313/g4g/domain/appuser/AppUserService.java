@@ -61,15 +61,16 @@ public class AppUserService {
             this.playerRepository.save(newGoalkeeper);
             System.out.println(" Goalkeeper nr "+i+" "+newGoalkeeper);
         }
-        this.leagueService.createLeague(appUser.getAppUserId());
+        this.clubRepository.save(newClub);
+        this.leagueService.createLeague(newClub.getClubId());
     }
 
-    public boolean confirmRegistration(String appUserName) {
+    public boolean confirmRegistration(long appUserId) {
 
-        Optional<AppUser> byAppUserName = this.appUserRepository.findByAppUserName(appUserName);
+        Optional<AppUser> byAppUserId = this.appUserRepository.findById(appUserId);
 
-        if (byAppUserName.isPresent()) {
-            byAppUserName.get().confirmRegistry();
+        if (byAppUserId.isPresent()) {
+            byAppUserId.get().confirmRegistry();
             return true;
         } else {
             return false;

@@ -23,8 +23,7 @@ public class League {
 
     private int leagueRound;
 
-    @OneToOne
-    private LeagueTable leagueTable;
+//    private LeagueTable leagueTable;
     @OneToMany
     private List<Club> leagueTeams;
 

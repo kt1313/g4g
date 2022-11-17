@@ -81,7 +81,7 @@ public class AppUserController {
             Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
             long appuserid = this.repository.findByAppUserName(appusername).get().getAppUserId();
             String appuserclubname = this.repository.findByAppUserName(appusername).get().getClubname();
-            boolean success = this.appUserService.confirmRegistration(appusername);
+            boolean success = this.appUserService.confirmRegistration(appuserid);
 
             model.addAttribute("appuser", appUser);
             model.addAttribute("appuserid", appuserid);
@@ -97,8 +97,9 @@ public class AppUserController {
     //do wykorzystania kiedy user jest zalogowany(??)
     @GetMapping("/registration/confirmed/{appUserName}")
     public String confirmRegistration(@PathVariable String appUserName, Model model) {
-
-        boolean success = this.appUserService.confirmRegistration(appUserName);
+        Optional<AppUser> appUser = this.repository.findByAppUserName(appUserName);
+        long appUserId = appUser.get().getAppUserId();
+        boolean success = this.appUserService.confirmRegistration(appUserId);
         model.addAttribute("success", success);
         model.addAttribute("appUserId", this.repository.findByAppUserName(appUserName).get().getAppUserId());
         return "/registrationConfirmed";

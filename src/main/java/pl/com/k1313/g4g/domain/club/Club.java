@@ -35,9 +35,9 @@ public class Club {
         this.clubPlayers = clubPlayers;
     }
 
-    public Club(AppUser appUser, String clubname) {
+    public Club(AppUser appUser, String clubName) {
         this.appUser = appUser;
-        this.clubName = clubname;
+        this.clubName = clubName;
     }
 
     public Club() {

@@ -32,6 +32,7 @@ public class ClubService {
     public Club clubCreation(AppUser appUser, String clubname) {
         Club newClub = new Club(appUser, clubname);
         this.clubRepository.save(newClub);
+        System.out.println(" user club"+this.clubRepository.findByClubId(newClub.getClubId()));
         return newClub;
     }
     public Club botClubCreation(){
