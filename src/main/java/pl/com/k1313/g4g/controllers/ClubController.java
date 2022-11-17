@@ -51,6 +51,13 @@ public class ClubController {
         return "appuser";
     }
 
+    @GetMapping("/league")
+    public String leaguepage() {
+
+        return "league";
+    }
+
+
     @PostMapping("/firstsquadplayers")
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
             @RequestParam(value = "clubId", required = true) String stringClubId,
@@ -168,4 +175,6 @@ public class ClubController {
         }
         return "redirect:/players";
     }
+
+
 }

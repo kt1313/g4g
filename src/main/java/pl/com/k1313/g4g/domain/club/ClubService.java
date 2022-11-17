@@ -1,22 +1,30 @@
 package pl.com.k1313.g4g.domain.club;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
+import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
+import pl.com.k1313.g4g.domain.player.PlayerService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
 public class ClubService {
-    public ClubService(ClubRepository clubRepository, PlayerRepository playerRepository) {
+    public ClubService(ClubRepository clubRepository, PlayerRepository playerRepository,
+                       PlayerService playerService,LeagueRepository leagueRepository) {
         this.clubRepository = clubRepository;
         this.playerRepository = playerRepository;
+        this.leagueRepository=leagueRepository;
+        this.playerService=playerService;
     }
 
+    private PlayerService playerService;
+    private LeagueRepository leagueRepository;
     private PlayerRepository playerRepository;
     private ClubRepository clubRepository;
 
@@ -25,6 +33,21 @@ public class ClubService {
         Club newClub = new Club(appUser, clubname);
         this.clubRepository.save(newClub);
         return newClub;
+    }
+    public Club botClubCreation(){
+        Club newClub=new Club();
+        newClub.setClubName(botClubNameCreation());
+        newClub.setClubFirst11(this.playerService.botPlayersCreation(newClub.getClubId()));
+        return newClub;
+    }
+    public String botClubNameCreation(){
+        Random r=new Random();
+        List clubNames=new ArrayList<>(List.of
+                ("FC BigDaddy", "A-Team", "Strongmen FC", "L-losers", "Handycaps Club", "WeWinOnWensday United",
+                "NeverSeeYourGoal CF", "FC True team", "WeWillChewYourMeat Utd", "FC GiveUp"));
+
+        String clubName=(String) clubNames.get(r.nextInt(10));
+        return clubName;
     }
 
     public List<Player> setUpFirstEleven(Club club) {

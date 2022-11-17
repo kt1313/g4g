@@ -2,6 +2,7 @@ package pl.com.k1313.g4g.domain.player;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.com.k1313.g4g.domain.club.ClubRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,13 @@ import java.util.Random;
 public class PlayerService {
 
     private PlayerRepository playerRepository;
+    private ClubRepository clubRepository;
+
     @Autowired
-    public PlayerService (PlayerRepository playerRepository){this.playerRepository=playerRepository;}
+    public PlayerService(PlayerRepository playerRepository, ClubRepository clubRepository) {
+        this.playerRepository = playerRepository;
+        this.clubRepository = clubRepository;
+    }
 
 
     public Player autoCreatePlayer() {
@@ -24,7 +30,7 @@ public class PlayerService {
         int ballControl = randomFrom100();
         int passing = randomFrom100();
         int tackling = randomFrom100();
-        int goalkeeping = randomFrom100()/3;
+        int goalkeeping = randomFrom100() / 3;
 
         Player newPlayer = new Player(
                 firstName,
@@ -64,23 +70,25 @@ public class PlayerService {
 
     public int randomAge() {
         Random r = new Random();
-        int result = r.nextInt(20)+19;
+        int result = r.nextInt(20) + 19;
         return result;
     }
+
     //tworzy goalkeepera - inny rozdzaj zawodnika
     public Player autoCreateGoalkeeper() {
-        Player newPlayer=autoCreatePlayer();
-        Player newGoalkeeper=new Player(
+        Player newPlayer = autoCreatePlayer();
+        Player newGoalkeeper = new Player(
                 newPlayer.getFirstName(), newPlayer.getLastName(),
-                newPlayer.getAge(),newPlayer.getAttacking()/2,
-                newPlayer.getBallControl()/2, newPlayer.getPassing()/2,
-                newPlayer.getInterception()/2,
+                newPlayer.getAge(), newPlayer.getAttacking() / 2,
+                newPlayer.getBallControl() / 2, newPlayer.getPassing() / 2,
+                newPlayer.getInterception() / 2,
                 //potem sprawdz bo nie moze byc wiecej niz 100
-                newPlayer.getGoalkeeping()*2
+                newPlayer.getGoalkeeping() * 2
         );
         this.playerRepository.save(newGoalkeeper);
         return newGoalkeeper;
     }
+
     public void confirmFirst11(List<String> ids) {
         List<Player> firstSquadPlayers = new ArrayList<>();
 
@@ -91,17 +99,32 @@ public class PlayerService {
                 first11Player.setFirstSquadPlayer(true);
                 firstSquadPlayers.add(first11Player);
                 this.playerRepository.save(first11Player);
-                System.out.println("--------------------------------------");
-                System.out.println("--------------------------------------");
-                System.out.println("--------------------------------------");
-                System.out.println("Listuje pierwszy sklad:   "+this.playerRepository.findAllByFirstSquadPlayer(true));
-                System.out.println("--------------------------------------");
-                System.out.println("--------------------------------------");
-                System.out.println("--------------------------------------");
-
             }
         }
     }
 
+    public List<Player> botPlayersCreation(long clubId) {
+        List players=new ArrayList<Player>();
+        for (int i = 0; i < 10 >; i++) {
+            Player newPlayer = autoCreatePlayer();
+            newPlayer.setPlayerClub(this.clubRepository.findByClubId(clubId));
+            List playersPosition=botPlayersPositions();
+            newPlayer.setPlayerPosition((PlayerPosition) playersPosition.get(i));
+            players.add(newPlayer);
+        }
+        Player newGoalkeeper=autoCreateGoalkeeper();
+        newGoalkeeper.setPlayerClub(this.clubRepository.findByClubId(clubId));
+        newGoalkeeper.setPlayerPosition(PlayerPosition.GK);
+        players.add(newGoalkeeper);
 
+        return players;
+    }
+
+    public List<PlayerPosition> botPlayersPositions() {
+        List playersPositions = new ArrayList<PlayerPosition>(List.of(
+                PlayerPosition.RWB, PlayerPosition.RCB, PlayerPosition.LCB, PlayerPosition.LWB,
+                PlayerPosition.RW, PlayerPosition.CMD, PlayerPosition.CMA, PlayerPosition.LW,
+                PlayerPosition.RF, PlayerPosition.LF));
+        return playersPositions;
+    }
 }

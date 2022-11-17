@@ -2,6 +2,7 @@ package pl.com.k1313.g4g.domain.club;
 
 import lombok.Data;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
+import pl.com.k1313.g4g.domain.league.League;
 import pl.com.k1313.g4g.domain.player.Player;
 
 import javax.persistence.*;
@@ -18,6 +19,9 @@ public class Club {
 
     @OneToOne
     private AppUser appUser;
+
+    @OneToOne
+    private League clubLeague;
 
     @ElementCollection(targetClass = Player.class)
     private List<Player> clubPlayers;
@@ -37,7 +41,6 @@ public class Club {
     }
 
     public Club() {
-
     }
 
     @Override
