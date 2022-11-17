@@ -1,65 +1,66 @@
 package pl.com.k1313.g4g.domain.league;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
+import pl.com.k1313.g4g.domain.club.ClubService;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
+@Service
 public class LeagueService {
 
     private LeagueRepository leagueRepository;
     private ClubRepository clubRepository;
+    private ClubService clubService;
 
     @Autowired
-    public LeagueService(LeagueRepository leagueRepository, ClubRepository clubRepository) {
+    public LeagueService(LeagueRepository leagueRepository, ClubRepository clubRepository, ClubService clubService) {
         this.leagueRepository = leagueRepository;
         this.clubRepository = clubRepository;
+        this.clubService=clubService;
     }
 
-    public void createLeague(long userClubId) {
+    public League createLeague(long userClubId) {
 
         Club userClub = this.clubRepository.findByClubId(userClubId);
-        List<League> leagues = this.leagueRepository.findAll();
-        List<Club> leagueTeams = new ArrayList<>();
+        League userLeague = checkAvailableLeague();
+        List<Club> leagueTeams = userLeague.getLeagueTeams();
+        for (Club c:leagueTeams
+             ) {if (c.getAppUser()==null){this.clubRepository.delete(c);
+             break;}
+             }
+        leagueTeams.add(userClub);
+        while (userLeague.getLeagueTeams().size()<8){
+            this.clubRepository.save( this.clubService.botClubCreation());
+        }
+        this.leagueRepository.save(userLeague);
+        return userLeague;
+    }
+
+    public League checkAvailableLeague() {
         League league = new League();
-        if (leagues.size() > 0) {
-            league = leagues.get(0);
-            leagueTeams = league.getLeagueTeams();
-
-            if (checkLeagueForUsers(league.getId()).size() < 8) {
-                leagueTeams.add(userClub);
-                this.leagueRepository.save(league);
-            } else {
-                League newleague = new League();
-                newleague.getLeagueTeams().add(userClub);
-                this.leagueRepository.save(newleague);
-            }
-        }else{
-            leagueTeams.add(userClub);
-            for (int i=0;i<leagueTeams.size();i++){
-
-            }
-        }
-        return;
-    }
-
-    public AppUser checkClubForUser(long clubId) {
-        AppUser clubAppUser = this.clubRepository.findByClubId(clubId).getAppUser();
-        return clubAppUser;
-    }
-
-    public List<AppUser> checkLeagueForUsers(long leagueId) {
-        List<AppUser> leagueAppUsers = new ArrayList<>();
-        List<Club> leagueClubs = this.leagueRepository.findAll();
-        for (Club c : leagueClubs
+        List<League> leagues = this.leagueRepository.findAll();
+        for (League l : leagues
         ) {
-            if (c.getAppUser().isRegistered()) {
-                leagueAppUsers.add(c.getAppUser());
+            List<Club> leagueClubs = this.clubRepository.findByClubLeague(l);
+            List<AppUser> leagueAppUsers = new ArrayList<>();
+            for (Club c : leagueClubs
+            ) {
+                AppUser appUser = c.getAppUser();
+                if (appUser != null) {
+                    leagueAppUsers.add(c.getAppUser());
+                }
+            }
+            if (leagueAppUsers.size() < 8) {
+                league = l;
+                break;
             }
         }
-        return leagueAppUsers;
+        this.leagueRepository.save(league);
+        return league;
     }
 }

@@ -105,7 +105,7 @@ public class PlayerService {
 
     public List<Player> botPlayersCreation(long clubId) {
         List players=new ArrayList<Player>();
-        for (int i = 0; i < 10 >; i++) {
+        for (int i = 0; i < 10 ; i++) {
             Player newPlayer = autoCreatePlayer();
             newPlayer.setPlayerClub(this.clubRepository.findByClubId(clubId));
             List playersPosition=botPlayersPositions();

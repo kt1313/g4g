@@ -7,6 +7,7 @@ import pl.com.k1313.g4g.domain.appuser.events.AppUserRegistrationEvent;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
+import pl.com.k1313.g4g.domain.league.LeagueService;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
@@ -22,6 +23,7 @@ public class AppUserService {
     private PlayerService playerService;
     private ClubRepository clubRepository;
     private ClubService clubService;
+    private LeagueService leagueService;
 
     @Autowired
     public AppUserService(ApplicationEventPublisher publisher,
@@ -29,23 +31,16 @@ public class AppUserService {
                           PlayerRepository playerRepository,
                           PlayerService playerService,
                           ClubRepository clubRepository,
-                          ClubService clubService) {
+                          ClubService clubService,
+                          LeagueService leagueService) {
         this.publisher = publisher;
         this.appUserRepository = appUserRepository;
         this.playerRepository = playerRepository;
         this.playerService = playerService;
         this.clubRepository=clubRepository;
         this.clubService=clubService;
+        this.leagueService=leagueService;
     }
-
-//    public void AppUserRegistration(long appUserId, String username, String password, String email) {
-//        AppUser newUser = new AppUser(appUserId, username, password, email);
-//        this.repository.save(newUser);
-//        AppUserRegistrationEvent event=new AppUserRegistrationEvent(username, email);
-//        publisher.publishEvent(event);
-//
-//    }
-
 
     public void createAppUser(String appusername, String clubname, String email, String password) {
         AppUser appUser = new AppUser(appusername, clubname, email, password);
@@ -66,8 +61,7 @@ public class AppUserService {
             this.playerRepository.save(newGoalkeeper);
             System.out.println(" Goalkeeper nr "+i+" "+newGoalkeeper);
         }
-        System.out.println("UWAGA!UWAGA!UWAGA!UWAGA!");
-        System.out.println("ALL PLAYERS FROM CLUB: "+this.playerRepository.findAllByPlayerClub(newClub));
+        this.leagueService.createLeague(appUser.getAppUserId());
     }
 
     public boolean confirmRegistration(String appUserName) {

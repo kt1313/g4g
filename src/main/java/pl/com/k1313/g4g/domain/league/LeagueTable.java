@@ -4,6 +4,7 @@ import pl.com.k1313.g4g.domain.club.Club;
 
 import java.util.List;
 
+
 public class LeagueTable {
 
     private List<Club> leagueClubs;
