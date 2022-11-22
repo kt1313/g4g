@@ -7,6 +7,7 @@ import pl.com.k1313.g4g.domain.appuser.events.AppUserRegistrationEvent;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
+import pl.com.k1313.g4g.domain.league.League;
 import pl.com.k1313.g4g.domain.league.LeagueService;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
@@ -62,7 +63,9 @@ public class AppUserService {
             System.out.println(" Goalkeeper nr "+i+" "+newGoalkeeper);
         }
         this.clubRepository.save(newClub);
-        this.leagueService.createLeague(newClub.getClubId());
+        League newLeague = this.leagueService.createLeague(newClub.getClubId());
+        System.out.println("User:"+appusername+" Club name: "
+                +clubname+" League ID and LeagueNr: "+newLeague+" League Teams: "+newLeague.getLeagueTeams());
     }
 
     public boolean confirmRegistration(long appUserId) {

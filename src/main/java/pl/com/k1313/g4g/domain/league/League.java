@@ -39,4 +39,17 @@ public class League {
     public List<Club> getLeagueTeams() {
         return leagueTeams;
     }
+
+    @Override
+    public String toString() {
+        return
+                 id +
+                ", leagueNumber='" + leagueNumber + " LeagueTeams"+getLeagueTeams()+'\'' ;
+    }
+
+    public void setLeagueNumber(String leagueNumber) {
+        this.leagueNumber = leagueNumber;
+    }
+
+
 }

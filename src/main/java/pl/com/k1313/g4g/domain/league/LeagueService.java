@@ -29,28 +29,37 @@ public class LeagueService {
 
         Club userClub = this.clubRepository.findByClubId(userClubId);
         League userLeague = checkAvailableLeague();
-        List<Club> leagueTeams = userLeague.getLeagueTeams();
-        if (leagueTeams != null) {
-            for (Club c : leagueTeams
-            ) {
-                if (c.getAppUser() == null) {
-                    this.clubRepository.delete(c);
-                    break;
-                }
-            }
-            leagueTeams.add(userClub);
-            while (userLeague.getLeagueTeams().size() < 8) {
-                this.clubRepository.save(this.clubService.botClubCreation());
-            }
-        } else {
-            leagueTeams=new ArrayList<>();
-            leagueTeams.add(userClub);
-            while (leagueTeams.size() < 8) {
-                Club newBotClub=this.clubService.botClubCreation();
-                leagueTeams.add(newBotClub);
-                this.clubRepository.save(newBotClub);
+        List<Club> leagueTeams = new ArrayList<>();
+        if (userLeague.getLeagueTeams() != null) {
+            leagueTeams = userLeague.getLeagueTeams();
+        }
+        int test = leagueTeams.size();
+//        tutaj trzeba sprawdzic czy zespoly ligii to boty i wyrzucic jeden jesli tak
+//            if (leagueTeams != null) {
+        for (Club c : leagueTeams
+        ) {
+            if (c.getAppUser() == null) {
+                this.clubRepository.delete(c);
+                break;
             }
         }
+        leagueTeams.add(userClub);
+        userClub.setClubLeague(userLeague);
+        this.clubRepository.save(userClub);
+        //tutaj musi cos userLeague sprawdzic stworzyc
+        this.leagueRepository.save(
+        while (userLeague.getLeagueTeams().size() < 8) {
+            this.clubRepository.save(this.clubService.botClubCreation());
+        }
+//            } else {
+        leagueTeams.add(userClub);
+        while (leagueTeams.size() < 8) {
+            Club newBotClub = this.clubService.botClubCreation();
+            leagueTeams.add(newBotClub);
+            this.clubRepository.save(newBotClub);
+        }
+//            }
+
         this.leagueRepository.save(userLeague);
         return userLeague;
     }
@@ -64,17 +73,38 @@ public class LeagueService {
             List<AppUser> leagueAppUsers = new ArrayList<>();
             for (Club c : leagueClubs
             ) {
-                AppUser appUser = c.getAppUser();
-                if (appUser != null) {
+                if (c.getAppUser() != null) {
                     leagueAppUsers.add(c.getAppUser());
+                    if (leagueAppUsers.size() < 8) {
+                        league = l;
+                        //teraz wyciagnij nr ligi a jesli nie ma to nadaj pierwszy wolny
+                        if (league.getLeagueNumber().isEmpty()) {
+                            List<League> leaguesWithNoNumbers =
+                                    this.leagueRepository.findAnyByLeagueNumberNotNull();
+                            if (!leaguesWithNoNumbers.isEmpty()) {
+                                int maxInt = 0;
+                                for (League leag : leaguesWithNoNumbers
+                                ) {
+                                    int leagueNumber = Integer.parseInt(leag.getLeagueNumber());
+                                    if (leagueNumber > maxInt) {
+                                        maxInt = leagueNumber;
+                                    }
+                                }
+                                String stringMaxInt=String.valueOf(maxInt+1);
+                                league.setLeagueNumber(stringMaxInt);
+                            }
+                        } else {
+
+                            dokonczyc tego elsa
+                        }
+                    } else {
+                        break;
+                    }
                 }
-            }
-            if (leagueAppUsers.size() < 8) {
-                league = l;
-                break;
             }
         }
         this.leagueRepository.save(league);
         return league;
+
     }
 }
