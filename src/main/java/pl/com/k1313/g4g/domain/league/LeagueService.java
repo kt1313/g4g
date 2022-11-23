@@ -32,7 +32,7 @@ public class LeagueService {
         League userLeague = checkAvailableLeague();
         userClub.setClubLeague(userLeague);
         this.clubRepository.save(userClub);
-        List<Club> leagueTeams=new ArrayList<>();
+        List<Club> leagueTeams = new ArrayList<>();
         //to do zrpbienia w przyszlosci - co jesliw  availbele league jest juz uzytkownik
 //      if (!userLeague.getLeagueTeams().isEmpty()){leagueTeams=userLeague.getLeagueTeams();}
         leagueTeams.add(userClub);
@@ -48,25 +48,21 @@ public class LeagueService {
             }
         }
 
-//        while (userLeague.getLeagueTeams().size() < 8) {
-//            this.clubRepository.save(this.clubService.botClubCreation());
-//        }
-////            } else {
         while (leagueTeams.size() < 8) {
             Club newBotClub = this.clubService.botClubCreation();
-;            newBotClub.setClubLeague(userLeague);
+            ;
+            newBotClub.setClubLeague(userLeague);
             leagueTeams.add(newBotClub);
             this.clubRepository.save(newBotClub);
         }
-//            }
-
+        userLeague.setLeagueTeams(leagueTeams);
         this.leagueRepository.save(userLeague);
         //jak wydlubac zespoly z ligi??? tylko z leagueTeams??
+
         System.out.println("----------------");
-        System.out.println("Liga: "+ userLeague.getId());
+        System.out.println("Liga: " + userLeague.getId());
         System.out.println("----------------");
-        System.out.println("zespoly: "+leagueTeams);
-        //zwraca NUlllaaaa!! ponizej
+        System.out.println("zespoly: " + userLeague.getLeagueTeams());
         return userLeague;
     }
 

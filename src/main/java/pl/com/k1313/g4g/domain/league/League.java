@@ -46,12 +46,17 @@ public class League {
         this.leagueNumber = leagueNumber;
     }
 
+    public void setLeagueTeams(List<Club> leagueTeams) {
+        this.leagueTeams = leagueTeams;
+    }
+
     @Override
     public String toString() {
         return
                 id
                         + " LeagueTeams "
-                        + new ArrayList<>(getLeagueTeams()) + '\'';
+//                        + new ArrayList<>(getLeagueTeams()) + '\''
+                ;
     }
 
 }
