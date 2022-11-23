@@ -8,7 +8,9 @@ import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerPosition;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Setter(value = AccessLevel.NONE)
@@ -23,7 +25,7 @@ public class League {
 
     private int leagueRound;
 
-//    private LeagueTable leagueTable;
+    //    private LeagueTable leagueTable;
     @OneToMany
     private List<Club> leagueTeams;
 
@@ -40,16 +42,16 @@ public class League {
         return leagueTeams;
     }
 
-    @Override
-    public String toString() {
-        return
-                 id +
-                ", leagueNumber='" + leagueNumber + " LeagueTeams"+getLeagueTeams()+'\'' ;
-    }
-
     public void setLeagueNumber(String leagueNumber) {
         this.leagueNumber = leagueNumber;
     }
 
+    @Override
+    public String toString() {
+        return
+                id
+                        + " LeagueTeams "
+                        + new ArrayList<>(getLeagueTeams()) + '\'';
+    }
 
 }
