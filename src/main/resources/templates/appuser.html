@@ -26,13 +26,18 @@
                 <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/team">Club</a>
+<!--                <a class="nav-link" href="/team">Club</a>-->
+                <a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
+                        th:text="${clubname}">clubname</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/players">Players</a>
+<!--                <a class="nav-link" href="/players">Players</a>-->
+                <a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a>
+                <input type="hidden" th:value="${clubId}">
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/league">League</a>
+<!--                <a class="nav-link" href="/team/league/">League</a>-->
+                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>
             </li>
         </ul>
     </div>
@@ -144,22 +149,25 @@
                             </div>
                         </div>
                         <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Club Name</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
-                                            th:text="${clubname}">clubname</span></a></h2>
-                                </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Club Name</h6>
                             </div>
+                            <div class="col-sm-9 text-secondary">
+                                <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
+                                        th:text="${clubname}">clubname</span></a></h2>
+                            </div>
+                        </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Local League Table</h6>
                             </div>
+
                             <div class="col-sm-9 text-secondary">
-                                <a class="nav-link" href="/leagues/appuserleague">League IV.21 - not active</a></div>
+                                <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>
+                                <input type="hidden" th:value="${leagueId}">
+                            </div>
                         </div>
                         <hr>
                         <div class="row">

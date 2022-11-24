@@ -47,9 +47,11 @@ public class AppUserController {
             String clubname = this.repository.findByAppUserName(appusername).get().getClubname();
             long clubId = this.clubRepository.findByClubName(clubname).get().getClubId();
             Optional<Club> club = this.clubRepository.findByClubName(clubname);
+            long leagueId= this.clubRepository.findByClubName(clubname).get().getClubLeague().getId();
             model.addAttribute("appusername", appusername);
             model.addAttribute("clubname", clubname);
             model.addAttribute("clubId", clubId);
+            model.addAttribute("leagueId", leagueId);
             return "appuser";
         } else return "login";
     }

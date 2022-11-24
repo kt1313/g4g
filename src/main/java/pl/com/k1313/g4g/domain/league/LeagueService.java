@@ -56,13 +56,9 @@ public class LeagueService {
             this.clubRepository.save(newBotClub);
         }
         userLeague.setLeagueTeams(leagueTeams);
+        userClub.setClubLeague(userLeague);
+        this.clubRepository.save(userClub);
         this.leagueRepository.save(userLeague);
-        //jak wydlubac zespoly z ligi??? tylko z leagueTeams??
-
-        System.out.println("----------------");
-        System.out.println("Liga: " + userLeague.getId());
-        System.out.println("----------------");
-        System.out.println("zespoly: " + userLeague.getLeagueTeams());
         return userLeague;
     }
 

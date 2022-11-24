@@ -69,36 +69,31 @@
 </style>
 <div class="container">
     <div>
-        <p>League Name</p>
+        <div><b><span th:text="${league.leagueNumber}">leaguenumber</span></b></div>
+
     </div>
     <div class="red">
         <div>
             <p>League table</p>
-            <p>1. First club</p>
-            <p>2. Second club</p>
-            <p>3. Third club</p>
-            <p>4. Forth club</p>
-            <p>5. Fifth club</p>
-            <p>6. Sixth club</p>
-            <p>7. Seventh club</p>
-            <p>8. Eighth club</p>
+            <div th:each="club : ${league.getLeagueTeams()}">
+                <div><span th:text="${club.getClubName()}">clubname</span></div>
+            </div>
+            <div>
+                <p>Games Win Lost Draw GoalsDif Points</p>
+                <p>1. First club</p>
+                <p>2. Second club</p>
+                <p>3. Third club</p>
+                <p>4. Forth club</p>
+                <p>5. Fifth club</p>
+                <p>6. Sixth club</p>
+                <p>7. Seventh club</p>
+                <p>8. Eighth club</p>
+            </div>
         </div>
         <div>
-            <p>Games Win Lost Draw GoalsDif Points</p>
-            <p>1. First club</p>
-            <p>2. Second club</p>
-            <p>3. Third club</p>
-            <p>4. Forth club</p>
-            <p>5. Fifth club</p>
-            <p>6. Sixth club</p>
-            <p>7. Seventh club</p>
-            <p>8. Eighth club</p>
+            <p>next fixtures</p>
         </div>
     </div>
-    <div>
-        <p>next fixtures</p>
-    </div>
 </div>
-<!--</div>-->
 </body>
 </html>

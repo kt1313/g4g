@@ -3,11 +3,10 @@ package pl.com.k1313.g4g.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.com.k1313.g4g.domain.club.Club;
+import pl.com.k1313.g4g.domain.league.League;
+import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerPosition;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
@@ -30,15 +29,17 @@ public class ClubController {
     private ClubRepository clubRepository;
     private PlayerService playerService;
     private ClubService clubService;
+    private LeagueRepository leagueRepository;
 
     @Autowired
     public ClubController(
             PlayerRepository playerRepository, PlayerService playerService,
-            ClubRepository clubRepository, ClubService clubService) {
+            ClubRepository clubRepository, ClubService clubService, LeagueRepository leagueRepository) {
         this.playerRepository = playerRepository;
         this.playerService = playerService;
         this.clubRepository = clubRepository;
         this.clubService = clubService;
+        this.leagueRepository = leagueRepository;
     }
 
     @GetMapping("/takeover")
@@ -51,30 +52,31 @@ public class ClubController {
         return "appuser";
     }
 
-    @GetMapping("/league")
-    public String leaguepage() {
-
+    @GetMapping("/league/{leagueId}")
+    public String league(@PathVariable long leagueId, Model model) {
+        League league = this.leagueRepository.findById(leagueId);
+        model.addAttribute("league", league);
         return "league";
     }
 
 
     @PostMapping("/firstsquadplayers")
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
-            @RequestParam(value = "clubId", required = true) String stringClubId,
-                        @RequestParam(value = "createnewplayerposition") List<String> stringPlayerPos,
+                                   @RequestParam(value = "clubId", required = true) String stringClubId,
+                                   @RequestParam(value = "createnewplayerposition") List<String> stringPlayerPos,
                                    Model model, HttpSession session, HttpServletRequest request) {
 
-        System.out.println("pozycja"+stringPlayerPos);
+        System.out.println("pozycja" + stringPlayerPos);
         //musi w players po wybraniu pozycji kazdemu playerowi
         //isc do kazdego z osobna playera i mu zmienic pozycje i save w repo zrobic
-        List <String> notemptyPlayerPos=new ArrayList<>();
-        for (String p:stringPlayerPos
-             ) {
-            if(!p.equals("0"))
+        List<String> notemptyPlayerPos = new ArrayList<>();
+        for (String p : stringPlayerPos
+        ) {
+            if (!p.equals("0"))
                 notemptyPlayerPos.add(p);
         }
-        List<PlayerPosition> playerPositions=new ArrayList<>(notemptyPlayerPos.size());
-        for (int i=0; i< notemptyPlayerPos.size();i++){
+        List<PlayerPosition> playerPositions = new ArrayList<>(notemptyPlayerPos.size());
+        for (int i = 0; i < notemptyPlayerPos.size(); i++) {
             playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));
             System.out.println(playerPositions.get(i));
         }
@@ -87,22 +89,24 @@ public class ClubController {
                 this.playerService.confirmFirst11(ids);
                 Club club = this.clubRepository.findByClubId(clubId);
                 List<Player> firstsquadplayers = this.clubService.setUpFirstEleven(club);
-                for (int i=0; i< firstsquadplayers.size();i++){firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));}
+                for (int i = 0; i < firstsquadplayers.size(); i++) {
+                    firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));
+                }
                 System.out.println("Dane o zawodniku, Imie: "
                         + firstsquadplayers.stream().findFirst().get().getFirstName()
                         + " pozycja: "
-                        + firstsquadplayers.stream().findFirst().get().getPlayerPosition()) ;
+                        + firstsquadplayers.stream().findFirst().get().getPlayerPosition());
                 Optional<Player> goalkeeper = firstsquadplayers.stream()
                         .filter(p -> p.getPlayerPosition().equals(PlayerPosition.GK))
                         .findFirst();
                 goalkeeper.ifPresent(p -> model.addAttribute("goalkeeper", goalkeeper));
-                System.out.println("goalkeeper"+goalkeeper);
+                System.out.println("goalkeeper" + goalkeeper);
 
                 Optional<Player> rightWingback = firstsquadplayers.stream()
                         .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RWB))
                         .findFirst();
                 rightWingback.ifPresent(p -> model.addAttribute("rightWingback", rightWingback));
-                System.out.println("rightWingback"+rightWingback);
+                System.out.println("rightWingback" + rightWingback);
 
                 Optional<Player> rightCentreback = firstsquadplayers.stream()
                         .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RCB))

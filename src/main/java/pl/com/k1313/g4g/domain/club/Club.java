@@ -20,7 +20,7 @@ public class Club {
     @OneToOne
     private AppUser appUser;
 
-    @OneToOne
+    @ManyToOne
     private League clubLeague;
 
     @ElementCollection(targetClass = Player.class)

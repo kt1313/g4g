@@ -10,4 +10,5 @@ public interface LeagueRepository extends JpaRepository<League,Long> {
 
     League findById(long id);
     List<League> findAnyByLeagueNumberNotNull();
+
 }
