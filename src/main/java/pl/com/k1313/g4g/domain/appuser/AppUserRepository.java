@@ -8,6 +8,7 @@ import java.util.Optional;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
+    AppUser findByClubId(long clubId);
     AppUser findByAppUserId(long appUserId);
     Optional<AppUser> findByAppUserName(String appusername);
 

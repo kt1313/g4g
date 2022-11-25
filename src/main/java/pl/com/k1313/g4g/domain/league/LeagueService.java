@@ -50,7 +50,7 @@ public class LeagueService {
 
         while (leagueTeams.size() < 8) {
             Club newBotClub = this.clubService.botClubCreation();
-            ;
+
             newBotClub.setClubLeague(userLeague);
             leagueTeams.add(newBotClub);
             this.clubRepository.save(newBotClub);

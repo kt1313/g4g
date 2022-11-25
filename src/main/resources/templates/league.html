@@ -124,7 +124,7 @@
         </tr>
         <tr class="wpos" th:each="club, state : ${league.getLeagueTeams()}">
             <td th:utext="${state.count}">index</td>
-            <td><a th:href="@{/team/{clubId}(clubId=${club.getClubId()})}"><span
+            <td><a th:href="@{/appuser/club/{clubId}(clubId=${club.getClubId()})}"><span
                     th:text="${club.getClubName()}">clubname</span></a>
                 <input type="hidden" th:value="${club.getClubId()}"></td>
             <td th:utext="${state.count}">count</td>

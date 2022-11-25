@@ -21,37 +21,43 @@ public class AppUser {
     private String appUserPassword;
     private String userEmail;
 
-    private boolean registered=false;
+    private long clubId;
+
+    private boolean registered = false;
 
 
-
-
-    AppUser (long appUserId, String appUserName, String userPassword, String userEmail){
-        this.appUserId=appUserId;
+    AppUser(long appUserId, String appUserName, String userPassword, String userEmail) {
+        this.appUserId = appUserId;
         this.appUserName = appUserName;
-        this.appUserPassword=userPassword;
-        this.userEmail=userEmail;
+        this.appUserPassword = userPassword;
+        this.userEmail = userEmail;
     }
-    AppUser (long appUserId, String appUserName, String userPassword, String userEmail, boolean registered){
-        this.appUserId=appUserId;
+
+    AppUser(long appUserId, String appUserName, String userPassword, String userEmail, boolean registered) {
+        this.appUserId = appUserId;
         this.appUserName = appUserName;
-        this.appUserPassword=userPassword;
-        this.userEmail=userEmail;
-        this.registered=registered;
+        this.appUserPassword = userPassword;
+        this.userEmail = userEmail;
+        this.registered = registered;
+    }
+
+    public AppUser(String appUserName, String clubname) {
+        this.appUserName = appUserName;
+        this.clubname = clubname;
     }
 
     public AppUser(String appusername, String clubname, String userEmail, String password) {
-        this.appUserName=appusername;
-        this.clubname=clubname;
-        this.userEmail=userEmail;
-        this.appUserPassword=password;
+        this.appUserName = appusername;
+        this.clubname = clubname;
+        this.userEmail = userEmail;
+        this.appUserPassword = password;
     }
 
     public AppUser() {
 
     }
 
-    public void confirmRegistry(){
-         this.registered=true;
+    public void confirmRegistry() {
+        this.registered = true;
     }
 }

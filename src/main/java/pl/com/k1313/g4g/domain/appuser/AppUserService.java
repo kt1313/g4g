@@ -38,9 +38,9 @@ public class AppUserService {
         this.appUserRepository = appUserRepository;
         this.playerRepository = playerRepository;
         this.playerService = playerService;
-        this.clubRepository=clubRepository;
-        this.clubService=clubService;
-        this.leagueService=leagueService;
+        this.clubRepository = clubRepository;
+        this.clubService = clubService;
+        this.leagueService = leagueService;
     }
 
     public void createAppUser(String appusername, String clubname, String email, String password) {
@@ -49,30 +49,30 @@ public class AppUserService {
         AppUserRegistrationEvent event = new AppUserRegistrationEvent(this, appusername, clubname, email, password);
         publisher.publishEvent(event);
 
-        Club newClub=this.clubService.clubCreation(appUser,clubname);
-        for (int i=0; i<18;i++) {
-            Player newPlayer=this.playerService.autoCreatePlayer();
+        Club newClub = this.clubService.clubCreation(appUser, clubname);
+        for (int i = 0; i < 18; i++) {
+            Player newPlayer = this.playerService.autoCreatePlayer();
             newPlayer.setPlayerClub(newClub);
             this.playerRepository.save(newPlayer);
-            System.out.println(" Player nr "+i+" "+newPlayer);
+            System.out.println(" Player nr " + i + " " + newPlayer);
         }
-        for (int i=0; i<3;i++) {
-            Player newGoalkeeper=this.playerService.autoCreateGoalkeeper();
+        for (int i = 0; i < 3; i++) {
+            Player newGoalkeeper = this.playerService.autoCreateGoalkeeper();
             newGoalkeeper.setPlayerClub(newClub);
             this.playerRepository.save(newGoalkeeper);
-            System.out.println(" Goalkeeper nr "+i+" "+newGoalkeeper);
+            System.out.println(" Goalkeeper nr " + i + " " + newGoalkeeper);
         }
         this.clubRepository.save(newClub);
         League newLeague = this.leagueService.createLeague(newClub.getClubId());
-        System.out.println("User:"+appusername+" Club name: "
-                +clubname+" League ID and LeagueNr: "+newLeague+" League Teams: "+newLeague.getLeagueTeams());
+        System.out.println("User:" + appusername + " Club name: "
+                + clubname + " League ID and LeagueNr: " + newLeague + " League Teams: " + newLeague.getLeagueTeams());
     }
 
     public boolean confirmRegistration(long appUserId) {
 
         AppUser byAppUserId = this.appUserRepository.findByAppUserId(appUserId);
 
-        if (byAppUserId!=null) {
+        if (byAppUserId != null) {
             byAppUserId.confirmRegistry();
             this.appUserRepository.save(byAppUserId);
             return true;

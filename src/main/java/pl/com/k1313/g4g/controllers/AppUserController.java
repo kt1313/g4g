@@ -22,21 +22,37 @@ public class AppUserController {
     private AppUserService appUserService;
     private AppUserRepository repository;
     private ClubRepository clubRepository;
-    private ClubService clubService;
+//    private ClubService clubService;
 
     @Autowired
     public AppUserController(AppUserService appUserService, AppUserRepository repository,
-                             ClubRepository clubRepository, ClubService clubService) {
+                             ClubRepository clubRepository
+//            , ClubService clubService
+    ) {
         this.appUserService = appUserService;
         this.repository = repository;
         this.clubRepository = clubRepository;
-        this.clubService = clubService;
+//        this.clubService = clubService;
     }
 
     @PostMapping
-    public String appUserAndClubPage(){
-        return "appuser";
+    public String appUserAndClubPage(long clubId, Model model) {
+        Club byClubId = this.clubRepository.findByClubId(clubId);
+        String clubName = byClubId.getClubName();
+        AppUser appUserByClubId = this.repository.findByClubId(clubId);
+        String appUserName = appUserByClubId.getAppUserName();
+        long leagueId = this.clubRepository.findByClubId(clubId).getClubId();
+
+        model.addAttribute("appuser", appUserByClubId);
+        model.addAttribute("appusername", appUserName);
+        model.addAttribute("club", byClubId);
+        model.addAttribute("clubname", clubName);
+        model.addAttribute("clubId", clubId);
+        model.addAttribute("leagueId", leagueId);
+
+        return "appuserandclub";
     }
+
     @PostMapping("/logged")
     public String appUserPage(String appusername, String password, Model model) {
 
@@ -49,12 +65,12 @@ public class AppUserController {
             String clubname = this.repository.findByAppUserName(appusername).get().getClubname();
             long clubId = this.clubRepository.findByClubName(clubname).get().getClubId();
             Optional<Club> club = this.clubRepository.findByClubName(clubname);
-            long leagueId= this.clubRepository.findByClubName(clubname).get().getClubLeague().getId();
+            long leagueId = this.clubRepository.findByClubName(clubname).get().getClubLeague().getId();
             model.addAttribute("appusername", appusername);
             model.addAttribute("clubname", clubname);
             model.addAttribute("clubId", clubId);
             model.addAttribute("leagueId", leagueId);
-            return "appuser";
+            return "appuserandclub";
         } else return "login";
     }
 
@@ -123,7 +139,7 @@ public class AppUserController {
             model.addAttribute("appusername", appusername);
             model.addAttribute("clubname", clubname);
             model.addAttribute("loginsuccess", loginsuccess);
-            return "appuser";
+            return "appuserandclub";
         } else {
             model.addAttribute("errors", errors);
             return "login";
