@@ -37,62 +37,117 @@
         </ul>
     </div>
 </nav>
-<!--/.Navbar -->>
+<!--/.Navbar -->
 <style>
-    .container {
-        display: flex;
-        background: rgb(232, 239, 252);
+    *{
+        font-family: Fjalla One;
+        margin: 0;
+        border: 0;
+        padding: 0;
+        color: white;
     }
 
-    .red {
-        /*background: orangered;*/
-        display: flex;
-        flex-direction: row;
+    html{
+        background-color: #000000;
     }
 
-    .red div {
-        font-size: 2vw;
+    .ptable table{
+        margin: 30px auto;
+        border-collapse: collapse;
     }
 
-    .green {
-        /*background: yellowgreen;*/
-        display: flex
-
+    .ptable{
+        margin: 0px 0% 30px 0%;
     }
 
-    .container div {
-        font-size: 1vw;
-        padding: .2em;
-        color: black;
-        flex: 1;
+    th, td {
+        padding: 10px;
+    }
+
+    th{
+        background-color: black;
+        color: #ffe221;
+    }
+
+    .headin{
+        text-align: center;
+        text-decoration: none;
+        color: #ffe221;
+        margin: 30px;
+        display: block;
+    }
+
+    .wpos{
+        text-align: center;
+    }
+
+    .wpos td{
+        color: #77ff21;
+    }
+
+    .pos{
+        text-align: center;
+    }
+
+    .pos td{
+        color: #ff7b21;
+    }
+
+    table .col{
+        border-bottom: 1px solid #FFFFFF;
+    }
+
+    .wpos:hover{
+        background-color: #77ff21;
+    }
+
+    .wpos:hover td{
+        color: #000000;
+    }
+
+    .pos:hover{
+        background-color: #ff7b21;
+    }
+
+    .pos:hover td{
+        color: #000000;
     }
 </style>
-<div class="container">
-    <div>
-        <div><b><span th:text="${league.leagueNumber}">leaguenumber</span></b></div>
-
-    </div>
-    <div class="red">
-        <div>
-            <p>League table</p>
-            <div th:each="club : ${league.getLeagueTeams()}">
-                <div><span th:text="${club.getClubName()}">clubname</span></div>
-            </div>
-            <div>
-                <p>Games Win Lost Draw GoalsDif Points</p>
-                <p>1. First club</p>
-                <p>2. Second club</p>
-                <p>3. Third club</p>
-                <p>4. Forth club</p>
-                <p>5. Fifth club</p>
-                <p>6. Sixth club</p>
-                <p>7. Seventh club</p>
-                <p>8. Eighth club</p>
-            </div>
-        </div>
-        <div>
-            <p>next fixtures</p>
-        </div>
+    <div class="ptable">
+        <h1 class="headin">Standings</h1>
+        <table>
+            <tr class="col">
+                <th>#</th>
+                <th>Team</th>
+                <th>GP</th>
+                <th>W</th>
+                <th>D</th>
+                <th>L</th>
+                <th>GD</th>
+                <th>PTS</th>
+            </tr>
+<!--            <div class="col-sm-9 text-secondary">-->
+<!--                <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>-->
+<!--                <input type="hidden" th:value="${leagueId}">-->
+<!--            </div>-->
+<!--            <div class="col-sm-9 text-secondary">-->
+<!--                <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span-->
+<!--                        th:text="${clubname}">clubname</span></a></h2>-->
+<!--            </div>-->
+            <tr class="wpos" th:each="club, state : ${league.getLeagueTeams()}">
+                <td th:utext="${state.count}">index</td>
+                <td><a th:href="@{/team/${club.getClubId()}(clubId=${club.getClubId()})}"><span
+                        th:text="${club.getClubName()}">clubname</span></a>
+                    <input type="hidden" th:value="${club.getClubId()}"></td>
+<!--                <td><span th:text="${club.getClubName()}">clubname</span></td>-->
+                <td th:utext="${state.count}">count</td>
+                <td>2</td>
+                <td>0</td>
+                <td>0</td>
+                <td>5</td>
+                <td>6</td>
+            </tr>
+        </table>
     </div>
 </div>
 </body>

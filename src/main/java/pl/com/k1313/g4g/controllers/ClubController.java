@@ -51,14 +51,18 @@ public class ClubController {
     public String teamhomepage() {
         return "appuser";
     }
-
+    @GetMapping("/{clubId}")
+    public String club(@PathVariable long clubId, Model model) {
+        Club club = this.clubRepository.findByClubId(clubId);
+        model.addAttribute("club", club);
+        return "club";
+    }
     @GetMapping("/league/{leagueId}")
     public String league(@PathVariable long leagueId, Model model) {
         League league = this.leagueRepository.findById(leagueId);
         model.addAttribute("league", league);
         return "league";
     }
-
 
     @PostMapping("/firstsquadplayers")
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
