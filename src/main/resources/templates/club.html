@@ -61,7 +61,8 @@
                                     <h6 class="mb-0">Club Name</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <h2><a class="nav-link" href="/appuser/club/{$clubId}"><span th:text="${clubname}">clubname</span></a></h2>
+                                    <h2><a class="nav-link" href="/appuser/club/{$clubId}"><span th:text="${clubname}">clubname</span></a>
+                                    </h2>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -69,9 +70,9 @@
                                     <div><h2><a class="nav-link" href="/appuser"><span
                                             th:text="${appuser}">appuser</span></a></h2>
                                     </div>
-                                    <div class="text-center"><a class="nav-link" href="/appuser/registration/stepone">Register and
-                                        takeover your Club!</a>
+                                    <div class="text-center"><a>This is your club: </a>
                                     </div>
+                                    <div><span th:text="${clubname}">clubname</span></div>
                                 </div>
                             </div>
                         </fieldset>
@@ -80,24 +81,14 @@
             </div>
         </div>
     </div>
-    <!--    <div class="container">-->
-    <!--        <div class="p-3 text-center">-->
-    <!--            <div class="h2">-->
-    <!--                <img src="https://e1.pngegg.com/pngimages/423/770/png-clipart-garcon-football-enfant-->
-    <!--               -dessin-equipement-sportif-doigt-main-ligne-thumbnail.png" alt="picture1" width="700" height="600" >-->
-    <!--            </div>-->
-    <!--            <div class="img-thumbnail">-->
-    <!--                <img src="registrypics.jpg" alt="picture2" >-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+
     <div class="container">
         <div class="p-3 text-center">
             <div class="h2">
                 <img src="https://c8.alamy.com/comp/H3A2TA/football-manager-pointing-at-chalkboard-H3A2TA.jpg"
                      alt="picture1" width="700" height="700">
             </div>
-            <div class="img-thumbnail" >
+            <div class="img-thumbnail">
                 <img src="regConfirmation.jpg" alt="picture2">
             </div>
         </div>

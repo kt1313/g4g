@@ -54,6 +54,8 @@ public class ClubController {
     @GetMapping("/{clubId}")
     public String club(@PathVariable long clubId, Model model) {
         Club club = this.clubRepository.findByClubId(clubId);
+        String clubname=club.getClubName();
+        model.addAttribute("clubname", clubname);
         model.addAttribute("club", club);
         return "club";
     }

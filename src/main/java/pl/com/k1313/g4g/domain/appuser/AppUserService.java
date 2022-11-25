@@ -70,10 +70,11 @@ public class AppUserService {
 
     public boolean confirmRegistration(long appUserId) {
 
-        Optional<AppUser> byAppUserId = this.appUserRepository.findById(appUserId);
+        AppUser byAppUserId = this.appUserRepository.findByAppUserId(appUserId);
 
-        if (byAppUserId.isPresent()) {
-            byAppUserId.get().confirmRegistry();
+        if (byAppUserId!=null) {
+            byAppUserId.confirmRegistry();
+            this.appUserRepository.save(byAppUserId);
             return true;
         } else {
             return false;

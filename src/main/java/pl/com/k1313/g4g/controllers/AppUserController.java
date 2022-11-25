@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.appuser.AppUserService;
@@ -12,7 +11,6 @@ import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
 
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +34,11 @@ public class AppUserController {
     }
 
     @PostMapping
-    public String appUserpage(String appusername, String password, Model model) {
+    public String appUserAndClubPage(){
+        return "appuser";
+    }
+    @PostMapping("/logged")
+    public String appUserPage(String appusername, String password, Model model) {
 
         List<String> errors = new ArrayList<>();
         Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);

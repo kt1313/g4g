@@ -39,24 +39,24 @@
 </nav>
 <!--/.Navbar -->
 <style>
-    *{
-        font-family: Fjalla One;
+    * {
+        /*font-family: Fjalla One;*/
         margin: 0;
         border: 0;
         padding: 0;
-        color: white;
+        /*color: white;*/
     }
 
-    html{
-        background-color: #000000;
-    }
+    /*html{*/
+    /*    background-color: #000000;*/
+    /*}*/
 
-    .ptable table{
+    .ptable table {
         margin: 30px auto;
         border-collapse: collapse;
     }
 
-    .ptable{
+    .ptable {
         margin: 0px 0% 30px 0%;
     }
 
@@ -64,91 +64,85 @@
         padding: 10px;
     }
 
-    th{
-        background-color: black;
-        color: #ffe221;
+    th {
+        background-color: lightblue;
+        color: black;
     }
 
-    .headin{
+    .headin {
         text-align: center;
         text-decoration: none;
-        color: #ffe221;
+        color: #000000;
         margin: 30px;
         display: block;
     }
 
-    .wpos{
+    .wpos {
         text-align: center;
     }
 
-    .wpos td{
-        color: #77ff21;
+    .wpos td {
+        color: black;
     }
 
-    .pos{
-        text-align: center;
-    }
-
-    .pos td{
-        color: #ff7b21;
-    }
-
-    table .col{
-        border-bottom: 1px solid #FFFFFF;
-    }
-
-    .wpos:hover{
-        background-color: #77ff21;
-    }
-
-    .wpos:hover td{
+    .pos td {
         color: #000000;
     }
 
-    .pos:hover{
-        background-color: #ff7b21;
+    table .col {
+        border-bottom: 1px solid lightskyblue;
     }
 
-    .pos:hover td{
+    .wpos:hover {
+        background-color: lightskyblue;
+    }
+
+    .wpos:hover td {
+        color: #000000;
+    }
+
+    .pos:hover {
+        background-color: cornflowerblue;
+    }
+
+    .pos:hover td {
         color: #000000;
     }
 </style>
-    <div class="ptable">
-        <h1 class="headin">Standings</h1>
-        <table>
-            <tr class="col">
-                <th>#</th>
-                <th>Team</th>
-                <th>GP</th>
-                <th>W</th>
-                <th>D</th>
-                <th>L</th>
-                <th>GD</th>
-                <th>PTS</th>
-            </tr>
-<!--            <div class="col-sm-9 text-secondary">-->
-<!--                <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>-->
-<!--                <input type="hidden" th:value="${leagueId}">-->
-<!--            </div>-->
-<!--            <div class="col-sm-9 text-secondary">-->
-<!--                <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span-->
-<!--                        th:text="${clubname}">clubname</span></a></h2>-->
-<!--            </div>-->
-            <tr class="wpos" th:each="club, state : ${league.getLeagueTeams()}">
-                <td th:utext="${state.count}">index</td>
-                <td><a th:href="@{/team/${club.getClubId()}(clubId=${club.getClubId()})}"><span
-                        th:text="${club.getClubName()}">clubname</span></a>
-                    <input type="hidden" th:value="${club.getClubId()}"></td>
-<!--                <td><span th:text="${club.getClubName()}">clubname</span></td>-->
-                <td th:utext="${state.count}">count</td>
-                <td>2</td>
-                <td>0</td>
-                <td>0</td>
-                <td>5</td>
-                <td>6</td>
-            </tr>
-        </table>
-    </div>
+<div class="ptable">
+    <h1 class="headin">Standings</h1>
+    <table>
+        <tr class="col">
+            <th>#</th>
+            <th>Team</th>
+            <th>GP</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>GD</th>
+            <th>PTS</th>
+        </tr>
+        <tr class="wpos" th:each="club, state : ${league.getLeagueTeams()}">
+            <td th:utext="${state.count}">index</td>
+            <td><a th:href="@{/team/{clubId}(clubId=${club.getClubId()})}"><span
+                    th:text="${club.getClubName()}">clubname</span></a>
+                <input type="hidden" th:value="${club.getClubId()}"></td>
+            <td th:utext="${state.count}">count</td>
+            <td>2</td>
+            <td>0</td>
+            <td>0</td>
+            <td>5</td>
+            <td>6</td>
+        </tr>
+    </table>
+</div>
+
+<div class="headin">
+    <div>LAST GAMES</div>
+    <div> FC Club I- FC Club II</div>
+    <div> FC Club III- FC Club IV</div>
+    <div> FC Club V- FC Club VI</div>
+    <div> FC Club I- FC Club II</div>
 </div>
 </body>
 </html>
