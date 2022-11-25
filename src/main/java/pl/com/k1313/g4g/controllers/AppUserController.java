@@ -35,15 +35,17 @@ public class AppUserController {
 //        this.clubService = clubService;
     }
 
-    @PostMapping
-    public String appUserAndClubPage(long clubId, Model model) {
+    @GetMapping("/club/{clubId}")
+    public String appUserAndClubPage(@PathVariable long clubId, Model model) {
         Club byClubId = this.clubRepository.findByClubId(clubId);
         String clubName = byClubId.getClubName();
-        AppUser appUserByClubId = this.repository.findByClubId(clubId);
-        String appUserName = appUserByClubId.getAppUserName();
+        String appUserName = byClubId.getAppUser().getAppUserName();
+        AppUser appUser=byClubId.getAppUser();
+//        AppUser appUserByClubId = this.repository.findByClubId(clubId);
+//        String appUserName = appUserByClubId.getAppUserName();
         long leagueId = this.clubRepository.findByClubId(clubId).getClubId();
 
-        model.addAttribute("appuser", appUserByClubId);
+        model.addAttribute("appuser", appUser);
         model.addAttribute("appusername", appUserName);
         model.addAttribute("club", byClubId);
         model.addAttribute("clubname", clubName);
@@ -146,16 +148,16 @@ public class AppUserController {
         }
     }
 
-    @GetMapping("/club/{clubId}")
-    public String clubPage(@PathVariable long clubId, Model model) {
-        Optional<Club> byId = this.clubRepository.findById(clubId);
-        String clubname = byId.get().getClubName();
-        String appUser = byId.get().getAppUser().getAppUserName();
-        model.addAttribute("clubname", clubname);
-        model.addAttribute("club", byId);
-        model.addAttribute("appuser", appUser);
-        return "club";
-    }
+//    @GetMapping("/club/{clubId}")
+//    public String clubPage(@PathVariable long clubId, Model model) {
+//        Optional<Club> byId = this.clubRepository.findById(clubId);
+//        String clubname = byId.get().getClubName();
+//        String appUser = byId.get().getAppUser().getAppUserName();
+//        model.addAttribute("clubname", clubname);
+//        model.addAttribute("club", byId);
+//        model.addAttribute("appuser", appUser);
+//        return "club";
+//    }
 
 
 }

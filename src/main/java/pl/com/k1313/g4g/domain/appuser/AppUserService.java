@@ -71,7 +71,6 @@ public class AppUserService {
     public boolean confirmRegistration(long appUserId) {
 
         AppUser byAppUserId = this.appUserRepository.findByAppUserId(appUserId);
-
         if (byAppUserId != null) {
             byAppUserId.confirmRegistry();
             this.appUserRepository.save(byAppUserId);
@@ -79,5 +78,11 @@ public class AppUserService {
         } else {
             return false;
         }
+    }
+
+    public AppUser botAppUserCreation(Club club){
+        AppUser appUser=new AppUser("Teddy Bot", club.getClubName());
+        this.appUserRepository.save(appUser);
+        return appUser;
     }
 }

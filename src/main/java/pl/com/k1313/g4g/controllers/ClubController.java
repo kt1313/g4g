@@ -49,14 +49,14 @@ public class ClubController {
     public String teamhomepage() {
         return "appuserandclub";
     }
-    @GetMapping("/{clubId}")
-    public String club(@PathVariable long clubId, Model model) {
-        Club club = this.clubRepository.findByClubId(clubId);
-        String clubname=club.getClubName();
-        model.addAttribute("clubname", clubname);
-        model.addAttribute("club", club);
-        return "club";
-    }
+//    @GetMapping("/{clubId}")
+//    public String club(@PathVariable long clubId, Model model) {
+//        Club club = this.clubRepository.findByClubId(clubId);
+//        String clubname=club.getClubName();
+//        model.addAttribute("clubname", clubname);
+//        model.addAttribute("club", club);
+//        return "club";
+//    }
     @GetMapping("/league/{leagueId}")
     public String league(@PathVariable long leagueId, Model model) {
         League league = this.leagueRepository.findById(leagueId);

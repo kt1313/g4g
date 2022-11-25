@@ -17,7 +17,7 @@ public class Club {
 
     private String clubName;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     private AppUser appUser;
 
     @ManyToOne
@@ -34,7 +34,6 @@ public class Club {
         this.appUser = appUser;
         this.clubPlayers = clubPlayers;
     }
-
     public Club(AppUser appUser, String clubName) {
         this.appUser = appUser;
         this.clubName = clubName;
@@ -45,6 +44,13 @@ public class Club {
 
     @Override
     public String toString() {
-        return  clubName ;
+        return "Club{" +
+                "clubId=" + clubId +
+                ", clubName='" + clubName + '\'' +
+                ", appUser=" + appUser +
+                ", clubLeague=" + clubLeague +
+//                ", clubPlayers=" + clubPlayers +
+//                ", clubFirst11=" + clubFirst11 +
+                '}';
     }
 }

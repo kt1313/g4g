@@ -46,6 +46,8 @@ public class ClubService {
         newClub.setClubName(botClubNameCreation());
         newClub.setClubFirst11(this.playerService.botPlayersCreation(newClub.getClubId()));
         newClub.setAppUser(new AppUser("Teddy Bot", newClub.getClubName()));
+
+        System.out.println(newClub);
         this.clubRepository.save(newClub);
         return newClub;
     }
@@ -54,7 +56,7 @@ public class ClubService {
         Random r = new Random();
         List clubNames = new ArrayList<>(List.of
                 ("FC BigDaddy", "A-Team", "Strongmen FC", "L-losers", "Handycaps Club", "WeWinOnWednesday United",
-                        "NeverSeeYourGoal CF", "FC True team", "WeWillChewYourMeat Utd", "FC GiveUp"));
+                        "NeverSeeYourGoal CF", "FC True Team", "WeWillChewYourMeat Utd", "FC GiveUp"));
         String clubName = (String) clubNames.get(r.nextInt(10));
         return clubName;
     }
