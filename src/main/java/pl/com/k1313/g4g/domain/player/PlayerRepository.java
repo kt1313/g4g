@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long>{
 
+    List<Player> findAllByPlayerClubAndFirstSquadPlayer(Club club);
     List<Player> findAllByPlayerClub(Club club);
     List<Player> findAllByFirstSquadPlayer(boolean first11Player);
     //przyklad ..jakich komand? nwm..sprawdz

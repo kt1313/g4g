@@ -5,6 +5,7 @@ import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.appuser.AppUserService;
 import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.player.Player;
+import pl.com.k1313.g4g.domain.player.PlayerPosition;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
 
@@ -27,7 +28,7 @@ public class ClubService {
 //        this.appUserService=appUserService;
     }
 
-//    private AppUserService appUserService;
+    //    private AppUserService appUserService;
     private PlayerService playerService;
     private LeagueRepository leagueRepository;
     private PlayerRepository playerRepository;
@@ -59,6 +60,75 @@ public class ClubService {
                         "NeverSeeYourGoal CF", "FC True Team", "WeWillChewYourMeat Utd", "FC GiveUp"));
         String clubName = (String) clubNames.get(r.nextInt(10));
         return clubName;
+    }
+
+    //pobiera tylko zawodników z pierwszej 11
+    List<Player> hostFirst11players = findFirst11Players(hostClub);
+    List<Player> guestFirst11players = findFirst11Players(guestClub);
+
+    public List<Integer> setFirst11FormationsValues(List<Player> first11Players) {
+
+
+        int first11Attack = 0;
+        int first11Defence = 0;
+        int first11Midfield = 0;
+
+
+        for (Player player : first11Players) {
+        }
+        //dla każdego sprawdza czy jest w ataku, pomocy czy obronie lub bramkarz
+        // i w zależności od tego sumuje procent jego umiejętności attacking
+        for (Player player : first11Players
+        ) {
+            if (player.getPlayerPosition().equals(PlayerPosition.LF) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.CF)) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.RF))) {
+                first11Attack += player.getAttacking();
+                first11Midfield += (player.getBallControl() * 0.35 + player.getPassing() * 0.35);
+                first11Defence += player.getInterception() * 0.5;
+            }
+            if (player.getPlayerPosition().equals(PlayerPosition.LW) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.CMA)) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.CM)) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.CMD)) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.RW))) {
+                first11Attack += (player.getAttacking() * 0.75);
+                first11Midfield += (player.getBallControl() * 0.5 + player.getPassing() * 0.5);
+                first11Defence += player.getInterception() * 0.5;
+            }
+            if (player.getPlayerPosition().equals(PlayerPosition.LWB) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.LCB)) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.CB)) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.RCB)) ||
+                    (player.getPlayerPosition().equals(PlayerPosition.RWB))) {
+                first11Attack += (player.getAttacking() * 0.5);
+                first11Midfield += (player.getBallControl() * 0.25 + player.getPassing() * 0.25);
+                first11Defence += player.getInterception() * 0.5;
+            }
+            if (player.getPlayerPosition().equals(PlayerPosition.GK)) {
+                first11Attack += (player.getAttacking() * 0.1);
+                first11Midfield += (player.getBallControl() * 0.1 + player.getPassing() * 0.1);
+                first11Defence += player.getInterception() * 0.5;
+            }
+        }
+        List<Integer> formationsValues = new ArrayList<Integer>(List.of(first11Defence, first11Midfield, first11Attack
+        ));
+        System.out.println("TeamServ, calculateFirst11FormVal, Wartość formacji: "
+                + " Attack: " + formationsValues.get(3)
+                + " Mid: " + formationsValues.get(1)
+                + " Def: " + formationsValues.get(0));
+
+        return formationsValues;
+    }
+
+
+
+
+    private List<Player> findFirst11Players(Club club){
+        List<Player> first11Players=this.playerRepository.findAllByPlayerClub(club).stream()
+                .filter(Player::isFirstSquadPlayer)
+                .collect(Collectors.toList());
+        return first11Players;
     }
 
 //    public List<Player> setUpFirstEleven(Club club) {
