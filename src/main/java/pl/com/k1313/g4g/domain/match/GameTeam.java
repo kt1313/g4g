@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Data
 @Entity
-public class MatchTeam {
+public class GameTeam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,10 +23,10 @@ public class MatchTeam {
     @OneToMany
     private List<Player> matchTeamPlayers = new ArrayList<Player>();
 
-    public MatchTeam() {
+    public GameTeam() {
     }
 
-    public MatchTeam(String teamName, int attack, int midfield, int defence, int goalkeeperSkill) {
+    public GameTeam(String teamName, int attack, int midfield, int defence, int goalkeeperSkill) {
 
         this.teamName = teamName;
         this.attack = attack;
@@ -35,7 +35,7 @@ public class MatchTeam {
         this.goalkeeperSkill = goalkeeperSkill;
     }
 
-    public MatchTeam(long id, String teamName, int attack, int midfield, int defence, int goalkeeperSkill) {
+    public GameTeam(long id, String teamName, int attack, int midfield, int defence, int goalkeeperSkill) {
 
         this.id = id;
         this.teamName = teamName;
@@ -45,11 +45,11 @@ public class MatchTeam {
         this.goalkeeperSkill = goalkeeperSkill;
     }
 
-    public MatchTeam(String teamName) {
+    public GameTeam(String teamName) {
         this.teamName = teamName;
     }
 
-    public MatchTeam(String teamName, List<Player> matchTeamPlayers) {
+    public GameTeam(String teamName, List<Player> matchTeamPlayers) {
         this.teamName = teamName;
         this.matchTeamPlayers = matchTeamPlayers;
     }

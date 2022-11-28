@@ -1,18 +1,19 @@
 package pl.com.k1313.g4g.domain.match;
 
 import lombok.Data;
+import pl.com.k1313.g4g.domain.club.Club;
 
 import javax.persistence.*;
 import java.util.List;
 @Data
 @Entity
-public class Match {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @OneToMany
-    private List<MatchTeam> matchTeams;
+    private List<Club> gameClubs;
 
     private int hostScore;
     private int guestScore;
@@ -21,11 +22,11 @@ public class Match {
 
 
 
-    public Match() {
+    public Game() {
     }
 
-    public Match(List<MatchTeam> matchTeams, boolean inProgress) {
-        this.matchTeams = matchTeams;
+    public Game(List<Club> gameClubs, boolean inProgress) {
+        this.gameClubs = gameClubs;
         this.inProgress = inProgress;
     }
 }

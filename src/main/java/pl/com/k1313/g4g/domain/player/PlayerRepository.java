@@ -7,10 +7,13 @@ import pl.com.k1313.g4g.domain.club.Club;
 import java.util.List;
 
 @Repository
-public interface PlayerRepository extends JpaRepository<Player, Long>{
+public interface PlayerRepository extends JpaRepository<Player, Long> {
+    Player findFirstByPlayerClubAndFirstSquadPlayerAndPlayerPosition(Club club, PlayerPosition playerPosition);
 
     List<Player> findAllByPlayerClubAndFirstSquadPlayer(Club club);
+
     List<Player> findAllByPlayerClub(Club club);
+
     List<Player> findAllByFirstSquadPlayer(boolean first11Player);
     //przyklad ..jakich komand? nwm..sprawdz
 //    Optional<Guest> findTop1ByCustomerIdAndFirstNameAndLastNameAndBirthDate(

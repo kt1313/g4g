@@ -2,7 +2,6 @@ package pl.com.k1313.g4g.domain.club;
 
 import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
-import pl.com.k1313.g4g.domain.appuser.AppUserService;
 import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerPosition;
@@ -11,7 +10,6 @@ import pl.com.k1313.g4g.domain.player.PlayerService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -62,12 +60,17 @@ public class ClubService {
         return clubName;
     }
 
-    //pobiera tylko zawodników z pierwszej 11
-    List<Player> hostFirst11players = findFirst11Players(hostClub);
-    List<Player> guestFirst11players = findFirst11Players(guestClub);
+    public List<Integer> getClubFirst11Values(Club club) {
+        List<Player> first11Players = findFirst11Players(club);
+        List<Integer> formationsValues = getFirst11FormationsValues(first11Players);
+        int w1= formationsValues.get(0);
+        int w2= formationsValues.get(1);
+        int w3= formationsValues.get(3);
+        Integer goalkeeperSkill = getGoalkeeperSkills(club);
+        return new ArrayList<>(List.of(goalkeeperSkill, w1,w2, w3));
+    }
 
-    public List<Integer> setFirst11FormationsValues(List<Player> first11Players) {
-
+    public List<Integer> getFirst11FormationsValues(List<Player> first11Players) {
 
         int first11Attack = 0;
         int first11Defence = 0;
@@ -122,68 +125,17 @@ public class ClubService {
     }
 
 
-
-
-    private List<Player> findFirst11Players(Club club){
-        List<Player> first11Players=this.playerRepository.findAllByPlayerClub(club).stream()
+    private List<Player> findFirst11Players(Club club) {
+        List<Player> first11Players = this.playerRepository.findAllByPlayerClub(club).stream()
                 .filter(Player::isFirstSquadPlayer)
                 .collect(Collectors.toList());
         return first11Players;
     }
 
-//    public List<Player> setUpFirstEleven(Club club) {
-//        List<Player> clubFirst11 = this.playerRepository.findAllByPlayerClub(club)
-//                .stream().filter(Player::isFirstSquadPlayer)
-//                .collect(Collectors.toList());
-//        club.setClubFirst11(clubFirst11);
-//        this.clubRepository.save(club);
-//        return clubFirst11;
-//    }
+    private Integer getGoalkeeperSkills(Club club) {
+        return this.playerRepository
+                .findFirstByPlayerClubAndFirstSquadPlayerAndPlayerPosition
+                        (club, PlayerPosition.GK).getGoalkeeping();
+    }
 
-//    public String[][] setUpFirst11(List<Player> firstsquadplayers) {
-//
-//        List<Player> clubFirst11;
-//        String[][] first11Table = new String[5][4];
-//        first11Table[0][0] = "0";
-//        first11Table[0][1] = "right Wingback";
-//        first11Table[0][2] = "right Winger";
-//        first11Table[0][3] = "3";
-//        first11Table[1][0] = "4";
-//        first11Table[1][1] = "right Centreback";
-//        first11Table[1][2] = "centre Midfielder Defending";
-//        first11Table[1][3] = "right Forward";
-//        first11Table[2][0] = "goalkeeper";
-//        first11Table[2][1] = "centreback";
-//        first11Table[2][2] = "centre Midfielder";
-//        first11Table[2][3] = "centre Forward";
-//        first11Table[3][0] = "12";
-//        first11Table[3][1] = "left Centreback";
-//        first11Table[3][2] = "centre Midfielder Attacking";
-//        first11Table[3][3] = "left Forward";
-//        first11Table[4][0] = "17";
-//        first11Table[4][1] = "left Wingback";
-//        first11Table[4][2] = "left Winger";
-//        first11Table[4][3] = "20";
-//
-//        String[][] first11FinalTable = new String[5][4];
-//        for (int x = 0; x < 5; x++) {
-//            for (int y = 0; y < 4; y++) {
-//
-//                //tu sparwdza czy pozycja jest wolna i jesli tak, to pobiera
-//                // sprawdza czy jej pozycja jest rowna pozycji zawodnika i
-//                // pobiera dane o zawodniku
-//                //i do niej przypisuje
-//                for (Player player : firstsquadplayers) {
-//                    if (first11FinalTable[x][y].isEmpty()) {
-//                        String playerPos = String.valueOf(player.getPlayerPosition());
-//                        if (Objects.equals(first11Table[x][y], playerPos)) {
-//                            first11FinalTable[x][y] = player.getFirstName() + " " + player.getLastName();
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return first11FinalTable;
-//
-//    }
 }
