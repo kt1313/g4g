@@ -30,10 +30,10 @@ public class GameService {
     }
 
     //    cały mecz event po evencie z komentarzami
-    public void handleMatchEngine(Club hostClub, Club guestClub) throws InterruptedException {
-        List<Club> gameTeamsList = new ArrayList<>(List.of(hostClub, guestClub));
+    public HashMap<Integer, String> handleMatchEngine(Club hostClub, Club guestClub) throws InterruptedException {
+        List<Club> gameClubsList = new ArrayList<>(List.of(hostClub, guestClub));
         Game newGame = new Game();
-        newGame.setGameClubs(gameTeamsList);
+        newGame.setGameClubs(gameClubsList);
         newGame.setInProgress(true);
         this.gameRepository.save(newGame);
         //get both teams values
@@ -61,7 +61,7 @@ public class GameService {
                 //komentarz o zawiązaniu akcji
                 gameCommentary(clubAttacking, 2, gameCommentaryList, gameMinute);
                 //to poniżej jako jedna metoda, bo zastosowanie też do kontrataku
-                opportunityEvent(clubAttacking, clubDefending, hostClub, guestClub, gameCommentaryList);
+                opportunityEvent(clubAttacking, clubDefending, hostClub, guestClub, gameCommentaryList, gameMinute);
             } else {
 //                //jesli uda się kontra to wtedy niech sprawdzi szansę na bramkę(opportunityEvent)
 //                wazne!!!-------------wazne!!!
@@ -72,14 +72,29 @@ public class GameService {
                     gameCommentary(clubDefending, 3, gameCommentaryList, gameMinute);
                     //TUTAJ UWAGA: celowo zamiana teamInDefence z teamOnOpportunity, bo teraz
                     //broniący sie atakują
-                    opportunityEvent(clubDefending, clubAttacking, hostClub, guestClub, gameCommentaryList);
-                    tutaj wyciagnij z powyzszej metody gameCommentary, zeby dodac gameMinute
+                    opportunityEvent(clubDefending, clubAttacking, hostClub, guestClub, gameCommentaryList, gameMinute);
                 }
             }
             if (gameMinute > 90) {
                 newGame.setInProgress(false);
             }
         }
+        String matchResult = "Koniec meczu. Na tablicy widnieje wynik" + newGame.getHostScore() + " : " + newGame.getGuestScore();
+        gameCommentaryList.put(gameMinute, matchResult);
+        System.out.println("Koniec. Wynik meczu: " + newGame.getHostScore() + " : " + newGame.getGuestScore());
+//        int hostTeamMid = hostClub.getMidfield();
+//        int hostTeamAtt = hostClub.getAttack();
+//        int hostTeamDef = hostClub.getDefence();
+//        int hostTeamGoalkpr = hostClub.getGoalkeeperSkill();
+//        int guestTeamMid = guestTeam.getMidfield();
+//        int guestTeamAtt = guestTeam.getAttack();
+//        int guestTeamDef = guestTeam.getDefence();
+//        int guestTeamGoalkpr = guestTeam.getGoalkeeperSkill();
+//        System.out.println("Stats:  ");
+//        System.out.println("HostTeam: Midfield: " + hostTeamMid + " Attack: " + hostTeamAtt + " Def: " + hostTeamDef + " Goalkpr: " + hostTeamGoalkpr);
+//        System.out.println("GuestTeam: Midfield: " + guestTeamMid + " Attack: " + guestTeamAtt + " Def: " + guestTeamDef + " Goalkpr: " + guestTeamGoalkpr);
+
+        return gameCommentaryList;
     }
 
 
@@ -151,8 +166,8 @@ public class GameService {
     }
 
     private void opportunityEvent(Club clubAttacking
-            , Club clubDefending, Club hostClub
-            , Club guestClub, HashMap<Integer, String> gameCommentaryList) {
+            , Club clubDefending, Club hostClub, Club guestClub, HashMap<Integer,
+            String> gameCommentaryList, int gameMinute) {
         if (attackSucceedOverDefence(clubAttacking, hostClub, guestClub)) {
 //                System.out.println("MatchServ, opportunityEvent, aatackSucceedOverDef ");
             int forwarderAttack = getForwarderAttack(clubAttacking, hostClub, guestClub);

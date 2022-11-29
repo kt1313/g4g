@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Player's Details</title>
+    <script src="/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+<body>
+<!--Navbar -->
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="#">Goal4Goal - Online Football Manager</a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <!--                <a class="nav-link" href="/team">Club</a>-->
+                <a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
+                        th:text="${clubname}">clubname</span></a>
+            </li>
+            <li class="nav-item">
+                <!--                <a class="nav-link" href="/players">Players</a>-->
+                <a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a>
+                <input type="hidden" th:value="${clubId}">
+            </li>
+            <li class="nav-item">
+                <!--                <a class="nav-link" href="/team/league/">League</a>-->
+                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>
+            </li>
+        </ul>
+    </div>
+
+</nav>
+
+
+<div class="container">
+    <br><br>
+    <form method="POST" th:action="@{/game/play}">
+        <div style="border-top-left-radius: 30px; border-bottom-right-radius: 30px; background-color: aliceblue">
+            <div>
+                <h2 style="text-align: center">Match of the Day</h2>
+            </div>
+            <table style="margin-left: auto; margin-right: auto; font-size: xx-large">
+                <td></td>
+                <td th:id="hostClubName" th:text="${hostClubName}"/>
+                <td th:id="hostClubScore" th:text="${hostClubScore}"/>
+                <td></td>
+                <td> :</td>
+                <td></td>
+                <td th:id="guestClubScore" th:text="${guestClubScore}"/>
+                <td></td>
+                <td th:id="guestClubName" th:text="${guestClubName}"/>
+                <td></td>
+            </table>
+        </div>
+        <br><br>
+        <!--        proba autorefreshingu-->
+
+        <!--        odswiezajacy się komentarz-->
+        <div>
+            <tr th:each="matchCommentary:${matchCommentary}">
+                <td th:utext="('<br>'+${matchCommentary})"/>
+                <!--a tu funkcja opoznienia w js-->
+        </div>
+
+        <!--        auto refresh przy uzyciu server-sent event-->
+        <div id="result"></div>
+
+        <input type="submit" value="Start Game">
+
+
+    </form>
+</div>
+
+</div>
+
+</body>
+</html>
