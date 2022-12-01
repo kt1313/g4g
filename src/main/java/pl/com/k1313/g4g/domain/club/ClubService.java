@@ -134,8 +134,8 @@ public class ClubService {
 
     private Integer getGoalkeeperSkills(Club club) {
         return this.playerRepository
-                .findFirstByPlayerClubAndFirstSquadPlayerAndPlayerPosition
-                        (club, PlayerPosition.GK).getGoalkeeping();
+                .findFirstByPlayerClubAndFirstSquadPlayerTrueAndPlayerPosition
+                        (club,  PlayerPosition.GK).getGoalkeeping();//tutaj sprawdz czy potrzebny 3ci argument?
     }
 
 }

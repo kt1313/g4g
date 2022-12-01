@@ -14,12 +14,14 @@ import pl.com.k1313.g4g.domain.match.GameService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/game")
 public class GameController {
     private GameRepository gameRepository;
     private GameService gameService;
+
 
     @Autowired
         public GameController (GameRepository gameRepository, GameService gameService){
@@ -33,7 +35,11 @@ public class GameController {
     public String handleGame(Club hostClub, Club guestClub, ModelMap map, Model m) throws InterruptedException {
         //ma pobrac JUŻ utworzony match z druzynami
         List<Club> gameClubs=new ArrayList<>(List.of(hostClub, guestClub));
-        Game playGame = this.gameRepository.findFirstByGameClubsAndInProgress(gameClubs);
+        Optional<Game> playGameOptional=this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
+        Game playGame = new Game();
+        if (playGameOptional.isPresent()){
+            playGame=playGameOptional.get();
+        }
 
         //ma teraz ROZEGRAC ten mecz
         HashMap<Integer, String> matchCommentary = this.gameService.handleMatchEngine(hostClub, guestClub);
