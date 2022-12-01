@@ -36,7 +36,7 @@ public class AppUserController {
     }
 
     @GetMapping("/club/{clubId}")
-    public String appUserAndClubPage(@PathVariable long clubId, Model model) {
+    public String appUserAndClubPage(@PathVariable long clubId, String appusertimestamp, Model model) {
         Club byClubId = this.clubRepository.findByClubId(clubId);
         String clubName = byClubId.getClubName();
         String appUserName = byClubId.getAppUser().getAppUserName();
@@ -44,7 +44,7 @@ public class AppUserController {
 //        AppUser appUserByClubId = this.repository.findByClubId(clubId);
 //        String appUserName = appUserByClubId.getAppUserName();
         long leagueId = this.clubRepository.findByClubId(clubId).getClubId();
-
+        model.addAttribute("appusertimestamp", appusertimestamp);
         model.addAttribute("appuser", appUser);
         model.addAttribute("appusername", appUserName);
         model.addAttribute("club", byClubId);
@@ -60,6 +60,7 @@ public class AppUserController {
 
         List<String> errors = new ArrayList<>();
         Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
+        String appUserTimeStamp=appUser.get().getTimeStampAppUser();
         if (!appUser.get().getAppUserPassword().equals(password)) {
             errors.add("Check username or passwword");
         }
@@ -68,6 +69,7 @@ public class AppUserController {
             long clubId = this.clubRepository.findByClubName(clubname).get().getClubId();
             Optional<Club> club = this.clubRepository.findByClubName(clubname);
             long leagueId = this.clubRepository.findByClubName(clubname).get().getClubLeague().getId();
+            model.addAttribute("appusertimestamp", appUserTimeStamp);
             model.addAttribute("appusername", appusername);
             model.addAttribute("clubname", clubname);
             model.addAttribute("clubId", clubId);

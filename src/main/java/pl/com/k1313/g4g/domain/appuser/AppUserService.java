@@ -13,6 +13,7 @@ import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
 
+import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 @Service
@@ -44,7 +45,9 @@ public class AppUserService {
     }
 
     public void createAppUser(String appusername, String clubname, String email, String password) {
-        AppUser appUser = new AppUser(appusername, clubname, email, password);
+
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+        AppUser appUser = new AppUser(appusername, clubname, email, password, timeStamp);
         this.appUserRepository.save(appUser);
         AppUserRegistrationEvent event = new AppUserRegistrationEvent(this, appusername, clubname, email, password);
         publisher.publishEvent(event);

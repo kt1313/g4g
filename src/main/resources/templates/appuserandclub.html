@@ -26,18 +26,21 @@
                 <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-<!--                <a class="nav-link" href="/team">Club</a>-->
+                <!--                <a class="nav-link" href="/team">Club</a>-->
                 <a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
                         th:text="${clubname}">clubname</span></a>
             </li>
-            <li class="nav-item">
-<!--                <a class="nav-link" href="/players">Players</a>-->
-                <a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a>
-                <input type="hidden" th:value="${clubId}">
-            </li>
-            <li class="nav-item">
-<!--                <a class="nav-link" href="/team/league/">League</a>-->
-                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>
+            <!--            <li class="nav-item">-->
+            <!--&lt;!&ndash;                <a class="nav-link" href="/players">Players</a>&ndash;&gt;-->
+            <!--                <a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a>-->
+            <!--                <input type="hidden" th:value="${clubId}">-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--&lt;!&ndash;                <a class="nav-link" href="/team/league/">League</a>&ndash;&gt;-->
+            <!--                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>-->
+            <!--            </li>-->
+            <li class="nav-item" style="text-align: right">
+                <a th:href="@{appusertimestamp}">LoggedUser</a>
             </li>
         </ul>
     </div>
@@ -156,123 +159,137 @@
                             <div class="col-sm-9 text-secondary">
                                 <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
                                         th:text="${clubname}">clubname</span></a></h2>
+                                <div class="col-sm-12">
+                                    <a class="btn btn-info " target="__blank"
+                                       th:href="@{/guests/edit/{id}(id=${guest.id})}">Edit</a>
+                                </div>
+                                <!--                                tu ma isc do kontrolera wysylajac hostClub, guestClub-->
+                                <div>
+                                    <form method="POST" th:action="@{/play}">
+                                        <input type="hidden" th:value="${clubId}">
+                                        <input type="hidden" th:value="${appusertimestamp}">
+                                        <input type="submit" class="btn-primary" style="background-color: #0040ff"
+                                               value="Play Game"/>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Local League Table</h6>
-                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Local League Table</h6>
+                                </div>
 
-                            <div class="col-sm-9 text-secondary">
-                                <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>
-                                <input type="hidden" th:value="${leagueId}">
+                                <div class="col-sm-9 text-secondary">
+                                    <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>
+                                    <input type="hidden" th:value="${leagueId}">
+                                    <input type="hidden" th:value="${appusertimestamp}">
+                                </div>
                             </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Main Squad </h6>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Main Squad </h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <h3><a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a></h3>
+                                    <input type="hidden" th:value="${appusertimestamp}">
+                                    <input type="hidden" th:value="${clubId}">
+                                </div>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <h3><a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a></h3>
-                                <input type="hidden" th:value="${clubId}">
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Youth Squad</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <a class="nav-link" href="/team/youth">Youth Stars - not active</a></div>
                             </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Youth Squad</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                <a class="nav-link" href="/team/youth">Youth Stars - not active</a></div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <a class="btn btn-info " target="__blank"
-                                   href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a class="btn btn-info " target="__blank"
+                                       href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="row gutters-sm">
+                        <div class="col-sm-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">
+                                        assignment</i>Main Squad Formations</h6>
+                                    <small>Goalkeeping</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
+                                             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Defence</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%"
+                                             aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Midfield</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%"
+                                             aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Attack</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%"
+                                             aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Tactics level</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%"
+                                             aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">
+                                        assignment</i>Youth Squad</h6>
+                                    <small>Goalkeeping</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
+                                             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Defence</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%"
+                                             aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Midfield</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%"
+                                             aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Attack</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%"
+                                             aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small>Tactics level</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%"
+                                             aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
-
-                <div class="row gutters-sm">
-                    <div class="col-sm-6 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">
-                                    assignment</i>Main Squad Formations</h6>
-                                <small>Goalkeeping</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
-                                         aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Defence</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 72%"
-                                         aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Midfield</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 89%"
-                                         aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Attack</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 55%"
-                                         aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Tactics level</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 66%"
-                                         aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">
-                                    assignment</i>Youth Squad</h6>
-                                <small>Goalkeeping</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
-                                         aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Defence</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 72%"
-                                         aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Midfield</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 89%"
-                                         aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Attack</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 55%"
-                                         aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Tactics level</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 66%"
-                                         aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
-<hr>
+    <hr>
 
 </div>
 </body>

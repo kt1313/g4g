@@ -25,19 +25,22 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <!--                <a class="nav-link" href="/team">Club</a>-->
-                <a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
-                        th:text="${clubname}">clubname</span></a>
-            </li>
-            <li class="nav-item">
-                <!--                <a class="nav-link" href="/players">Players</a>-->
-                <a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a>
-                <input type="hidden" th:value="${clubId}">
-            </li>
-            <li class="nav-item">
-                <!--                <a class="nav-link" href="/team/league/">League</a>-->
-                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>
+<!--            <li class="nav-item">-->
+<!--                &lt;!&ndash;                <a class="nav-link" href="/team">Club</a>&ndash;&gt;-->
+<!--                <a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span-->
+<!--                        th:text="${clubname}">clubname</span></a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                &lt;!&ndash;                <a class="nav-link" href="/players">Players</a>&ndash;&gt;-->
+<!--                <a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a>-->
+<!--                <input type="hidden" th:value="${clubId}">-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                &lt;!&ndash;                <a class="nav-link" href="/team/league/">League</a>&ndash;&gt;-->
+<!--                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>-->
+<!--            </li>-->
+            <li class="nav-item" style="text-align: right">
+                <a th:href="@{appusertimestamp}">LoggedUser</a>
             </li>
         </ul>
     </div>

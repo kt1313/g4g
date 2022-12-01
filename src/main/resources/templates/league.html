@@ -25,14 +25,17 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/team">Club</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/players">Players</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/league">League</a>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/team">Club</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/players">Players</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/league">League</a>-->
+<!--            </li>-->
+            <li class="nav-item" style="text-align: right">
+                <a th:href="@{appusertimestamp}">LoggedUser</a>
             </li>
         </ul>
     </div>
@@ -126,6 +129,7 @@
             <td th:utext="${state.count}">index</td>
             <td><a th:href="@{/appuser/club/{clubId}(clubId=${club.getClubId()})}"><span
                     th:text="${club.getClubName()}">clubname</span></a>
+                <input type="hidden" th:value="${appusertimestamp}">
                 <input type="hidden" th:value="${club.getClubId()}"></td>
             <td th:utext="${state.count}">count</td>
             <td>2</td>

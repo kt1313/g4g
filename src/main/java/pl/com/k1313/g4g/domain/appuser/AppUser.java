@@ -22,6 +22,7 @@ public class AppUser {
     private String userEmail;
 
     private long clubId;
+    private String timeStampAppUser;
 
     private boolean registered = false;
 
@@ -31,6 +32,13 @@ public class AppUser {
         this.appUserName = appUserName;
         this.appUserPassword = userPassword;
         this.userEmail = userEmail;
+    }
+    AppUser(long appUserId, String appUserName, String userPassword, String userEmail, String timeStampAppUser) {
+        this.appUserId = appUserId;
+        this.appUserName = appUserName;
+        this.appUserPassword = userPassword;
+        this.userEmail = userEmail;
+        this.timeStampAppUser=timeStampAppUser;
     }
 
     AppUser(long appUserId, String appUserName, String userPassword, String userEmail, boolean registered) {
@@ -46,11 +54,12 @@ public class AppUser {
         this.clubname = clubname;
     }
 
-    public AppUser(String appusername, String clubname, String userEmail, String password) {
+    public AppUser(String appusername, String clubname, String userEmail, String password, String timeStampAppUser) {
         this.appUserName = appusername;
         this.clubname = clubname;
         this.userEmail = userEmail;
         this.appUserPassword = password;
+        this.timeStampAppUser=timeStampAppUser;
     }
 
     public AppUser() {
