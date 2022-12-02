@@ -40,7 +40,7 @@
             <!--                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>-->
             <!--            </li>-->
             <li class="nav-item" style="text-align: right">
-                <a th:href="@{appusertimestamp}">LoggedUser</a>
+                <p th:text="${appusertimestamp}">
             </li>
         </ul>
     </div>
@@ -150,6 +150,14 @@
                             <div class="col-sm-9 text-secondary">
                                 <h2><span th:text="${appusername}">appusername</span></h2>
                             </div>
+                            <div>
+                                <form th:action="@{/game/test}" method="post">
+                                    <input type="hidden" th:value="${clubId}" th:name="clubId">
+                                    <input type="hidden" th:value="${appusertimestamp}" th:name="appusertimestamp">
+                                    <input type="submit" class="btn-primary" style="background-color: #0040ff"
+                                           value="Test"/>
+                                </form>
+                            </div>
                         </div>
                         <hr>
                         <div class="row">
@@ -159,13 +167,14 @@
                             <div class="col-sm-9 text-secondary">
                                 <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
                                         th:text="${clubname}">clubname</span></a></h2>
-                                <div class="col-sm-12">
-                                    <a class="btn btn-info " target="__blank"
-                                       th:href="@{/guests/edit/{id}(id=${guest.id})}">Edit</a>
-                                </div>
+                                <a th:text="${appusertimestamp}">AppUser Timespan</a>
+                                <!--                                <div class="col-sm-12">-->
+                                <!--                                    <a class="btn btn-info " target="__blank"-->
+                                <!--                                       th:href="@{/guests/edit/{id}(id=${guest.id})}">Edit</a>-->
+                                <!--                                </div>-->
                                 <!--                                tu ma isc do kontrolera wysylajac hostClub, guestClub-->
                                 <div>
-                                    <form method="POST" th:action="@{/play}">
+                                    <form th:action="@{/game/playgame}" method="post">
                                         <input type="hidden" th:value="${clubId}">
                                         <input type="hidden" th:value="${appusertimestamp}">
                                         <input type="submit" class="btn-primary" style="background-color: #0040ff"
@@ -178,12 +187,22 @@
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Local League Table</h6>
                                 </div>
-
-                                <div class="col-sm-9 text-secondary">
+                                <!--                                th:action="@{/game/playgame}"-->
+                                <form method="get">
                                     <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>
                                     <input type="hidden" th:value="${leagueId}">
                                     <input type="hidden" th:value="${appusertimestamp}">
-                                </div>
+
+                                    <!--                                    <input type="hidden" th:value="${clubId}">-->
+                                    <!--                                    <input type="hidden" th:value="${appusertimestamp}">-->
+                                    <!--                                    <input type="submit" class="btn-primary" style="background-color: #0040ff"-->
+                                    <!--                                           value="Play Game"/>-->
+                                </form>
+                                <!--                                <div class="col-sm-9 text-secondary">-->
+                                <!--                                    <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>-->
+                                <!--                                    <input type="hidden" th:value="${leagueId}">-->
+                                <!--                                    <input type="hidden" th:value="${appusertimestamp}">-->
+                                <!--                                </div>-->
                             </div>
                             <hr>
                             <div class="row">
