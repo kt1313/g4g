@@ -45,8 +45,8 @@ public class ClubController {
         return "registrationStepOne";
     }
 
-    @GetMapping("/league/{leagueId}")
-    public String league(@PathVariable long leagueId, String appusertimestamp, Model model) {
+    @GetMapping("/league/{leagueId}/{appusertimestamp}")
+    public String league(@PathVariable long leagueId, @PathVariable String appusertimestamp, Model model) {
         League league = this.leagueRepository.findById(leagueId);
         model.addAttribute("league", league);
         model.addAttribute("appusertimestamp", appusertimestamp);

@@ -35,8 +35,8 @@ public class AppUserController {
 //        this.clubService = clubService;
     }
 
-    @GetMapping("/club/{clubId}")
-    public String appUserAndClubPage(@PathVariable long clubId, String appusertimestamp, Model model) {
+    @GetMapping("/club/{clubId}/{appusertimestamp}")
+    public String appUserAndClubPage(@PathVariable long clubId, @PathVariable String appusertimestamp, Model model) {
         Club byClubId = this.clubRepository.findByClubId(clubId);
         String clubName = byClubId.getClubName();
         String appUserName = byClubId.getAppUser().getAppUserName();

@@ -150,14 +150,6 @@
                             <div class="col-sm-9 text-secondary">
                                 <h2><span th:text="${appusername}">appusername</span></h2>
                             </div>
-                            <div>
-                                <form th:action="@{/game/test}" method="post">
-                                    <input type="hidden" th:value="${clubId}" th:name="clubId">
-                                    <input type="hidden" th:value="${appusertimestamp}" th:name="appusertimestamp">
-                                    <input type="submit" class="btn-primary" style="background-color: #0040ff"
-                                           value="Test"/>
-                                </form>
-                            </div>
                         </div>
                         <hr>
                         <div class="row">
@@ -175,8 +167,8 @@
                                 <!--                                tu ma isc do kontrolera wysylajac hostClub, guestClub-->
                                 <div>
                                     <form th:action="@{/game/playgame}" method="post">
-                                        <input type="hidden" th:value="${clubId}">
-                                        <input type="hidden" th:value="${appusertimestamp}">
+                                        <input type="hidden" th:value="${clubId}" th:name="clubId">
+                                        <input type="hidden" th:value="${appusertimestamp}" th:name="appusertimestamp">
                                         <input type="submit" class="btn-primary" style="background-color: #0040ff"
                                                value="Play Game"/>
                                     </form>
@@ -187,22 +179,10 @@
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Local League Table</h6>
                                 </div>
-                                <!--                                th:action="@{/game/playgame}"-->
-                                <form method="get">
-                                    <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>
-                                    <input type="hidden" th:value="${leagueId}">
-                                    <input type="hidden" th:value="${appusertimestamp}">
-
-                                    <!--                                    <input type="hidden" th:value="${clubId}">-->
-                                    <!--                                    <input type="hidden" th:value="${appusertimestamp}">-->
-                                    <!--                                    <input type="submit" class="btn-primary" style="background-color: #0040ff"-->
-                                    <!--                                           value="Play Game"/>-->
-                                </form>
-                                <!--                                <div class="col-sm-9 text-secondary">-->
-                                <!--                                    <h3><a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a></h3>-->
-                                <!--                                    <input type="hidden" th:value="${leagueId}">-->
-                                <!--                                    <input type="hidden" th:value="${appusertimestamp}">-->
-                                <!--                                </div>-->
+                                    <h3><a th:href="@{/team/league/{leagueId}/{appusertimestamp}
+                                    (leagueId=${leagueId}, appusertimestamp=${appusertimestamp})}">League</a></h3>
+<!--                                    <input type="hidden" th:value="${leagueId}">-->
+<!--                                    <input type="hidden" th:value="${appusertimestamp}" th:name="appusertimestamp">-->
                             </div>
                             <hr>
                             <div class="row">

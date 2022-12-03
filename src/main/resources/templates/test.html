@@ -29,17 +29,7 @@
                 <!--                <a class="nav-link" href="/team">Club</a>-->
                 <a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
                         th:text="${clubname}">clubname</span></a>
-            </li>
-            <!--            <li class="nav-item">-->
-            <!--&lt;!&ndash;                <a class="nav-link" href="/players">Players</a>&ndash;&gt;-->
-            <!--                <a th:href="@{/players/{clubId}(clubId=${clubId})}">Players</a>-->
-            <!--                <input type="hidden" th:value="${clubId}">-->
-            <!--            </li>-->
-            <!--            <li class="nav-item">-->
-            <!--&lt;!&ndash;                <a class="nav-link" href="/team/league/">League</a>&ndash;&gt;-->
-            <!--                <a th:href="@{/team/league/{leagueId}(leagueId=${leagueId})}">League</a>-->
-            <!--            </li>-->
-            <li class="nav-item" style="text-align: right">
+            </li>            <li class="nav-item" style="text-align: right">
                 <p th:text="${appusertimestamp}">
                 <h2><span th:text="${clubId}">clubId</span></h2>
                 <h2><span th:text="${appusertimestamp}">appusertimestamp</span></h2>

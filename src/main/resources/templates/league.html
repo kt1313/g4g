@@ -125,9 +125,12 @@
             <th>GD</th>
             <th>PTS</th>
         </tr>
+<!--        <h3><a th:href="@{/team/league/{leagueId}/{appusertimestamp}-->
+<!--                                    (leagueId=${leagueId}, appusertimestamp=${appusertimestamp})}">League</a></h3>-->
         <tr class="wpos" th:each="club, state : ${league.getLeagueTeams()}">
             <td th:utext="${state.count}">index</td>
-            <td><a th:href="@{/appuser/club/{clubId}(clubId=${club.getClubId()})}"><span
+            <td><a th:href="@{/appuser/club/{clubId}/{appusertimestamp}
+            (clubId=${club.getClubId()}, appusertimestamp=${appusertimestamp})}"><span
                     th:text="${club.getClubName()}">clubname</span></a>
                 <input type="hidden" th:value="${appusertimestamp}">
                 <input type="hidden" th:value="${club.getClubId()}"></td>
