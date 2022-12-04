@@ -2,6 +2,7 @@ package pl.com.k1313.g4g.domain.player;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 
 import java.util.ArrayList;
@@ -104,24 +105,35 @@ public class PlayerService {
     }
 
     public List<Player> botPlayersCreation(long clubId) {
-        List players=new ArrayList<Player>();
-        for (int i = 0; i < 10 ; i++) {
-            Player newPlayer = autoCreatePlayer();
-            newPlayer.setPlayerClub(this.clubRepository.findByClubId(clubId));
-            List playersPosition=botPlayersPositions();
-            newPlayer.setPlayerPosition((PlayerPosition) playersPosition.get(i));
-            players.add(newPlayer);
-        }
+        List<Player> players=new ArrayList<>();
+
         Player newGoalkeeper=autoCreateGoalkeeper();
         newGoalkeeper.setPlayerClub(this.clubRepository.findByClubId(clubId));
         newGoalkeeper.setPlayerPosition(PlayerPosition.GK);
+        newGoalkeeper.setFirstSquadPlayer(Boolean.TRUE);
+        Club club=this.clubRepository.findByClubId(clubId);
+        newGoalkeeper.setPlayerClub(club);
         players.add(newGoalkeeper);
+        this.playerRepository.save(newGoalkeeper);
+
+        for (int i = 1; i < 11 ; i++) {
+            Player newPlayer = autoCreatePlayer();
+            newPlayer.setPlayerClub(this.clubRepository.findByClubId(clubId));
+            List<PlayerPosition> playersPosition=botPlayersPositions();
+            newPlayer.setPlayerPosition((PlayerPosition) playersPosition.get(i-1));
+            newPlayer.setFirstSquadPlayer(Boolean.TRUE);
+            newPlayer.setPlayerClub(club);
+            players.add(newPlayer);
+            this.playerRepository.save(newPlayer);
+
+        }
+
 
         return players;
     }
 
     public List<PlayerPosition> botPlayersPositions() {
-        List playersPositions = new ArrayList<PlayerPosition>(List.of(
+        List<PlayerPosition> playersPositions = new ArrayList<>(List.of(
                 PlayerPosition.RWB, PlayerPosition.RCB, PlayerPosition.LCB, PlayerPosition.LWB,
                 PlayerPosition.RW, PlayerPosition.CMD, PlayerPosition.CMA, PlayerPosition.LW,
                 PlayerPosition.RF, PlayerPosition.LF));

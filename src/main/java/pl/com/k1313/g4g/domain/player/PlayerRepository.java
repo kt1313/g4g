@@ -10,7 +10,7 @@ import java.util.List;
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     Player findFirstByPlayerClubAndFirstSquadPlayerTrueAndPlayerPosition(Club club, PlayerPosition playerPosition);
 
-//    List<Player> findAllByPlayerClubAndFirstSquadPlayer(Club club);
+    List<Player> findAllByPlayerClubAndFirstSquadPlayer(Club club, boolean first11Player);
 
     List<Player> findAllByPlayerClub(Club club);
 

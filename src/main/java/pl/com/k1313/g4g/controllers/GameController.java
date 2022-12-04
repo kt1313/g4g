@@ -67,8 +67,8 @@ public class GameController {
         map.addAttribute("matchCommentary", matchCommentary);
 
         //tu naglowek, nazwy druzyn i wynik
-        String hostClubName = playGame.getGameClubs().get(0).getClubName();
-        String guestClubName = playGame.getGameClubs().get(1).getClubName();
+        String hostClubName = hostClub.getClubName();
+        String guestClubName = guestClub.getClubName();
         Integer hostClubScore = playGame.getHostScore();
         Integer guestClubScore = playGame.getGuestScore();
         m.addAttribute("appusertimestamp", appusertimestamp);

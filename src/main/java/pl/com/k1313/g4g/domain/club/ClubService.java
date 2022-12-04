@@ -43,12 +43,17 @@ public class ClubService {
     public Club botClubCreation() {
         Club newClub = new Club();
         newClub.setClubName(botClubNameCreation());
-        newClub.setClubFirst11(this.playerService.botPlayersCreation(newClub.getClubId()));
         newClub.setAppUser(new AppUser("Teddy Bot", newClub.getClubName()));
-
-        System.out.println(newClub);
         this.clubRepository.save(newClub);
+        setBotClubPlayers(newClub.getClubId());
+//        newClub.setClubFirst11(this.playerService.botPlayersCreation(newClub.getClubId()));
+//        this.clubRepository.save(newClub);
         return newClub;
+    }
+
+    private void setBotClubPlayers(long clubId) {
+        this.playerService.botPlayersCreation(clubId);
+        this.clubRepository.save(this.clubRepository.findByClubId(clubId));
     }
 
     public String botClubNameCreation() {
@@ -61,14 +66,18 @@ public class ClubService {
     }
 
     public List<Integer> getClubFirst11Values(Club club) {
-        List<Player> first11Players = findFirst11Players(club);
-        TUTAJ TRZEBA WROCIC DO TWORZENIA BOT CLUB I FIRST11 i SAVE!!!
+//       nie dziala findAllByPlayerClub
+//        List<Player> clubPlayers = this.playerRepository.findAllByPlayerClub(club);
+        List<Player> first11Players = this.playerRepository.
+                findAllByPlayerClubAndFirstSquadPlayer(club, Boolean.TRUE);
+//        List<Player> first11Players = findFirst11Players(club);
+//        TUTAJ TRZEBA WROCIC DO TWORZENIA BOT CLUB I FIRST11 i SAVE!!!
         List<Integer> formationsValues = getFirst11FormationsValues(first11Players);
-        int w1= formationsValues.get(0);
-        int w2= formationsValues.get(1);
-        int w3= formationsValues.get(2);
+        int w1 = formationsValues.get(0);
+        int w2 = formationsValues.get(1);
+        int w3 = formationsValues.get(2);
         Integer goalkeeperSkill = getGoalkeeperSkills(club);
-        return new ArrayList<>(List.of(goalkeeperSkill, w1,w2, w3));
+        return new ArrayList<>(List.of(goalkeeperSkill, w1, w2, w3));
     }
 
     public List<Integer> getFirst11FormationsValues(List<Player> first11Players) {
@@ -119,7 +128,7 @@ public class ClubService {
                 + " Attack: " + formationsValues.get(2)
                 + " Mid: " + formationsValues.get(1)
                 + " Def: " + formationsValues.get(0)
-                )
+        )
         ;
 
         return formationsValues;
@@ -136,7 +145,7 @@ public class ClubService {
     private Integer getGoalkeeperSkills(Club club) {
         return this.playerRepository
                 .findFirstByPlayerClubAndFirstSquadPlayerTrueAndPlayerPosition
-                        (club,  PlayerPosition.GK).getGoalkeeping();//tutaj sprawdz czy potrzebny 3ci argument?
+                        (club, PlayerPosition.GK).getGoalkeeping();//tutaj sprawdz czy potrzebny 3ci argument?
     }
 
 }

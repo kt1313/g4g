@@ -75,8 +75,6 @@ public class ClubController {
             playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));
             System.out.println(playerPositions.get(i));
         }
-
-
         try {
             long clubId = Long.parseLong(stringClubId);
 
