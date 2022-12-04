@@ -30,15 +30,16 @@ public class GameService {
     }
 
     //    cały mecz event po evencie z komentarzami
-    public HashMap<Integer, String> handleMatchEngine(Club hostClub, Club guestClub) throws InterruptedException {
-        List<Club> gameClubsList = new ArrayList<>(List.of(hostClub, guestClub));
-        Game newGame = new Game(gameClubsList,true);
+    public HashMap<Integer, String> handleMatchEngine(List<Club> gameClubs) throws InterruptedException {
+        Game newGame = new Game(gameClubs,true);
         this.gameRepository.save(newGame);
+        Club hostClub=gameClubs.get(0);
+        Club guestClub=gameClubs.get(1);
         //get both teams values
         List<Integer> hostClubValues = this.clubService.getClubFirst11Values(hostClub);
         List<Integer> guestClubValues = this.clubService.getClubFirst11Values(guestClub);
-        Club clubAttacking;
-        Club clubDefending;
+        Club clubAttacking = new Club();
+        Club clubDefending=new Club();
         Integer gameMinute = 0;
 
         HashMap<Integer, String> gameCommentaryList = new HashMap<>();

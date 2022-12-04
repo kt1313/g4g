@@ -52,14 +52,18 @@ public class GameController {
         Club hostClub = this.clubRepository.findByAppUser(appUser);
         Club guestClub = this.clubRepository.findByClubId(clubId);
         List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
+
+        //tutaj sprawdza Game a przeciez jeszcze nie utworzone
         Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
         Game playGame = new Game();
         if (playGameOptional.isPresent()) {
             playGame = playGameOptional.get();
+        }else {
+
         }
 
         //ma teraz ROZEGRAC ten mecz
-        HashMap<Integer, String> matchCommentary = this.gameService.handleMatchEngine(hostClub, guestClub);
+        HashMap<Integer, String> matchCommentary = this.gameService.handleMatchEngine(gameClubs);
         map.addAttribute("matchCommentary", matchCommentary);
 
         //tu naglowek, nazwy druzyn i wynik

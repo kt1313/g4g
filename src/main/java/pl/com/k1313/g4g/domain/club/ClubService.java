@@ -62,10 +62,11 @@ public class ClubService {
 
     public List<Integer> getClubFirst11Values(Club club) {
         List<Player> first11Players = findFirst11Players(club);
+        TUTAJ TRZEBA WROCIC DO TWORZENIA BOT CLUB I FIRST11 i SAVE!!!
         List<Integer> formationsValues = getFirst11FormationsValues(first11Players);
         int w1= formationsValues.get(0);
         int w2= formationsValues.get(1);
-        int w3= formationsValues.get(3);
+        int w3= formationsValues.get(2);
         Integer goalkeeperSkill = getGoalkeeperSkills(club);
         return new ArrayList<>(List.of(goalkeeperSkill, w1,w2, w3));
     }
@@ -77,8 +78,6 @@ public class ClubService {
         int first11Midfield = 0;
 
 
-        for (Player player : first11Players) {
-        }
         //dla każdego sprawdza czy jest w ataku, pomocy czy obronie lub bramkarz
         // i w zależności od tego sumuje procent jego umiejętności attacking
         for (Player player : first11Players
@@ -117,15 +116,17 @@ public class ClubService {
         List<Integer> formationsValues = new ArrayList<Integer>(List.of(first11Defence, first11Midfield, first11Attack
         ));
         System.out.println("TeamServ, calculateFirst11FormVal, Wartość formacji: "
-                + " Attack: " + formationsValues.get(3)
+                + " Attack: " + formationsValues.get(2)
                 + " Mid: " + formationsValues.get(1)
-                + " Def: " + formationsValues.get(0));
+                + " Def: " + formationsValues.get(0)
+                )
+        ;
 
         return formationsValues;
     }
 
 
-    private List<Player> findFirst11Players(Club club) {
+    public List<Player> findFirst11Players(Club club) {
         List<Player> first11Players = this.playerRepository.findAllByPlayerClub(club).stream()
                 .filter(Player::isFirstSquadPlayer)
                 .collect(Collectors.toList());
