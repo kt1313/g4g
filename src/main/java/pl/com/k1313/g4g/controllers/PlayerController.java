@@ -41,6 +41,7 @@ public class PlayerController {
         Club club = this.clubRepository.findByClubId(clubId);
         model.addAttribute("players", this.playerRepository.findAllByPlayerClub(club));
         model.addAttribute("clubId", clubId);
+        model.addAttribute("clubName", club.getClubName());
         return "players";
     }
 

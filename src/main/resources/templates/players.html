@@ -81,7 +81,8 @@
     .gray {
         display: flex;
     }
-    .frame{
+
+    .frame {
         background: rgb(232, 239, 252);
     }
 </style>
@@ -152,11 +153,12 @@
                             </div>
                         </div>
                         <div class="green">
-                            <div class="gray"><b><span th:text="${player.playerClub}">playerClubname</span></b></div>
+                            <div class="gray"><b><span th:text="${clubName}">playerClubname</span></b></div>
                             <div class="blue">
                                 <div>First 11:</div>
                                 <input type="checkbox" th:name="firstSquadPlayer"
                                        th:value="${player.id}"/>
+
                             </div>
                         </div>
                     </div>

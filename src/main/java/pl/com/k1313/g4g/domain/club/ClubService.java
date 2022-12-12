@@ -66,18 +66,15 @@ public class ClubService {
     }
 
     public List<Integer> getClubFirst11Values(Club club) {
-//       nie dziala findAllByPlayerClub
-//        List<Player> clubPlayers = this.playerRepository.findAllByPlayerClub(club);
+
         List<Player> first11Players = this.playerRepository.
                 findAllByPlayerClubAndFirstSquadPlayer(club, Boolean.TRUE);
-//        List<Player> first11Players = findFirst11Players(club);
-//        TUTAJ TRZEBA WROCIC DO TWORZENIA BOT CLUB I FIRST11 i SAVE!!!
         List<Integer> formationsValues = getFirst11FormationsValues(first11Players);
-        int w1 = formationsValues.get(0);
-        int w2 = formationsValues.get(1);
-        int w3 = formationsValues.get(2);
+        int def = formationsValues.get(0);
+        int mid = formationsValues.get(1);
+        int att = formationsValues.get(2);
         Integer goalkeeperSkill = getGoalkeeperSkills(club);
-        return new ArrayList<>(List.of(goalkeeperSkill, w1, w2, w3));
+        return new ArrayList<>(List.of(goalkeeperSkill, def, mid, att));
     }
 
     public List<Integer> getFirst11FormationsValues(List<Player> first11Players) {
@@ -96,14 +93,14 @@ public class ClubService {
                     (player.getPlayerPosition().equals(PlayerPosition.RF))) {
                 first11Attack += player.getAttacking();
                 first11Midfield += (player.getBallControl() * 0.35 + player.getPassing() * 0.35);
-                first11Defence += player.getInterception() * 0.5;
+                first11Defence += player.getInterception() * 0.25;
             }
             if (player.getPlayerPosition().equals(PlayerPosition.LW) ||
                     (player.getPlayerPosition().equals(PlayerPosition.CMA)) ||
                     (player.getPlayerPosition().equals(PlayerPosition.CM)) ||
                     (player.getPlayerPosition().equals(PlayerPosition.CMD)) ||
                     (player.getPlayerPosition().equals(PlayerPosition.RW))) {
-                first11Attack += (player.getAttacking() * 0.75);
+                first11Attack += (player.getAttacking() * 0.5);
                 first11Midfield += (player.getBallControl() * 0.5 + player.getPassing() * 0.5);
                 first11Defence += player.getInterception() * 0.5;
             }
@@ -112,9 +109,9 @@ public class ClubService {
                     (player.getPlayerPosition().equals(PlayerPosition.CB)) ||
                     (player.getPlayerPosition().equals(PlayerPosition.RCB)) ||
                     (player.getPlayerPosition().equals(PlayerPosition.RWB))) {
-                first11Attack += (player.getAttacking() * 0.5);
+                first11Attack += (player.getAttacking() * 0.25);
                 first11Midfield += (player.getBallControl() * 0.25 + player.getPassing() * 0.25);
-                first11Defence += player.getInterception() * 0.5;
+                first11Defence += player.getInterception() * 0.75;
             }
             if (player.getPlayerPosition().equals(PlayerPosition.GK)) {
                 first11Attack += (player.getAttacking() * 0.1);

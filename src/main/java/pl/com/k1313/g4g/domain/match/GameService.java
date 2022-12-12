@@ -52,8 +52,8 @@ public class GameService {
             } else {
                 clubDefending = hostClub;
             }
-//            komentarz o posiadaniu pilki, niech losuje tylko co...drugi event(wiekszy od 2)
-            if (randomAboutCommentary() > 2) {
+//            komentarz o posiadaniu pilki, niech losuje tylko co...czwarty event(wiekszy od 3)
+            if (randomAboutCommentary() > 3) {
                 gameCommentary(clubAttacking, 1, gameCommentaryList, gameMinute);
             }
             if (opportunitySucceed()) {
@@ -171,7 +171,7 @@ public class GameService {
         if (attackSucceedOverDefence(clubAttacking, hostClub, guestClub)) {
 //                System.out.println("MatchServ, opportunityEvent, aatackSucceedOverDef ");
             int forwarderAttack = getForwarderAttack(clubAttacking, hostClub, guestClub);
-            int goalkeeperSkill=this.clubService.getClubFirst11Values(guestClub).get(3);
+            int goalkeeperSkill=this.clubService.getClubFirst11Values(clubDefending).get(0);
             if (forwardScoresVsGoalkeeper(goalkeeperSkill, forwarderAttack)) {
                 goalEvent(clubsList,clubAttacking);
                 gameCommentary(clubAttacking, 4, gameCommentaryList, gameMinute);
@@ -260,13 +260,13 @@ public class GameService {
             game=gameOptional.get();
         }
 
-        Optional<Club> hostClub = game.getGameClubs().stream().findFirst();
-        Optional<Club> guestClub = game.getGameClubs().stream().findFirst();
+        Club hostClub = clubList.get(0);
+        Club guestClub = clubList.get(1);
 //tu jest porownywany Optional do Club.......
-        if ((club.getClubId()) == (hostClub.get().getClubId())) {
+        if ((club.getClubId()) == (hostClub.getClubId())) {
             game.setHostScore(game.getHostScore() + 1);
             System.out.println("Match score: Gospodarze: " + game.getHostScore() + " Goście: " + game.getGuestScore());
-        } else if (club.getClubId() == (guestClub.get().getClubId())) {
+        } else if (club.getClubId() == (guestClub.getClubId())) {
             game.setGuestScore(game.getGuestScore() + 1);
             System.out.println("Match score: Gospodarze: " + game.getHostScore() + " Goście: " + game.getGuestScore());
 

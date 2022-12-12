@@ -53,13 +53,10 @@ public class GameController {
         Club guestClub = this.clubRepository.findByClubId(clubId);
         List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
 
-        //tutaj sprawdza Game a przeciez jeszcze nie utworzone
         Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
         Game playGame = new Game();
         if (playGameOptional.isPresent()) {
             playGame = playGameOptional.get();
-        }else {
-
         }
 
         //ma teraz ROZEGRAC ten mecz
@@ -78,6 +75,7 @@ public class GameController {
         m.addAttribute("guestClubScore", guestClubScore);
 
         return "gameinprogress";
+//        NIE MA BRAMEK , SRAWDZ BRAMKARZ<->NAPASTNIK
     }
 
     @PostMapping("/test")
