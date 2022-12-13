@@ -16,6 +16,7 @@ import pl.com.k1313.g4g.domain.match.GameRepository;
 import pl.com.k1313.g4g.domain.match.GameService;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 
+import javax.swing.plaf.TreeUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,10 +58,13 @@ public class GameController {
         Game playGame = new Game();
         if (playGameOptional.isPresent()) {
             playGame = playGameOptional.get();
+        } else {
+            playGame.setGameClubs(gameClubs);
+            playGame.setInProgress(Boolean.TRUE);
         }
-
+        this.gameRepository.save(playGame);
         //ma teraz ROZEGRAC ten mecz
-        HashMap<Integer, String> matchCommentary = this.gameService.handleMatchEngine(gameClubs);
+        HashMap<Integer, String> matchCommentary = this.gameService.handleMatchEngine(playGame);
         map.addAttribute("matchCommentary", matchCommentary);
 
         //tu naglowek, nazwy druzyn i wynik
@@ -81,8 +85,8 @@ public class GameController {
     @PostMapping("/test")
     public String appUserPage(String appusertimestamp, Long clubId, Model model) {
         String test = appusertimestamp;
-        model.addAttribute("appusertimestamp",appusertimestamp);
-        model.addAttribute("clubId",clubId);
+        model.addAttribute("appusertimestamp", appusertimestamp);
+        model.addAttribute("clubId", clubId);
 
         return "test";
     }
