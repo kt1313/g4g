@@ -159,20 +159,17 @@
                             <div class="col-sm-9 text-secondary">
                                 <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
                                         th:text="${clubname}">clubname</span></a></h2>
-                                <!--                                <a th:text="${appusertimestamp}">AppUser Timespan</a>-->
-                                <div>
-                                    <form th:action="@{/game/playgame}" method="post">
-                                        <input type="hidden" th:value="${clubId}" th:name="clubId">
-                                        <input type="hidden" th:value="${appusertimestamp}" th:name="appusertimestamp">
-                                        <input type="submit" class="btn-primary" style="background-color: #0040ff"
-                                               value="Play Game"/>
-<!--                                        <td>-->
-<!--                                            <span th:if="${clubname==appuser.getClubname()}">nop</span>-->
-<!--                                            <span th:unless="${clubname!=appuser.getClubname()}">-->
-<!--                                        <input type="submit" class="btn-primary" style="background-color: #0040ff"-->
-<!--                                               value="Play Game"/></span>-->
-<!--                                        </td>-->
-                                    </form>
+<!--                                <span th:text="${appusernamebytimestamp}">sasasa</span>-->
+                                <div th:if="${appusernamebytimestamp!=clubOwnerName}">
+                                     <div>
+                                        <form th:action="@{/game/playgame}" method="post">
+                                            <input type="hidden" th:value="${clubId}" th:name="clubId">
+                                            <input type="hidden" th:value="${appusertimestamp}"
+                                                   th:name="appusertimestamp">
+                                            <input type="submit" class="btn-primary" style="background-color: #0040ff"
+                                                   value="Play Game"/>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

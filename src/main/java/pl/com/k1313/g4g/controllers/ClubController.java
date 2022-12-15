@@ -8,6 +8,8 @@ import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.league.League;
 import pl.com.k1313.g4g.domain.league.LeagueRepository;
 
+import pl.com.k1313.g4g.domain.match.Game;
+import pl.com.k1313.g4g.domain.match.GameRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerPosition;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
@@ -30,16 +32,19 @@ public class ClubController {
     private PlayerService playerService;
     private ClubService clubService;
     private LeagueRepository leagueRepository;
+    private GameRepository gameRepository;
 
     @Autowired
     public ClubController(
             PlayerRepository playerRepository, PlayerService playerService,
-            ClubRepository clubRepository, ClubService clubService, LeagueRepository leagueRepository) {
+            ClubRepository clubRepository, ClubService clubService,
+            LeagueRepository leagueRepository, GameRepository gameRepository) {
         this.playerRepository = playerRepository;
         this.playerService = playerService;
         this.clubRepository = clubRepository;
         this.clubService = clubService;
         this.leagueRepository = leagueRepository;
+        this.gameRepository=gameRepository;
     }
 
     @GetMapping("/takeover")
@@ -50,6 +55,8 @@ public class ClubController {
     @GetMapping("/league/{leagueId}/{appusertimestamp}")
     public String league(@PathVariable long leagueId, @PathVariable String appusertimestamp, Model model) {
         League league = this.leagueRepository.findById(leagueId);
+        List<Game> lastGamesList=this.gameRepository.findAll();
+        model.addAttribute("lastgames", lastGamesList);
         model.addAttribute("league", league);
         model.addAttribute("appusertimestamp", appusertimestamp);
         return "league";

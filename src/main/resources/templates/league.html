@@ -150,6 +150,23 @@
     <div> FC Club III- FC Club IV</div>
     <div> FC Club V- FC Club VI</div>
     <div> FC Club I- FC Club II</div>
+    <table>
+        <tr th:if={lastgames != null} th:each="g:${lastgames}">
+        <td th:text="g.getGameClubs().get(0)"></td>
+        <td th:text="g.getHostScore"></td>
+        <td th:text="g.getGameClubs().get(1)"></td>
+        <td th:text="g.getGuestScore"></td>
+        </tr>
+    </table>
+<!--    <table>-->
+<!--        <tr th:each="owner : ${owners}">-->
+<!--            <td th:text="${owner.userName}"></td>-->
+<!--        <tr th:if={owner.bicycles != null} th:each="bike : ${owner.bicycles}">-->
+<!--            <td th:text="${bike.make}"></td>-->
+<!--            <td th:text="${bike.model}"></td>-->
+<!--        </tr>-->
+<!--        </tr>-->
+<!--    </table>-->
 </div>
 </body>
 </html>

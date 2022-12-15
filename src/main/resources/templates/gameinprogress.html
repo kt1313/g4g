@@ -58,13 +58,13 @@
             <table style="margin-left: auto; margin-right: auto; font-size: xx-large">
                 <td></td>
                 <td th:id="hostClubName" th:text="${hostClubName}"/>
-                <td th:id="hostClubScore" th:text="${hostClubScore}"/>
+                <td th:id="hostClubScore" th:text="('_'+${hostClubScore}) "/>
                 <td></td>
-                <td> :</td>
+                <td>:</td>
                 <td></td>
-                <td th:id="guestClubScore" th:text="${guestClubScore}"/>
+                <td th:id="guestClubScore" th:text="${guestClubScore} "/>
                 <td></td>
-                <td th:id="guestClubName" th:text="${guestClubName}"/>
+                <td th:id="guestClubName" th:text="('  '+${guestClubName})"/>
                 <td></td>
             </table>
         </div>

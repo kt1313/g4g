@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface GameRepository extends JpaRepository<Game, Long> {
 
     Optional<Game> findFirstByInProgress(boolean inProgress);
-
     Optional<Game> findFirstByGameClubsInAndInProgress(List<Club> clubs, boolean inProgress);
 
 }
