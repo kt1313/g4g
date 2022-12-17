@@ -108,24 +108,29 @@
                                     <div class="form-group">
                                         <label for="createnewplayerposition">Position: </label>
                                         <select name="createnewplayerposition"
-                                                id="createnewplayerposition" th:value="${player.playerPosition}"
-                                                required>
-                                            <option value="0">Select position for First 11 player</option>
-                                            <option value="GK">Goalkeeper</option>
-                                            <option value="RWB">Right Wingback</option>
-                                            <option value="RCB">Right Centre-back</option>
-                                            <option value="CB">Centre back</option>
-                                            <option value="LCB">Left Centre-back</option>
-                                            <option value="LWB">Left Wing-back</option>
-                                            <option value="RW">Right Winger</option>
-                                            <option value="CMD">Centre Midfielder Defending</option>
-                                            <option value="CM">Centre Midfielder</option>
-                                            <option value="CMA">Centre Midfielder Attacking</option>
-                                            <option value="LW">Left Winger</option>
-                                            <option value="RF">Right Forward</option>
-                                            <option value="CF">Centre Forward</option>
-                                            <option value="LF">Left Forward</option>
+                                                id="createnewplayerposition" th:value="${player.playerPosition}" required>
+                                            <option value="0">Select position for player</option>
+                                            <option th:if="${player.playerPosition!=null}"
+                                            th:selected="${player.playerPosition}" th:text="${player.playerPosition}"></option>
+                                            <option value="GK">goalkeeper</option>
+                                            <option value="RWB">right Wingback</option>
+                                            <option value="RCB">right Centre-back</option>
+                                            <option value="CB">centre back</option>
+                                            <option value="LCB">left Centre-back</option>
+                                            <option value="LWB">left Wing-back</option>
+                                            <option value="RW">right Winger</option>
+                                            <option value="CMD">centre Midfielder Defending</option>
+                                            <option value="CM">centre Midfielder</option>
+                                            <option value="CMA">centre Midfielder Attacking</option>
+                                            <option value="LW">left Winger</option>
+                                            <option value="RF">right Forward</option>
+                                            <option value="CF">centre Forward</option>
+                                            <option value="LF">left Forward</option>
                                         </select>
+<!--                                        <select ...>-->
+<!--                                            <option></option>-->
+<!--                                            <option th:each="shoe : ${shoes}" th:selected="${shoe == item.getShoe()}" th:value="${shoe}" th:text="${shoe}"></option>-->
+<!--                                        </select>-->
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +145,7 @@
                                 <div><span th:text="${player.interception}">playerinterception</span></div>
                             </div>
                             <div class="gray">
-                                <div>Ball Control</div>
+                                <div>BallControl</div>
                                 <div><span th:text="${player.ballControl}">playerballcontrol</span></div>
                             </div>
                             <div class="green">
@@ -157,7 +162,7 @@
                             <div class="blue">
                                 <div>First 11:</div>
                                 <input type="checkbox" th:name="firstSquadPlayer"
-                                       th:value="${player.id}"/>
+                                       th:value="${player.id}" th:checked="${player.firstSquadPlayer}"/>
 
                             </div>
                         </div>

@@ -122,15 +122,15 @@ public class AppUserController {
     }
 
     //do wykorzystania kiedy user jest zalogowany(??)
-    @GetMapping("/registration/confirmed/{appUserName}")
-    public String confirmRegistration(@PathVariable String appUserName, Model model) {
-        Optional<AppUser> appUser = this.repository.findByAppUserName(appUserName);
-        long appUserId = appUser.get().getAppUserId();
-        boolean success = this.appUserService.confirmRegistration(appUserId);
-        model.addAttribute("success", success);
-        model.addAttribute("appUserId", this.repository.findByAppUserName(appUserName).get().getAppUserId());
-        return "/registrationConfirmed";
-    }
+//    @GetMapping("/registration/confirmed/{appUserName}")
+//    public String confirmRegistration(@PathVariable String appUserName, Model model) {
+//        Optional<AppUser> appUser = this.repository.findByAppUserName(appUserName);
+//        long appUserId = appUser.get().getAppUserId();
+//        boolean success = this.appUserService.confirmRegistration(appUserId);
+//        model.addAttribute("success", success);
+//        model.addAttribute("appUserId", this.repository.findByAppUserName(appUserName).get().getAppUserId());
+//        return "/registrationConfirmed";
+//    }
 
     @PostMapping("/login")
     public String loginConfirmed(String appusername, String password, Model model) {

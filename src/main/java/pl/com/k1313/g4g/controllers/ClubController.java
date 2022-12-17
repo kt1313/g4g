@@ -68,7 +68,7 @@ public class ClubController {
                                    @RequestParam(value = "createnewplayerposition") List<String> stringPlayerPos,
                                    Model model, HttpSession session, HttpServletRequest request) {
 
-        System.out.println("pozycja"+stringPlayerPos);
+//        System.out.println("pozycja"+stringPlayerPos);
         //musi w players po wybraniu pozycji kazdemu playerowi
         //isc do kazdego z osobna playera i mu zmienic pozycje i save w repo zrobic
         List <String> notemptyPlayerPos=new ArrayList<>();
@@ -79,9 +79,7 @@ public class ClubController {
         }
         List<PlayerPosition> playerPositions=new ArrayList<>(notemptyPlayerPos.size());
         for (int i=0; i< notemptyPlayerPos.size();i++){
-            playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));
-            System.out.println(playerPositions.get(i));
-        }
+            playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));}
         try {
             long clubId = Long.parseLong(stringClubId);
 
