@@ -65,4 +65,14 @@ public class Game {
     public int hashCode() {
         return Objects.hash(id, gameClubs, hostScore, guestScore, isPenaltyScore, inProgress);
     }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", gameClubs=" + gameClubs +
+                ", hostScore=" + hostScore +
+                ", guestScore=" + guestScore +
+                '}';
+    }
 }

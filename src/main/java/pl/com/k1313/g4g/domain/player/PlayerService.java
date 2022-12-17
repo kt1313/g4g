@@ -90,8 +90,11 @@ public class PlayerService {
         return newGoalkeeper;
     }
 
-    public void confirmFirst11(List<String> ids) {
+    public void confirmFirst11(List<String> ids, Long clubId) {
+//        tu ma zasejwowac firstSquadPlayerow na true a pozostalym wyczyscic FirstSquadPlayer
         List<Player> firstSquadPlayers = new ArrayList<>();
+        Club club=this.clubRepository.findByClubId(clubId);
+        List<Player> allClubPlayers=this.playerRepository.findAllByPlayerClub(club);
 
         if (!ids.isEmpty()) {
             for (String playerId : ids) {
@@ -100,6 +103,17 @@ public class PlayerService {
                 first11Player.setFirstSquadPlayer(true);
                 firstSquadPlayers.add(first11Player);
                 this.playerRepository.save(first11Player);
+            }
+        }
+        boolean isFound=false;
+        for (Player p:allClubPlayers
+             ) {
+            String pString=String.valueOf(p.getId());
+            isFound=ids.contains(pString);
+            if (!isFound){
+//                p.setPlayerPosition(PlayerPosition.NoPosition);
+                p.setFirstSquadPlayer(false);
+                this.playerRepository.save(p);
             }
         }
     }

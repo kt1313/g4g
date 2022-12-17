@@ -84,7 +84,7 @@ public class ClubController {
             long clubId = Long.parseLong(stringClubId);
 
             if (!ids.isEmpty()) {
-                this.playerService.confirmFirst11(ids);
+                this.playerService.confirmFirst11(ids, clubId);
                 Club club = this.clubRepository.findByClubId(clubId);
 //                TUTAJ SPRAWDZ, LECI TYLKO PO GOALKEEPERZE
                 List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
@@ -92,10 +92,10 @@ public class ClubController {
                     firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));
                     this.playerRepository.save(firstsquadplayers.get(i));
                 }
-                System.out.println("Dane o zawodniku, Imie: "
-                        + firstsquadplayers.stream().findFirst().get().getFirstName()
-                        + " pozycja: "
-                        + firstsquadplayers.stream().findFirst().get().getPlayerPosition()) ;
+//                System.out.println("Dane o zawodniku, Imie: "
+//                        + firstsquadplayers.stream().findFirst().get().getFirstName()
+//                        + " pozycja: "
+//                        + firstsquadplayers.stream().findFirst().get().getPlayerPosition()) ;
 
 
                 Optional<Player> goalkeeper = firstsquadplayers.stream()

@@ -3,6 +3,7 @@ package pl.com.k1313.g4g.domain.player;
 
 public enum PlayerPosition {
 
+    NoPosition("FREE","0"),
     GK ("goalkeeper", "3"),
     RWB("right Wingback", "10"),
     RCB("right Centreback", "9"),

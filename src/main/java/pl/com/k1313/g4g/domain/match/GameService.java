@@ -80,6 +80,7 @@ public class GameService {
         gameCommentaryList.put(gameMinute, matchResult);
         System.out.println("Koniec. Wynik meczu: " + playGame.getHostScore() + " : " + playGame.getGuestScore());
         this.gameRepository.save(playGame);
+        System.out.println(this.gameRepository.findAll());
 
         return gameCommentaryList;
     }

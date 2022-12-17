@@ -110,14 +110,14 @@
                                         <select name="createnewplayerposition"
                                                 id="createnewplayerposition" th:value="${player.playerPosition}" required>
                                             <option value="0">Select position for player</option>
-                                            <option th:if="${player.playerPosition!=null}"
+                                            <option th:if="${player.playerPosition!=null} and ${player.firstSquadPlayer}"
                                             th:selected="${player.playerPosition}" th:text="${player.playerPosition}"></option>
                                             <option value="GK">goalkeeper</option>
                                             <option value="RWB">right Wingback</option>
-                                            <option value="RCB">right Centre-back</option>
-                                            <option value="CB">centre back</option>
-                                            <option value="LCB">left Centre-back</option>
-                                            <option value="LWB">left Wing-back</option>
+                                            <option value="RCB">right Centreback</option>
+                                            <option value="CB">centreback</option>
+                                            <option value="LCB">left Centreback</option>
+                                            <option value="LWB">left Wingback</option>
                                             <option value="RW">right Winger</option>
                                             <option value="CMD">centre Midfielder Defending</option>
                                             <option value="CM">centre Midfielder</option>
@@ -127,10 +127,6 @@
                                             <option value="CF">centre Forward</option>
                                             <option value="LF">left Forward</option>
                                         </select>
-<!--                                        <select ...>-->
-<!--                                            <option></option>-->
-<!--                                            <option th:each="shoe : ${shoes}" th:selected="${shoe == item.getShoe()}" th:value="${shoe}" th:text="${shoe}"></option>-->
-<!--                                        </select>-->
                                     </div>
                                 </div>
                             </div>
