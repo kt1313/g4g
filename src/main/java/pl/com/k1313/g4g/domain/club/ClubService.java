@@ -2,6 +2,7 @@ package pl.com.k1313.g4g.domain.club;
 
 import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
+import pl.com.k1313.g4g.domain.league.League;
 import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerPosition;
@@ -9,6 +10,7 @@ import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -145,4 +147,16 @@ public class ClubService {
                         (club, PlayerPosition.GK).getGoalkeeping();//tutaj sprawdz czy potrzebny 3ci argument?
     }
 
+    public List<Club> clubsSortedByPointsAndGoalsDiff(long leagueId) {
+        Comparator<Club> compareByPointsAndGoalsDiff = Comparator
+                .comparing(Club::getClubPoints)
+                .thenComparing(Club::getClubGoalsDiff)
+                .reversed();
+
+        List<Club> clubsSortedByPointsAndGoalsDiff = this.clubRepository.findByClubLeagueId(leagueId)
+                .stream()
+                .sorted(compareByPointsAndGoalsDiff)
+                .collect(Collectors.toList());
+        return clubsSortedByPointsAndGoalsDiff;
+    }
 }

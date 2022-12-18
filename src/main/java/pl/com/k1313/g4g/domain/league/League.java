@@ -25,7 +25,7 @@ public class League {
 
     private int leagueRound;
 
-    //    private LeagueTable leagueTable;
+
     @OneToMany
     private List<Club> leagueTeams;
 

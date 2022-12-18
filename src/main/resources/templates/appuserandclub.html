@@ -159,7 +159,6 @@
                             <div class="col-sm-9 text-secondary">
                                 <h2><a th:href="@{/appuser/club/{clubId}(clubId=${clubId})}"><span
                                         th:text="${clubname}">clubname</span></a></h2>
-<!--                                <span th:text="${appusernamebytimestamp}">sasasa</span>-->
                                 <div th:if="${appusernamebytimestamp!=clubOwnerName}">
                                      <div>
                                         <form th:action="@{/game/playgame}" method="post">

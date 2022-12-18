@@ -25,15 +25,15 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
             </li>
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="/team">Club</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="/players">Players</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="/league">League</a>-->
-<!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="/team">Club</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="/players">Players</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="/league">League</a>-->
+            <!--            </li>-->
             <li class="nav-item" style="text-align: right">
                 <a th:href="@{appusertimestamp}">LoggedUser</a>
             </li>
@@ -125,48 +125,32 @@
             <th>GD</th>
             <th>PTS</th>
         </tr>
-<!--        <h3><a th:href="@{/team/league/{leagueId}/{appusertimestamp}-->
-<!--                                    (leagueId=${leagueId}, appusertimestamp=${appusertimestamp})}">League</a></h3>-->
-        <tr class="wpos" th:each="club, state : ${league.getLeagueTeams()}">
+        <tr class="wpos" th:each="club, state : ${clubslistsorted}">
             <td th:utext="${state.count}">index</td>
             <td><a th:href="@{/appuser/club/{clubId}/{appusertimestamp}
             (clubId=${club.getClubId()}, appusertimestamp=${appusertimestamp})}"><span
                     th:text="${club.getClubName()}">clubname</span></a>
                 <input type="hidden" th:value="${appusertimestamp}">
                 <input type="hidden" th:value="${club.getClubId()}"></td>
-            <td th:utext="${state.count}">count</td>
-            <td>2</td>
-            <td>0</td>
-            <td>0</td>
-            <td>5</td>
-            <td>6</td>
+            <td th:utext="${club.clubRounds}">GamesPlayed</td>
+            <td th:utext="${club.clubWins}">Wins</td>
+            <td th:utext="${club.clubDraws}">Draws</td>
+            <td th:utext="${club.clubLosses}">Losses</td>
+            <td th:utext="${club.clubGoalsDiff}">Goals Difference</td>
+            <td th:utext="${club.clubPoints}">Points</td>
         </tr>
     </table>
 </div>
-
 <div class="headin">
-    <div>LAST GAMES</div>
-    <div> FC Club I- FC Club II</div>
-    <div> FC Club III- FC Club IV</div>
-    <div> FC Club V- FC Club VI</div>
-    <div> FC Club I- FC Club II</div>
-    <table>
+    <table style="margin-left:auto;margin-right:auto;">
+        <thead>LAST Games</thead>
         <tr th:if="${lastgames != null}" th:each="g:${lastgames}">
-        <td th:text="${g.gameClubs.get(0).clubName}"></td>
-        <td th:text="${g.hostScore}"></td>
-        <td th:text="${g.gameClubs.get(1).clubName}"></td>
-        <td th:text="${g.guestScore}"></td>
+            <td th:text="${g.gameClubs.get(0).clubName}"></td>
+            <td th:text="${g.hostScore}"></td>
+            <td th:text="${g.guestScore}"></td>
+            <td th:text="${g.gameClubs.get(1).clubName}"></td>
         </tr>
     </table>
-<!--    <table>-->
-<!--        <tr th:each="owner : ${owners}">-->
-<!--            <td th:text="${owner.userName}"></td>-->
-<!--        <tr th:if={owner.bicycles != null} th:each="bike : ${owner.bicycles}">-->
-<!--            <td th:text="${bike.make}"></td>-->
-<!--            <td th:text="${bike.model}"></td>-->
-<!--        </tr>-->
-<!--        </tr>-->
-<!--    </table>-->
 </div>
 </body>
 </html>

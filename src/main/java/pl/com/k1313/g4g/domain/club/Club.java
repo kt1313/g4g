@@ -17,6 +17,12 @@ public class Club {
 
     private String clubName;
 
+    private int clubRounds;
+    private int clubPoints;
+    private int clubWins;
+    private int clubDraws;
+    private int clubLosses;
+    private int clubGoalsDiff;
     @OneToOne(cascade=CascadeType.PERSIST)
     private AppUser appUser;
 

@@ -67,7 +67,7 @@ public class LeagueService {
         List<League> leagues = this.leagueRepository.findAll();
         for (League l : leagues
         ) {
-            List<Club> leagueClubs = this.clubRepository.findByClubLeague(l.getId());
+            List<Club> leagueClubs = this.clubRepository.findByClubLeagueId(l.getId());
             List<AppUser> leagueAppUsers = new ArrayList<>();
             for (Club c : leagueClubs
             ) {
