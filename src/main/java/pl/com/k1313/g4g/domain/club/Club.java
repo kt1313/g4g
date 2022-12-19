@@ -23,6 +23,9 @@ public class Club {
     private int clubDraws;
     private int clubLosses;
     private int clubGoalsDiff;
+
+    private ClubHostGuest clubHostGuest;
+
     @OneToOne(cascade=CascadeType.PERSIST)
     private AppUser appUser;
 
@@ -43,6 +46,10 @@ public class Club {
     public Club(AppUser appUser, String clubName) {
         this.appUser = appUser;
         this.clubName = clubName;
+    }
+
+    public Club(ClubHostGuest clubHostGuest){
+        this.clubHostGuest=clubHostGuest;
     }
 
     public Club() {

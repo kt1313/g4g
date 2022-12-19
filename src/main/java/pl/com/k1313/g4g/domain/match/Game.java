@@ -20,10 +20,18 @@ public class Game {
     @OneToMany
     private List<Club> gameClubs;
 
+    @ManyToOne
+    @JoinColumn(name = "host_club_club_id")
+    private Club hostClub;
+    @ManyToOne
+    @JoinColumn(name = "guest_club_club_id")
+    private Club guestClub;
     private int hostScore;
     private int guestScore;
     private boolean isPenaltyScore;
     private boolean inProgress;
+    private GameType gameType;
+
 
     public void setGameClubs(List<Club> gameClubs) {
         this.gameClubs = gameClubs;
@@ -46,6 +54,11 @@ public class Game {
     }
 
     public Game() {
+    }
+
+    public Game(Club hostClub, Club guestClub, GameType gameType){
+        this.hostClub=hostClub;
+        this.guestClub=guestClub;
     }
 
     public Game(List<Club> gameClubs, boolean inProgress) {

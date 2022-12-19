@@ -7,6 +7,8 @@ import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
+import pl.com.k1313.g4g.domain.match.Game;
+import pl.com.k1313.g4g.domain.match.GameType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,7 @@ public class LeagueService {
         }
         userLeague.setLeagueTeams(leagueTeams);
         userClub.setClubLeague(userLeague);
+        createGamesSchedule(userLeague.getId());
         this.clubRepository.save(userClub);
         this.leagueRepository.save(userLeague);
         return userLeague;
@@ -75,7 +78,7 @@ public class LeagueService {
                     leagueAppUsers.add(c.getAppUser());
                     if (leagueAppUsers.size() < 8) {
                         league = l;
-                        //teraz wyciagnij nr ligi a jesli nie ma to nadaj pierwszy wolny
+                        //teraz wyciagnij nr ligi, a jesli nie ma to nadaj pierwszy wolny
                         if (league.getLeagueNumber().isEmpty()) {
                             setLeagueNumber(league);
                         }
@@ -88,7 +91,6 @@ public class LeagueService {
         }
         this.leagueRepository.save(league);
         return league;
-
     }
 
     public String setLeagueNumber(League league) {
@@ -107,4 +109,58 @@ public class LeagueService {
         league.setLeagueNumber(stringMaxLeagueNr);
         return stringMaxLeagueNr;
     }
+
+    public Game[][] createGamesSchedule(long leagueId) {
+////              I. 1-8, 2-7,3-6,4-5
+////            II. 1-7, 8-6, 2-5, 3-4
+////            III. 1-6, 7-5, 8-4, 2-3
+////            IV. 1-5, 6-4, 7-3, 8-2
+////            V. 1-4, 5-3, 6-2, 7-8
+////            VI. 1-3, 4-2, 5-8, 6-7
+////            VII. 1-2, 3-8, 4-7, 5-6
+        List<Club> clubsList = this.clubRepository.findByClubLeagueId(leagueId);
+        Club clubA = clubsList.get(0);
+        Club clubB = clubsList.get(1);
+        Club clubC = clubsList.get(2);
+        Club clubD = clubsList.get(3);
+        Club clubE = clubsList.get(4);
+        Club clubF = clubsList.get(5);
+        Club clubG = clubsList.get(6);
+        Club clubH = clubsList.get(7);
+
+        Game[][] leagueRounds = {
+                {new Game(clubA, clubH, GameType.LG),
+                        new Game(clubB, clubG, GameType.LG),
+                        new Game(clubC, clubF, GameType.LG),
+                        new Game(clubD, clubE, GameType.LG)},
+                {new Game(clubA, clubG, GameType.LG),
+                        new Game(clubH, clubF, GameType.LG),
+                        new Game(clubB, clubE, GameType.LG),
+                        new Game(clubC, clubD, GameType.LG)},
+                {new Game(clubA, clubF, GameType.LG),
+                        new Game(clubG, clubE, GameType.LG),
+                        new Game(clubH, clubD, GameType.LG),
+                        new Game(clubB, clubC, GameType.LG)},
+                {new Game(clubA, clubE, GameType.LG),
+                        new Game(clubF, clubD, GameType.LG),
+                        new Game(clubG, clubC, GameType.LG),
+                        new Game(clubH, clubB, GameType.LG)},
+                {new Game(clubA, clubD, GameType.LG),
+                        new Game(clubE, clubC, GameType.LG),
+                        new Game(clubF, clubB, GameType.LG),
+                        new Game(clubG, clubH, GameType.LG)},
+                {new Game(clubA, clubC, GameType.LG),
+                        new Game(clubD, clubB, GameType.LG),
+                        new Game(clubE, clubH, GameType.LG),
+                        new Game(clubF, clubG, GameType.LG)},
+                {new Game(clubA, clubB, GameType.LG),
+                        new Game(clubC, clubH, GameType.LG),
+                        new Game(clubD, clubG, GameType.LG),
+                        new Game(clubE, clubF, GameType.LG)}
+        };
+        this.leagueRepository.save(this.leagueRepository.findById(leagueId));
+        return leagueRounds;
+    }
+
 }
+
