@@ -1,6 +1,5 @@
 package pl.com.k1313.g4g.domain.league;
 
-import com.mysql.cj.protocol.a.NativeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
@@ -11,8 +10,8 @@ import pl.com.k1313.g4g.domain.match.Game;
 import pl.com.k1313.g4g.domain.match.GameType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LeagueService {
@@ -59,7 +58,7 @@ public class LeagueService {
         }
         userLeague.setLeagueTeams(leagueTeams);
         userClub.setClubLeague(userLeague);
-        createGamesSchedule(userLeague.getId());
+        createGamesFixtures(userLeague.getId());
         this.clubRepository.save(userClub);
         this.leagueRepository.save(userLeague);
         return userLeague;
@@ -110,7 +109,7 @@ public class LeagueService {
         return stringMaxLeagueNr;
     }
 
-    public Game[][] createGamesSchedule(long leagueId) {
+    public HashMap<Integer, List<Game>>  createGamesFixtures(long leagueId) {
 ////              I. 1-8, 2-7,3-6,4-5
 ////            II. 1-7, 8-6, 2-5, 3-4
 ////            III. 1-6, 7-5, 8-4, 2-3
@@ -118,6 +117,7 @@ public class LeagueService {
 ////            V. 1-4, 5-3, 6-2, 7-8
 ////            VI. 1-3, 4-2, 5-8, 6-7
 ////            VII. 1-2, 3-8, 4-7, 5-6
+        HashMap<Integer, List<Game>> rounds=new HashMap<>();
         List<Club> clubsList = this.clubRepository.findByClubLeagueId(leagueId);
         Club clubA = clubsList.get(0);
         Club clubB = clubsList.get(1);
@@ -128,38 +128,46 @@ public class LeagueService {
         Club clubG = clubsList.get(6);
         Club clubH = clubsList.get(7);
 
-        Game[][] leagueRounds = {
-                {new Game(clubA, clubH, GameType.LG),
-                        new Game(clubB, clubG, GameType.LG),
-                        new Game(clubC, clubF, GameType.LG),
-                        new Game(clubD, clubE, GameType.LG)},
-                {new Game(clubA, clubG, GameType.LG),
-                        new Game(clubH, clubF, GameType.LG),
-                        new Game(clubB, clubE, GameType.LG),
-                        new Game(clubC, clubD, GameType.LG)},
-                {new Game(clubA, clubF, GameType.LG),
-                        new Game(clubG, clubE, GameType.LG),
-                        new Game(clubH, clubD, GameType.LG),
-                        new Game(clubB, clubC, GameType.LG)},
-                {new Game(clubA, clubE, GameType.LG),
-                        new Game(clubF, clubD, GameType.LG),
-                        new Game(clubG, clubC, GameType.LG),
-                        new Game(clubH, clubB, GameType.LG)},
-                {new Game(clubA, clubD, GameType.LG),
-                        new Game(clubE, clubC, GameType.LG),
-                        new Game(clubF, clubB, GameType.LG),
-                        new Game(clubG, clubH, GameType.LG)},
-                {new Game(clubA, clubC, GameType.LG),
-                        new Game(clubD, clubB, GameType.LG),
-                        new Game(clubE, clubH, GameType.LG),
-                        new Game(clubF, clubG, GameType.LG)},
-                {new Game(clubA, clubB, GameType.LG),
-                        new Game(clubC, clubH, GameType.LG),
-                        new Game(clubD, clubG, GameType.LG),
-                        new Game(clubE, clubF, GameType.LG)}
+        Game[][] leagueFixtures = {
+                {new Game(clubA, clubH, GameType.LG, leagueId),
+                        new Game(clubB, clubG, GameType.LG, leagueId),
+                        new Game(clubC, clubF, GameType.LG, leagueId),
+                        new Game(clubD, clubE, GameType.LG, leagueId)},
+                {new Game(clubA, clubG, GameType.LG, leagueId),
+                        new Game(clubH, clubF, GameType.LG, leagueId),
+                        new Game(clubB, clubE, GameType.LG, leagueId),
+                        new Game(clubC, clubD, GameType.LG, leagueId)},
+                {new Game(clubA, clubF, GameType.LG, leagueId),
+                        new Game(clubG, clubE, GameType.LG, leagueId),
+                        new Game(clubH, clubD, GameType.LG, leagueId),
+                        new Game(clubB, clubC, GameType.LG, leagueId)},
+                {new Game(clubA, clubE, GameType.LG, leagueId),
+                        new Game(clubF, clubD, GameType.LG, leagueId),
+                        new Game(clubG, clubC, GameType.LG, leagueId),
+                        new Game(clubH, clubB, GameType.LG, leagueId)},
+                {new Game(clubA, clubD, GameType.LG, leagueId),
+                        new Game(clubE, clubC, GameType.LG, leagueId),
+                        new Game(clubF, clubB, GameType.LG, leagueId),
+                        new Game(clubG, clubH, GameType.LG, leagueId)},
+                {new Game(clubA, clubC, GameType.LG, leagueId),
+                        new Game(clubD, clubB, GameType.LG, leagueId),
+                        new Game(clubE, clubH, GameType.LG, leagueId),
+                        new Game(clubF, clubG, GameType.LG, leagueId)},
+                {new Game(clubA, clubB, GameType.LG, leagueId),
+                        new Game(clubC, clubH, GameType.LG, leagueId),
+                        new Game(clubD, clubG, GameType.LG, leagueId),
+                        new Game(clubE, clubF, GameType.LG, leagueId)}
         };
-        this.leagueRepository.save(this.leagueRepository.findById(leagueId));
-        return leagueRounds;
+        for (int i = 0; i < 7; i++) {
+            List<Game> round = new ArrayList<>();
+            for (int y = 0; y < 4; y++) {
+                round.add(leagueFixtures[i][y]);
+            }
+            rounds.put(i, round);
+        }
+        this.leagueRepository.findAllById(leagueId).setLeagueFixtures(rounds);
+        this.leagueRepository.save(this.leagueRepository.findAllById(leagueId));
+        return rounds;
     }
 
 }

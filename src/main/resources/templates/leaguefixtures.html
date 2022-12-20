@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Player's Details</title>
+    <script src="/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+<body>
+<!--Navbar -->
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="#">Goal4Goal - Online Football Manager</a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
+            </li>
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="/team">Club</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="/players">Players</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="/league">League</a>-->
+            <!--            </li>-->
+            <li class="nav-item" style="text-align: right">
+                <a th:href="@{appusertimestamp}">LoggedUser</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!--/.Navbar -->
+
+<div>
+    <table>
+        <thead>LEAGUE</thead>
+        <thead th:text="${leagueId}">leagueId</thead>
+<tr th:each="round : ${rounds}">
+    <td th:text="${r.get(0)}"></td>
+    <td th:text="${r.get(1)}"></td>
+    <td th:text="${r.get(2)}"></td>
+    <td th:text="${r.get(3)}"></td>
+    </table>
+    <tr th:if="${lastgames != null}" th:each="g:${lastgames}">
+        <td th:text="${g.gameClubs.get(0).clubName}"></td>
+        <td th:text="${g.hostScore}"></td>
+        <td th:text="${g.guestScore}"></td>
+        <td th:text="${g.gameClubs.get(1).clubName}"></td>
+    </tr>
+</div>
+</body>
+</html>

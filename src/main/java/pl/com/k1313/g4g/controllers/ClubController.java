@@ -20,10 +20,8 @@ import pl.com.k1313.g4g.domain.club.ClubService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -58,7 +56,7 @@ public class ClubController {
     public String league(@PathVariable long leagueId, @PathVariable String appusertimestamp, Model model) {
         League league = this.leagueRepository.findById(leagueId);
         List<Game> lastGamesList=this.gameRepository.findAll();
-        List<Club> clubsSortedByPointsAndGoalsDiff=this.clubService.clubsSortedByPointsAndGoalsDiff(leagueId);
+        List<Club> clubsSortedByPointsAndGoalsDiff=this.clubService.sortingByPointsAndGoalsDiff(leagueId);
 
         model.addAttribute("lastgames", lastGamesList);
         model.addAttribute("league", league);

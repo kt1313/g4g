@@ -4,13 +4,11 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import pl.com.k1313.g4g.domain.club.Club;
-import pl.com.k1313.g4g.domain.player.Player;
-import pl.com.k1313.g4g.domain.player.PlayerPosition;
+import pl.com.k1313.g4g.domain.match.Game;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Setter(value = AccessLevel.NONE)
@@ -25,9 +23,10 @@ public class League {
 
     private int leagueRound;
 
-
     @OneToMany
     private List<Club> leagueTeams;
+
+    private HashMap<Integer, List<Game>> leagueFixtures;
 
     public League() {
 
@@ -48,6 +47,18 @@ public class League {
 
     public void setLeagueTeams(List<Club> leagueTeams) {
         this.leagueTeams = leagueTeams;
+    }
+
+    public void setLeagueRound(int leagueRound) {
+        this.leagueRound = leagueRound;
+    }
+
+    public void setLeagueFixtures(HashMap<Integer, List<Game>> leagueFixtures) {
+        this.leagueFixtures = leagueFixtures;
+    }
+
+    public HashMap<Integer, List<Game>> getLeagueFixtures() {
+        return leagueFixtures;
     }
 
     @Override

@@ -141,6 +141,13 @@
         </tr>
     </table>
 </div>
+<div>
+    <form method="post" th:action="@{/game/leaguefixtures}">
+        <input type="hidden" th:value="${league.getId()}" th:name="leagueId">
+        <input type="hidden" >
+        <input type="submit" th:value="Play League Round">
+    </form>
+</div>
 <div class="headin">
     <table style="margin-left:auto;margin-right:auto;">
         <thead>LAST Games</thead>

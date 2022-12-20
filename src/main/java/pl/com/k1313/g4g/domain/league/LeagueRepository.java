@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface LeagueRepository extends JpaRepository<League,Long> {
 
-    League findById(long id);
+    League findAllById(long id);
     List<League> findAnyByLeagueNumberNotNull();
 
 

@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
-@Data
 @Setter(value = AccessLevel.NONE)
 @Entity
 public class Game {
@@ -31,10 +30,18 @@ public class Game {
     private boolean isPenaltyScore;
     private boolean inProgress;
     private GameType gameType;
-
+    private long leagueId;
 
     public void setGameClubs(List<Club> gameClubs) {
         this.gameClubs = gameClubs;
+    }
+
+    public void setHostClub(Club hostClub) {
+        this.hostClub = hostClub;
+    }
+
+    public void setGuestClub(Club guestClub) {
+        this.guestClub = guestClub;
     }
 
     public void setHostScore(int hostScore) {
@@ -53,12 +60,58 @@ public class Game {
         this.inProgress = inProgress;
     }
 
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
+    }
+
+    public void setLeagueId(long leagueId) {
+        this.leagueId = leagueId;
+    }
+
+    public List<Club> getGameClubs() {
+        return gameClubs;
+    }
+
+    public Club getHostClub() {
+        return hostClub;
+    }
+
+    public Club getGuestClub() {
+        return guestClub;
+    }
+
+    public int getHostScore() {
+        return hostScore;
+    }
+
+    public int getGuestScore() {
+        return guestScore;
+    }
+
+    public boolean isPenaltyScore() {
+        return isPenaltyScore;
+    }
+
+    public boolean isInProgress() {
+        return inProgress;
+    }
+
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    public long getLeagueId() {
+        return leagueId;
+    }
+
     public Game() {
     }
 
-    public Game(Club hostClub, Club guestClub, GameType gameType){
+    public Game(Club hostClub, Club guestClub, GameType gameType, long leagueId){
         this.hostClub=hostClub;
         this.guestClub=guestClub;
+        this.gameType=gameType;
+        this.leagueId=leagueId;
     }
 
     public Game(List<Club> gameClubs, boolean inProgress) {

@@ -30,7 +30,7 @@ public class GameService {
     }
 
     //    cały mecz event po evencie z komentarzami
-    public HashMap<Integer, String> handleMatchEngine(Game playGame) throws InterruptedException {
+    public HashMap<Integer, String> handleGameEngine(Game playGame) throws InterruptedException {
         Club hostClub = playGame.getGameClubs().get(0);
         Club guestClub = playGame.getGameClubs().get(1);
         //get both teams values
@@ -43,7 +43,7 @@ public class GameService {
         HashMap<Integer, String> gameCommentaryList = new HashMap<>();
         while (playGame.isInProgress()) {
             gameMinute++;
-            Thread.sleep(100);
+            Thread.sleep(10);
             clubAttacking = clubWithGreaterBallPossesion(hostClub, guestClub);
             if (clubAttacking.equals(hostClub)) {
                 clubDefending = guestClub;
@@ -87,29 +87,35 @@ public class GameService {
     }
 
     private void updateClubsValuesAfterGames(Club hostClub, Club guestClub, Game playGame) {
-        hostClub.setClubRounds(hostClub.getClubRounds() + 1);
-        guestClub.setClubRounds(guestClub.getClubRounds() + 1);
-        int goalsDifference = playGame.getHostScore() - playGame.getGuestScore();
-        if (goalsDifference >= 0) {
-            hostClub.setClubGoalsDiff(hostClub.getClubGoalsDiff() + goalsDifference);
-            guestClub.setClubGoalsDiff(guestClub.getClubGoalsDiff() - goalsDifference);
-        } else {
-            guestClub.setClubGoalsDiff(guestClub.getClubGoalsDiff() - goalsDifference);
-            hostClub.setClubGoalsDiff(hostClub.getClubGoalsDiff() + goalsDifference);
-        }
-        if (playGame.getHostScore() > playGame.getGuestScore()) {
-            hostClub.setClubPoints(hostClub.getClubPoints() + 3);
-            hostClub.setClubWins(hostClub.getClubWins()+1);
-            guestClub.setClubLosses(guestClub.getClubLosses()+1);
-        } else if (playGame.getHostScore() == playGame.getGuestScore()) {
-            hostClub.setClubPoints(hostClub.getClubPoints() + 1);
-            guestClub.setClubPoints(guestClub.getClubPoints() + 1);
-            hostClub.setClubDraws(hostClub.getClubDraws()+1);
-            guestClub.setClubDraws(guestClub.getClubDraws()+1);
-        } else {
-            guestClub.setClubPoints(guestClub.getClubPoints() + 3);
-            guestClub.setClubWins(guestClub.getClubWins()+1);
-            hostClub.setClubLosses(hostClub.getClubLosses()+1);
+
+        //tutaj niech sprawdzi czy Friendly czy League Game
+        GameType gameType = playGame.getGameType();
+        if (gameType == GameType.LG) {
+//            w templatce league stworzyc button playRound i maja symulowac gry w lidze
+            hostClub.setClubRounds(hostClub.getClubRounds() + 1);
+            guestClub.setClubRounds(guestClub.getClubRounds() + 1);
+            int goalsDifference = playGame.getHostScore() - playGame.getGuestScore();
+            if (goalsDifference >= 0) {
+                hostClub.setClubGoalsDiff(hostClub.getClubGoalsDiff() + goalsDifference);
+                guestClub.setClubGoalsDiff(guestClub.getClubGoalsDiff() - goalsDifference);
+            } else {
+                guestClub.setClubGoalsDiff(guestClub.getClubGoalsDiff() - goalsDifference);
+                hostClub.setClubGoalsDiff(hostClub.getClubGoalsDiff() + goalsDifference);
+            }
+            if (playGame.getHostScore() > playGame.getGuestScore()) {
+                hostClub.setClubPoints(hostClub.getClubPoints() + 3);
+                hostClub.setClubWins(hostClub.getClubWins() + 1);
+                guestClub.setClubLosses(guestClub.getClubLosses() + 1);
+            } else if (playGame.getHostScore() == playGame.getGuestScore()) {
+                hostClub.setClubPoints(hostClub.getClubPoints() + 1);
+                guestClub.setClubPoints(guestClub.getClubPoints() + 1);
+                hostClub.setClubDraws(hostClub.getClubDraws() + 1);
+                guestClub.setClubDraws(guestClub.getClubDraws() + 1);
+            } else {
+                guestClub.setClubPoints(guestClub.getClubPoints() + 3);
+                guestClub.setClubWins(guestClub.getClubWins() + 1);
+                hostClub.setClubLosses(hostClub.getClubLosses() + 1);
+            }
         }
 
         this.clubRepository.save(hostClub);
