@@ -160,8 +160,12 @@ public class LeagueService {
         };
         for (int i = 0; i < 7; i++) {
             List<Game> round = new ArrayList<>();
-            for (int y = 0; y < 4; y++) {
-                round.add(leagueFixtures[i][y]);
+            for (int j = 0; j < 4; j++) {
+                List<Club> gameClubs=new ArrayList<>();
+                gameClubs.add(leagueFixtures[i][j].getHostClub());
+                gameClubs.add(leagueFixtures[i][j].getGuestClub());
+                leagueFixtures[i][j].setGameClubs(gameClubs);
+                round.add(leagueFixtures[i][j]);
             }
             rounds.put(i, round);
         }

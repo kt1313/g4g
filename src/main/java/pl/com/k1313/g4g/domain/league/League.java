@@ -7,13 +7,14 @@ import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.match.Game;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
 @Data
 @Setter(value = AccessLevel.NONE)
 @Entity
-public class League {
+public class League implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

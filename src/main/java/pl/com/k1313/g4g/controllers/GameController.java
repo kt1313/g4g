@@ -96,7 +96,8 @@ public class GameController {
     public String leagueGames(@PathVariable long leagueId, Model model) {
 //        List<Game> leagueGames = this.gameRepository.findAllByLeagueId(leagueId);
         //jestem tutaj, do zrobienia templatka oraz kontroller tutaj
-        HashMap<Integer, List<Game>> rounds = this.leagueService.createGamesFixtures(leagueId);
+        League league=this.leagueRepository.findAllById(leagueId);
+        HashMap<Integer, List<Game>> rounds = league.getLeagueFixtures();
        model.addAttribute("rounds", rounds);
         return "leaguefixtures";
     }

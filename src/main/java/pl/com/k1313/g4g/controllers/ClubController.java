@@ -54,7 +54,7 @@ public class ClubController {
 
     @GetMapping("/league/{leagueId}/{appusertimestamp}")
     public String league(@PathVariable long leagueId, @PathVariable String appusertimestamp, Model model) {
-        League league = this.leagueRepository.findById(leagueId);
+        League league = this.leagueRepository.findAllById(leagueId);
         List<Game> lastGamesList=this.gameRepository.findAll();
         List<Club> clubsSortedByPointsAndGoalsDiff=this.clubService.sortingByPointsAndGoalsDiff(leagueId);
 
