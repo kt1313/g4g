@@ -12,6 +12,7 @@ import pl.com.k1313.g4g.domain.match.GameType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LeagueService {
@@ -109,7 +110,7 @@ public class LeagueService {
         return stringMaxLeagueNr;
     }
 
-    public HashMap<Integer, List<Game>>  createGamesFixtures(long leagueId) {
+    public Map<Integer, List<Game>> createGamesFixtures(long leagueId) {
 ////              I. 1-8, 2-7,3-6,4-5
 ////            II. 1-7, 8-6, 2-5, 3-4
 ////            III. 1-6, 7-5, 8-4, 2-3
@@ -117,7 +118,7 @@ public class LeagueService {
 ////            V. 1-4, 5-3, 6-2, 7-8
 ////            VI. 1-3, 4-2, 5-8, 6-7
 ////            VII. 1-2, 3-8, 4-7, 5-6
-        HashMap<Integer, List<Game>> rounds=new HashMap<>();
+        Map<Integer, List<Game>> roundsWithGames=new HashMap<>();
         List<Club> clubsList = this.clubRepository.findByClubLeagueId(leagueId);
         Club clubA = clubsList.get(0);
         Club clubB = clubsList.get(1);
@@ -158,20 +159,21 @@ public class LeagueService {
                         new Game(clubD, clubG, GameType.LG, leagueId),
                         new Game(clubE, clubF, GameType.LG, leagueId)}
         };
+        List<Game> leagueAllGames = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            List<Game> round = new ArrayList<>();
             for (int j = 0; j < 4; j++) {
                 List<Club> gameClubs=new ArrayList<>();
                 gameClubs.add(leagueFixtures[i][j].getHostClub());
                 gameClubs.add(leagueFixtures[i][j].getGuestClub());
                 leagueFixtures[i][j].setGameClubs(gameClubs);
-                round.add(leagueFixtures[i][j]);
+                leagueAllGames.add(leagueFixtures[i][j]);
+                this.leagueRepository.findAllById(leagueId).getLeagueAllGames().add(leagueFixtures[i][j]);
             }
-            rounds.put(i, round);
+            roundsWithGames.put(i, leagueAllGames);
         }
-        this.leagueRepository.findAllById(leagueId).setLeagueFixtures(rounds);
+//        this.leagueRepository.findAllById(leagueId).setLeagueFixtures(rounds);
         this.leagueRepository.save(this.leagueRepository.findAllById(leagueId));
-        return rounds;
+        return roundsWithGames;
     }
 
 }

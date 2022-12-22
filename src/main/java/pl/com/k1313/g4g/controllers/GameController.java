@@ -19,10 +19,8 @@ import pl.com.k1313.g4g.domain.match.GameRepository;
 import pl.com.k1313.g4g.domain.match.GameService;
 import pl.com.k1313.g4g.domain.match.GameType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/game")
@@ -48,7 +46,7 @@ public class GameController {
         this.appUserRepository = appUserRepository;
         this.clubRepository = clubRepository;
         this.leagueRepository = leagueRepository;
-        this.leagueService=leagueService;
+        this.leagueService = leagueService;
     }
 
     //tutaj stworzyc najpierw cos co utworzy Game z Id, zapisze do Repo, a potem
@@ -96,12 +94,33 @@ public class GameController {
     public String leagueGames(@PathVariable long leagueId, Model model) {
 //        List<Game> leagueGames = this.gameRepository.findAllByLeagueId(leagueId);
         //jestem tutaj, do zrobienia templatka oraz kontroller tutaj
-        League league=this.leagueRepository.findAllById(leagueId);
-        HashMap<Integer, List<Game>> rounds = league.getLeagueFixtures();
-       model.addAttribute("rounds", rounds);
+        League league = this.leagueRepository.findAllById(leagueId);
+        List<Game> round1 = league.getLeagueAllGames().stream().limit(4).collect(Collectors.toList());
+        List<Game> round2 = league.getLeagueAllGames().stream().skip(4).limit(4).collect(Collectors.toList());
+        List<Game> round3 = league.getLeagueAllGames().stream().skip(8).limit(4).collect(Collectors.toList());
+        List<Game> round4 = league.getLeagueAllGames().stream().skip(12).limit(4).collect(Collectors.toList());
+        List<Game> round5 = league.getLeagueAllGames().stream().skip(16).limit(4).collect(Collectors.toList());
+        List<Game> round6 = league.getLeagueAllGames().stream().skip(20).limit(4).collect(Collectors.toList());
+        List<Game> round7 = league.getLeagueAllGames().stream().skip(24).limit(4).collect(Collectors.toList());
+        Map<Integer, List<Game>> allRounds = new TreeMap<>();
+        allRounds.put(1, round1);
+        allRounds.put(2, round2);
+        allRounds.put(3, round3);
+        allRounds.put(4, round4);
+        allRounds.put(5, round5);
+        allRounds.put(6, round6);
+        allRounds.put(7, round7);
+        model.addAttribute("allrounds", allRounds);
+        model.addAttribute("gamesinround1", round1);
+        model.addAttribute("gamesinround2", round2);
+        model.addAttribute("gamesinround3", round3);
+        model.addAttribute("gamesinround4", round4);
+        model.addAttribute("gamesinround5", round5);
+        model.addAttribute("gamesinround6", round6);
+        model.addAttribute("gamesinround7", round7);
+
         return "leaguefixtures";
     }
-
 
 
     @PostMapping("/test")

@@ -51,30 +51,31 @@
     <table>
         <thead>LEAGUE</thead>
         <thead th:text="${leagueId}">leagueId</thead>
-        <span th:each="round : ${rounds}">
+        <span th:each="round : ${allrounds}">
+
             <tr>
-            <td th:text="${rounds.get(0).gameClubs.get(0).ClubName}"></td>
-            <td th:text="${rounds.get(0).hostScore}"></td>
-            <td th:text="${rounds.get(0).guestScore}"></td>
-            <td th:text="${rounds.get(0).gameClubs.get(1).ClubName}"></td>
+            <td th:text="${round.getValue().get(0).gameClubs.get(0).ClubName}"></td>
+            <td th:text="${round.getValue().get(0).hostScore}"></td>
+            <td th:text="${round.getValue().get(0).guestScore}"></td>
+            <td th:text="${round.getValue().get(0).gameClubs.get(1).ClubName}"></td>
             </tr>
             <tr>
-            <td th:text="${rounds.get(1).gameClubs.get(0).ClubName}"></td>
-            <td th:text="${rounds.get(1).hostScore}"></td>
-            <td th:text="${rounds.get(1).guestScore}"></td>
-            <td th:text="${rounds.get(1).gameClubs.get(1).ClubName}"></td>
+            <td th:text="${round.getValue().get(1).gameClubs.get(0).ClubName}"></td>
+            <td th:text="${round.getValue().get(1).hostScore}"></td>
+            <td th:text="${round.getValue().get(1).guestScore}"></td>
+            <td th:text="${round.getValue().get(1).gameClubs.get(1).ClubName}"></td>
             </tr>
             <tr>
-            <td th:text="${rounds.get(2).gameClubs.get(0).ClubName}"></td>
-            <td th:text="${rounds.get(2).hostScore}"></td>
-            <td th:text="${rounds.get(2).guestScore}"></td>
-            <td th:text="${rounds.get(2).gameClubs.get(1).ClubName}"></td>
+            <td th:text="${round.getValue().get(2).gameClubs.get(0).ClubName}"></td>
+            <td th:text="${round.getValue().get(2).hostScore}"></td>
+            <td th:text="${round.getValue().get(2).guestScore}"></td>
+            <td th:text="${round.getValue().get(2).gameClubs.get(1).ClubName}"></td>
             </tr>
             <tr>
-            <td th:text="${rounds.get(3).gameClubs.get(0).ClubName}"></td>
-            <td th:text="${rounds.get(3).hostScore}"></td>
-            <td th:text="${rounds.get(3).guestScore}"></td>
-            <td th:text="${rounds.get(3).gameClubs.get(1).ClubName}"></td>
+            <td th:text="${round.getValue().get(3).gameClubs.get(0).ClubName}"></td>
+            <td th:text="${round.getValue().get(3).hostScore}"></td>
+            <td th:text="${round.getValue().get(3).guestScore}"></td>
+            <td th:text="${round.getValue().get(3).gameClubs.get(1).ClubName}"></td>
             </tr>
         </span>
     </table>

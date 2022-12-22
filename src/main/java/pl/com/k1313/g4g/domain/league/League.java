@@ -7,27 +7,34 @@ import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.match.Game;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Setter(value = AccessLevel.NONE)
 @Entity
-public class League implements Serializable {
+public class League {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "league")
     private long id;
 
     private String leagueNumber;
-
-    private int leagueRound;
+    @ElementCollection
+    private final List<Integer> leagueRound = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7));
 
     @OneToMany
     private List<Club> leagueTeams;
 
-    private HashMap<Integer, List<Game>> leagueFixtures;
+    //    @ElementCollection
+////    @CollectionTable(name = "league_fixtures_maping",
+////            joinColumns = {@JoinColumn(name = "league_id", referencedColumnName = "id")})
+//    @MapKeyColumn(name = "round_number")
+//    @Column(name = "games")
+//    private Map<Integer, List<Game>> leagueFixtures;
+    @OneToMany
+    private List<Game> leagueAllGames;
 
     public League() {
 
@@ -50,17 +57,26 @@ public class League implements Serializable {
         this.leagueTeams = leagueTeams;
     }
 
-    public void setLeagueRound(int leagueRound) {
-        this.leagueRound = leagueRound;
+
+    public List<Integer> getLeagueRound() {
+        return leagueRound;
     }
 
-    public void setLeagueFixtures(HashMap<Integer, List<Game>> leagueFixtures) {
-        this.leagueFixtures = leagueFixtures;
+    public List<Game> getLeagueAllGames() {
+        return leagueAllGames;
     }
 
-    public HashMap<Integer, List<Game>> getLeagueFixtures() {
-        return leagueFixtures;
+    public void setLeagueAllGames(List<Game> leagueRoundGames) {
+        this.leagueAllGames = leagueRoundGames;
     }
+
+    //    public void setLeagueFixtures(HashMap<Integer, List<Game>> leagueFixtures) {
+//        this.leagueFixtures = leagueFixtures;
+//    }
+//
+//    public Map<Integer, List<Game>> getLeagueFixtures() {
+//        return leagueFixtures;
+//    }
 
     @Override
     public String toString() {
