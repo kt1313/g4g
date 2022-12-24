@@ -14,16 +14,13 @@ import java.util.Objects;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToMany
+    @ManyToMany
     private List<Club> gameClubs;
-
-    @ManyToOne
-    @JoinColumn(name = "host_club_club_id")
+    @OneToOne
     private Club hostClub;
-    @ManyToOne
-    @JoinColumn(name = "guest_club_club_id")
+    @OneToOne
     private Club guestClub;
     private int hostScore;
     private int guestScore;
@@ -107,11 +104,11 @@ public class Game {
     public Game() {
     }
 
-    public Game(Club hostClub, Club guestClub, GameType gameType, long leagueId){
-        this.hostClub=hostClub;
-        this.guestClub=guestClub;
-        this.gameType=gameType;
-        this.leagueId=leagueId;
+    public Game(Club hostClub, Club guestClub, GameType gameType, long leagueId) {
+        this.hostClub = hostClub;
+        this.guestClub = guestClub;
+        this.gameType = gameType;
+        this.leagueId = leagueId;
     }
 
     public Game(List<Club> gameClubs, boolean inProgress) {

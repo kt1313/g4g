@@ -7,6 +7,7 @@ import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
 import pl.com.k1313.g4g.domain.match.Game;
+import pl.com.k1313.g4g.domain.match.GameRepository;
 import pl.com.k1313.g4g.domain.match.GameType;
 
 import java.util.ArrayList;
@@ -19,12 +20,15 @@ public class LeagueService {
 
     private LeagueRepository leagueRepository;
     private ClubRepository clubRepository;
+    private GameRepository gameRepository;
     private ClubService clubService;
 
     @Autowired
-    public LeagueService(LeagueRepository leagueRepository, ClubRepository clubRepository, ClubService clubService) {
+    public LeagueService(LeagueRepository leagueRepository, ClubRepository clubRepository,
+                         GameRepository gameRepository, ClubService clubService) {
         this.leagueRepository = leagueRepository;
         this.clubRepository = clubRepository;
+        this.gameRepository=gameRepository;
         this.clubService = clubService;
     }
 
@@ -59,8 +63,8 @@ public class LeagueService {
         }
         userLeague.setLeagueTeams(leagueTeams);
         userClub.setClubLeague(userLeague);
-        createGamesFixtures(userLeague.getId());
         this.clubRepository.save(userClub);
+        createGamesFixtures(userLeague.getId());
         this.leagueRepository.save(userLeague);
         return userLeague;
     }
@@ -118,6 +122,7 @@ public class LeagueService {
 ////            V. 1-4, 5-3, 6-2, 7-8
 ////            VI. 1-3, 4-2, 5-8, 6-7
 ////            VII. 1-2, 3-8, 4-7, 5-6
+        League league=this.leagueRepository.findAllById(leagueId);
         Map<Integer, List<Game>> roundsWithGames=new HashMap<>();
         List<Club> clubsList = this.clubRepository.findByClubLeagueId(leagueId);
         Club clubA = clubsList.get(0);
@@ -165,14 +170,18 @@ public class LeagueService {
                 List<Club> gameClubs=new ArrayList<>();
                 gameClubs.add(leagueFixtures[i][j].getHostClub());
                 gameClubs.add(leagueFixtures[i][j].getGuestClub());
-                leagueFixtures[i][j].setGameClubs(gameClubs);
-                leagueAllGames.add(leagueFixtures[i][j]);
-                this.leagueRepository.findAllById(leagueId).getLeagueAllGames().add(leagueFixtures[i][j]);
+                Game game =leagueFixtures[i][j];
+                game.setGameClubs(gameClubs);
+                this.gameRepository.save(game);
+//                leagueFixtures[i][j].setGameClubs(gameClubs);
+                leagueAllGames.add(game);
+                league.setLeagueAllGames(leagueAllGames);
+                this.leagueRepository.save(league);
             }
             roundsWithGames.put(i, leagueAllGames);
         }
 //        this.leagueRepository.findAllById(leagueId).setLeagueFixtures(rounds);
-        this.leagueRepository.save(this.leagueRepository.findAllById(leagueId));
+//        this.leagueRepository.save(this.leagueRepository.findAllById(leagueId));
         return roundsWithGames;
     }
 

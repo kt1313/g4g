@@ -3,6 +3,7 @@ package pl.com.k1313.g4g.domain.league;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.match.Game;
 
@@ -27,13 +28,7 @@ public class League {
     @OneToMany
     private List<Club> leagueTeams;
 
-    //    @ElementCollection
-////    @CollectionTable(name = "league_fixtures_maping",
-////            joinColumns = {@JoinColumn(name = "league_id", referencedColumnName = "id")})
-//    @MapKeyColumn(name = "round_number")
-//    @Column(name = "games")
-//    private Map<Integer, List<Game>> leagueFixtures;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Game> leagueAllGames;
 
     public League() {
@@ -66,25 +61,14 @@ public class League {
         return leagueAllGames;
     }
 
-    public void setLeagueAllGames(List<Game> leagueRoundGames) {
-        this.leagueAllGames = leagueRoundGames;
+    public void setLeagueAllGames(List<Game> leagueAllGames) {
+        this.leagueAllGames = leagueAllGames;
     }
-
-    //    public void setLeagueFixtures(HashMap<Integer, List<Game>> leagueFixtures) {
-//        this.leagueFixtures = leagueFixtures;
-//    }
-//
-//    public Map<Integer, List<Game>> getLeagueFixtures() {
-//        return leagueFixtures;
-//    }
 
     @Override
     public String toString() {
         return
-                id
-                        + " LeagueTeams "
-//                        + new ArrayList<>(getLeagueTeams()) + '\''
-                ;
+                "League Id:"+id   ;
     }
 
 }
