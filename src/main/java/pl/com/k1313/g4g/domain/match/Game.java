@@ -1,7 +1,6 @@
 package pl.com.k1313.g4g.domain.match;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Setter;
 import pl.com.k1313.g4g.domain.club.Club;
 

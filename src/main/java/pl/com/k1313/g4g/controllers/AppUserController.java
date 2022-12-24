@@ -10,6 +10,7 @@ import pl.com.k1313.g4g.domain.appuser.AppUserService;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
+import pl.com.k1313.g4g.domain.league.League;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,8 @@ public class AppUserController {
         AppUser appUser = this.repository.findByTimeStampAppUser(appusertimestamp);
 //        AppUser appUserByClubId = this.repository.findByClubId(clubId);
 //        String appUserName = appUserByClubId.getAppUserName();
-        long leagueId = this.clubRepository.findByClubId(clubId).getClubLeague().getId();
+
+        League league=byClubId.getClubLeague();
 
         model.addAttribute("appusertimestamp", appusertimestamp);
         model.addAttribute("appuser", appUser);
@@ -53,7 +55,7 @@ public class AppUserController {
         model.addAttribute("club", byClubId);
         model.addAttribute("clubname", clubName);
         model.addAttribute("clubId", clubId);
-        model.addAttribute("leagueId", leagueId);
+//        model.addAttribute("leagueId", leagueId);
 
         return "appuserandclub";
     }

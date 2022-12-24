@@ -70,6 +70,10 @@ public class GameController {
             playGame.setGameClubs(gameClubs);
             playGame.setInProgress(Boolean.TRUE);
         }
+        if (playGame.getGameType().equals(GameType.LG)) {
+            playGame.setLeagueId(hostClub.getClubLeague().getId());
+        }
+
         this.gameRepository.save(playGame);
         //ma teraz ROZEGRAC ten mecz
         HashMap<Integer, String> matchCommentary = this.gameService.handleGameEngine(playGame);

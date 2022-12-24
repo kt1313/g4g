@@ -17,7 +17,6 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 
     List<Club> findAllByClubLeagueOrderByClubPointsDesc(League league);
 
-    Optional<Club> findById(long clubId);
 
     Optional<Club> findByClubName(String clubname);
 

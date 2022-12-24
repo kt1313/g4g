@@ -19,9 +19,8 @@ import pl.com.k1313.g4g.domain.club.ClubService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -55,10 +54,34 @@ public class ClubController {
     @GetMapping("/league/{leagueId}/{appusertimestamp}")
     public String league(@PathVariable long leagueId, @PathVariable String appusertimestamp, Model model) {
         League league = this.leagueRepository.findAllById(leagueId);
-        List<Game> lastGamesList=this.gameRepository.findAll();
+        List<Game> leagueGames=this.gameRepository.findAllByLeagueId(leagueId);
         List<Club> clubsSortedByPointsAndGoalsDiff=this.clubService.sortingByPointsAndGoalsDiff(leagueId);
+        List<Game> round1 = league.getLeagueAllGames().stream().limit(4).collect(Collectors.toList());
+        List<Game> round2 = league.getLeagueAllGames().stream().skip(4).limit(4).collect(Collectors.toList());
+        List<Game> round3 = league.getLeagueAllGames().stream().skip(8).limit(4).collect(Collectors.toList());
+        List<Game> round4 = league.getLeagueAllGames().stream().skip(12).limit(4).collect(Collectors.toList());
+        List<Game> round5 = league.getLeagueAllGames().stream().skip(16).limit(4).collect(Collectors.toList());
+        List<Game> round6 = league.getLeagueAllGames().stream().skip(20).limit(4).collect(Collectors.toList());
+        List<Game> round7 = league.getLeagueAllGames().stream().skip(24).limit(4).collect(Collectors.toList());
+        Map<Integer, List<Game>> allRounds = new TreeMap<>();
+        allRounds.put(1, round1);
+        allRounds.put(2, round2);
+        allRounds.put(3, round3);
+        allRounds.put(4, round4);
+        allRounds.put(5, round5);
+        allRounds.put(6, round6);
+        allRounds.put(7, round7);
 
-        model.addAttribute("lastgames", lastGamesList);
+        model.addAttribute("allrounds", allRounds);
+        model.addAttribute("gamesinround1", round1);
+        model.addAttribute("gamesinround2", round2);
+        model.addAttribute("gamesinround3", round3);
+        model.addAttribute("gamesinround4", round4);
+        model.addAttribute("gamesinround5", round5);
+        model.addAttribute("gamesinround6", round6);
+        model.addAttribute("gamesinround7", round7);
+
+        model.addAttribute("leaguegames", leagueGames);
         model.addAttribute("league", league);
         model.addAttribute("clubslistsorted", clubsSortedByPointsAndGoalsDiff);
         model.addAttribute("appusertimestamp", appusertimestamp);
