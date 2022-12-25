@@ -20,7 +20,6 @@ public class League {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "league")
     private long id;
 
     private String leagueNumber;

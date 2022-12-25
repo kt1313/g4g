@@ -37,6 +37,7 @@ public class GameService {
 
     //    cały mecz event po evencie z komentarzami
     public HashMap<Integer, String> handleGameEngine(Game playGame) throws InterruptedException {
+        playGame.setInProgress(true);
         Club hostClub = playGame.getGameClubs().get(0);
         Club guestClub = playGame.getGameClubs().get(1);
         //get both teams values
@@ -88,17 +89,16 @@ public class GameService {
         System.out.println("Koniec. Wynik meczu: " + playGame.getHostScore() + " : " + playGame.getGuestScore());
         updateClubsValuesAfterGames(hostClub, guestClub, playGame);
         this.gameRepository.save(playGame);
-        System.out.println(this.gameRepository.findAll());
+//        tutaj przeslac gre do ligi i zapisac w repo lige z grami
+//        System.out.println(this.gameRepository.findAll());
 
         return gameCommentaryList;
     }
 
     private void updateClubsValuesAfterGames(Club hostClub, Club guestClub, Game playGame) {
 
-        //tutaj niech sprawdzi czy Friendly czy League Game
-        GameType gameType = playGame.getGameType();
-        if (gameType == GameType.LG) {
-//            w templatce league stworzyc button playRound i maja symulowac gry w lidze
+        //tutaj niech sprawdzi czy Friendly czy League Game i czy skonczona
+        if (playGame.getGameType() == GameType.LG & playGame.getGameStatus().equals(GameStatus.PLAYED)) {
             hostClub.setClubRounds(hostClub.getClubRounds() + 1);
             guestClub.setClubRounds(guestClub.getClubRounds() + 1);
             int goalsDifference = playGame.getHostScore() - playGame.getGuestScore();
@@ -331,25 +331,42 @@ public class GameService {
         } else return false;
     }
 
-    public int findRoundToPlay(long leagueId) {
+    public int findRoundToPlay(List<List<Game>> rounds, long leagueId) {
         List<Game> allByLeagueId = this.gameRepository.findAllByLeagueId(leagueId);
         List<Integer> leagueRounds = this.leagueRepository.findAllById(leagueId).getLeagueRound();
-        int roundToPlay=0;
-//        List<Game> gamesToPlay = new ArrayList<>();
+        Map<Integer, List<Game>> leagueRoundsMap = new TreeMap<>();
+        leagueRoundsMap.put(leagueRounds.get(0), rounds.get(0));
+        leagueRoundsMap.put(leagueRounds.get(1), rounds.get(1));
+        leagueRoundsMap.put(leagueRounds.get(2), rounds.get(2));
+        leagueRoundsMap.put(leagueRounds.get(3), rounds.get(3));
+        leagueRoundsMap.put(leagueRounds.get(4), rounds.get(4));
+        leagueRoundsMap.put(leagueRounds.get(5), rounds.get(5));
+        leagueRoundsMap.put(leagueRounds.get(6), rounds.get(6));
 
-        for (int r : leagueRounds
-        ) {
-            for (Game g : allByLeagueId
-            ) {
-                if (g.getGameStatus().equals(GameStatus.NOTPLAYED)) {
-                    roundToPlay = r;
+        int roundToPlay = 0;
+
+        for (int i = 0; i < leagueRounds.size(); i++) {
+            Game game=rounds.get(i).get(0);
+            GameStatus gameStatus=game.getGameStatus();
+            if (gameStatus.equals(GameStatus.NOTPLAYED))
+            {
+                roundToPlay = i + 1;
+                break;
+            }
+        }
+//        for (int r : leagueRounds
+//        ) {
+//            for (Game g : allByLeagueId
+//            ) {
+//                if (g.getGameStatus().equals(GameStatus.NOTPLAYED)) {
+//                    roundToPlay = r;
 //                    gamesToPlay.add(g);
 //                    if (gamesToPlay.size() > 3) {
 //                        break;
 //                    }
-                }
-            }
-        }
+//                }
+//            }
+//        }
         return roundToPlay;
     }
 }

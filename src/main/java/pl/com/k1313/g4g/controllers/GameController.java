@@ -107,13 +107,10 @@ public class GameController {
         rounds.add(league.getLeagueAllGames().stream().skip(16).limit(4).collect(Collectors.toList()));
         rounds.add(league.getLeagueAllGames().stream().skip(20).limit(4).collect(Collectors.toList()));
         rounds.add(league.getLeagueAllGames().stream().skip(24).limit(4).collect(Collectors.toList()));
-        int roundToPlay = this.gameService.findRoundToPlay(leagueId);
-tutaj blad pokazuje roundtoplay 7 i daje same remisy
+        int roundToPlay = this.gameService.findRoundToPlay(rounds, leagueId);
         List<String> errors = new ArrayList<>();
-        List<Game> leagueGames = league.getLeagueAllGames();
         List<Club> leagueSortedByPointsAndGoalsDiff;
 
-        model.addAttribute("leaguegames", leagueGames);
         model.addAttribute("appusertimestamp", appusertimestamp);
         model.addAttribute("leagueId", leagueId);
         model.addAttribute("league", league);
@@ -128,10 +125,14 @@ tutaj blad pokazuje roundtoplay 7 i daje same remisy
                 this.gameService.handleGameEngine(g);
             }
             leagueSortedByPointsAndGoalsDiff = this.clubService.sortingByPointsAndGoalsDiff(leagueId);
+            List<Game> leagueGames = league.getLeagueAllGames();
+            model.addAttribute("leaguegames", leagueGames);
             model.addAttribute("clubslistsorted", leagueSortedByPointsAndGoalsDiff);
             return "league";
         } else
             leagueSortedByPointsAndGoalsDiff = this.clubService.sortingByPointsAndGoalsDiff(leagueId);
+        List<Game> leagueGames = league.getLeagueAllGames();
+        model.addAttribute("leaguegames", leagueGames);
         model.addAttribute("clubslistsorted", leagueSortedByPointsAndGoalsDiff);
         return "league";
     }
