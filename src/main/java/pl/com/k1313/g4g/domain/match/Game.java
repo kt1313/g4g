@@ -26,78 +26,87 @@ public class Game {
     private boolean isPenaltyScore;
     private boolean inProgress;
     private GameType gameType;
+    private GameStatus gameStatus;
     private long leagueId;
-
-    public void setGameClubs(List<Club> gameClubs) {
-        this.gameClubs = gameClubs;
-    }
-
-    public void setHostClub(Club hostClub) {
-        this.hostClub = hostClub;
-    }
-
-    public void setGuestClub(Club guestClub) {
-        this.guestClub = guestClub;
-    }
-
-    public void setHostScore(int hostScore) {
-        this.hostScore = hostScore;
-    }
-
-    public void setGuestScore(int guestScore) {
-        this.guestScore = guestScore;
-    }
-
-    public void setPenaltyScore(boolean penaltyScore) {
-        isPenaltyScore = penaltyScore;
-    }
-
-    public void setInProgress(boolean inProgress) {
-        this.inProgress = inProgress;
-    }
-
-    public void setGameType(GameType gameType) {
-        this.gameType = gameType;
-    }
-
-    public void setLeagueId(long leagueId) {
-        this.leagueId = leagueId;
-    }
 
     public List<Club> getGameClubs() {
         return gameClubs;
+    }
+
+    public void setGameClubs(List<Club> gameClubs) {
+        this.gameClubs = gameClubs;
     }
 
     public Club getHostClub() {
         return hostClub;
     }
 
+    public void setHostClub(Club hostClub) {
+        this.hostClub = hostClub;
+    }
+
     public Club getGuestClub() {
         return guestClub;
+    }
+
+    public void setGuestClub(Club guestClub) {
+        this.guestClub = guestClub;
     }
 
     public int getHostScore() {
         return hostScore;
     }
 
+    public void setHostScore(int hostScore) {
+        this.hostScore = hostScore;
+    }
+
     public int getGuestScore() {
         return guestScore;
+    }
+
+    public void setGuestScore(int guestScore) {
+        this.guestScore = guestScore;
     }
 
     public boolean isPenaltyScore() {
         return isPenaltyScore;
     }
 
+    public void setPenaltyScore(boolean penaltyScore) {
+        isPenaltyScore = penaltyScore;
+    }
+
     public boolean isInProgress() {
         return inProgress;
+    }
+
+    public void setInProgress(boolean inProgress) {
+        this.inProgress = inProgress;
     }
 
     public GameType getGameType() {
         return gameType;
     }
 
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
     public long getLeagueId() {
         return leagueId;
+    }
+
+    public void setLeagueId(long leagueId) {
+        this.leagueId = leagueId;
     }
 
     public Game() {

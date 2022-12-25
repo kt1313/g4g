@@ -67,9 +67,7 @@ public class AppUserService {
         }
         this.clubRepository.save(newClub);
         League newLeague = this.leagueService.createLeague(newClub.getClubId());
-        System.out.println("User:" + appusername + " Club name: "
-                + clubname + " League ID and LeagueNr: " + newLeague + " League Teams: " + newLeague.getLeagueTeams());
-    }
+  }
 
     public boolean confirmRegistration(long appUserId) {
 

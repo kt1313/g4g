@@ -142,30 +142,26 @@
     </table>
 </div>
 <div>
-    <form method="post" th:action="@{/game/leaguefixtures}">
-        <input type="hidden" th:value="${league.getId()}" th:name="leagueId">
-        <input type="hidden">
+    <form method="post" th:action="@{/game/playleagueround}">
+        <input type="hidden" th:value="${leagueId}" th:name="leagueId">
+        <input type="hidden" th:value="${appusertimestamp}" th:name="appusertimestamp">
+
         <input type="submit" value="Play Next League Round">
     </form>
 </div>
 <div class="headin">
     <table style="margin-left:auto;margin-right:auto;">
         <thead>FIXTURES</thead>
-        <span th:if="${leaguegames != null}" th:each="r, state:${league.leagueRound}">
+        <span th:if="${leaguegames != null}" th:each="r, state:${leaguerounds}">
             <tr>
             <td>ROUND</td><td th:text="${state.count}"></td>
             </tr>
-            <!--            (g/4 - ${state.count})<1-->
-            <!--th:if="${evaluation &lt; 49 and evaluation &gt; 29}"-->
         <span th:each="g, iterStat:${leaguegames}">
             <tr th:if="${iterStat.index}/4 - ${state.index}&lt;1 and ${iterStat.index}/4 - ${state.index}&gt;=0">
-<!--                <td th:text="${iterStat.index}"></td>-->
-                <!--                <td th:text="${state.index}"></td>-->
-                <!--                <td th:text="${iterStat.index}/4 - ${state.index}&lt;=1 and ${iterStat.index}/4 - ${state.index}&gt;0"></td>-->
-                <!--                    -->
+
                     <td th:text="${g.gameClubs.get(0).clubName}"></td>
-                    <td th:text="${g.hostScore}"></td>
-                    <td th:text="${g.guestScore}"></td>
+                <td th:text="${g.GameStatus.NOTPLAYED}?'spacja':${g.hostScore}"></td>
+                                <td th:text="${g.GameStatus.NOTPLAYED} ?'spacja2': ${g.guestScore}"></td>
                     <td th:text="${g.gameClubs.get(1).clubName}"></td>
             </tr>
         </span>

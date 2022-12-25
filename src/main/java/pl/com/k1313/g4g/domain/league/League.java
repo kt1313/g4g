@@ -9,7 +9,9 @@ import pl.com.k1313.g4g.domain.match.Game;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Setter(value = AccessLevel.NONE)
@@ -30,6 +32,8 @@ public class League {
 
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Game> leagueAllGames;
+
+
 
     public League() {
 

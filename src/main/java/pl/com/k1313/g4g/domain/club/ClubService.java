@@ -37,7 +37,6 @@ public class ClubService {
     public Club clubCreation(AppUser appUser, String clubname) {
         Club newClub = new Club(appUser, clubname);
         this.clubRepository.save(newClub);
-        System.out.println(" user club" + this.clubRepository.findByClubId(newClub.getClubId()));
         return newClub;
     }
 
@@ -47,8 +46,6 @@ public class ClubService {
         newClub.setAppUser(new AppUser("Teddy Bot", newClub.getClubName()));
         this.clubRepository.save(newClub);
         setBotClubPlayers(newClub.getClubId());
-//        newClub.setClubFirst11(this.playerService.botPlayersCreation(newClub.getClubId()));
-//        this.clubRepository.save(newClub);
         return newClub;
     }
 
@@ -122,12 +119,12 @@ public class ClubService {
         }
         List<Integer> formationsValues = new ArrayList<Integer>(List.of(first11Defence, first11Midfield, first11Attack
         ));
-        System.out.println("TeamServ, calculateFirst11FormVal, Wartość formacji: "
-                + " Attack: " + formationsValues.get(2)
-                + " Mid: " + formationsValues.get(1)
-                + " Def: " + formationsValues.get(0)
-        )
-        ;
+//        System.out.println("TeamServ, calculateFirst11FormVal, Wartość formacji: "
+//                + " Attack: " + formationsValues.get(2)
+//                + " Mid: " + formationsValues.get(1)
+//                + " Def: " + formationsValues.get(0)
+//        )
+//        ;
 
         return formationsValues;
     }

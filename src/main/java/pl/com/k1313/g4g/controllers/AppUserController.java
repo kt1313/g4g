@@ -11,6 +11,7 @@ import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
 import pl.com.k1313.g4g.domain.league.League;
+import pl.com.k1313.g4g.domain.league.LeagueRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +24,18 @@ public class AppUserController {
     private AppUserService appUserService;
     private AppUserRepository repository;
     private ClubRepository clubRepository;
+    private LeagueRepository leagueRepository;
 //    private ClubService clubService;
 
     @Autowired
     public AppUserController(AppUserService appUserService, AppUserRepository repository,
-                             ClubRepository clubRepository
+                             ClubRepository clubRepository, LeagueRepository leagueRepository
 //            , ClubService clubService
     ) {
         this.appUserService = appUserService;
         this.repository = repository;
         this.clubRepository = clubRepository;
+        this.leagueRepository=leagueRepository;
 //        this.clubService = clubService;
     }
 
@@ -46,7 +49,8 @@ public class AppUserController {
 //        AppUser appUserByClubId = this.repository.findByClubId(clubId);
 //        String appUserName = appUserByClubId.getAppUserName();
 
-        League league=byClubId.getClubLeague();
+//        League league=byClubId.getClubLeague();
+//        int leaguerounds=7;
 
         model.addAttribute("appusertimestamp", appusertimestamp);
         model.addAttribute("appuser", appUser);
@@ -55,7 +59,8 @@ public class AppUserController {
         model.addAttribute("club", byClubId);
         model.addAttribute("clubname", clubName);
         model.addAttribute("clubId", clubId);
-//        model.addAttribute("leagueId", leagueId);
+//        model.addAttribute("league", league);
+//        model.addAttribute("leaguerounds", leaguerounds);
 
         return "appuserandclub";
     }
@@ -74,6 +79,9 @@ public class AppUserController {
             long clubId = this.clubRepository.findByClubName(clubname).get().getClubId();
             Optional<Club> club = this.clubRepository.findByClubName(clubname);
             long leagueId = this.clubRepository.findByClubName(clubname).get().getClubLeague().getId();
+            League league=this.leagueRepository.findAllById(leagueId);
+
+            model.addAttribute("league", league);
             model.addAttribute("appusertimestamp", appUserTimeStamp);
             model.addAttribute("appusername", appusername);
             model.addAttribute("clubname", clubname);

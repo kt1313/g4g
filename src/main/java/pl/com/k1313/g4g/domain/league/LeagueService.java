@@ -8,6 +8,7 @@ import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
 import pl.com.k1313.g4g.domain.match.Game;
 import pl.com.k1313.g4g.domain.match.GameRepository;
+import pl.com.k1313.g4g.domain.match.GameStatus;
 import pl.com.k1313.g4g.domain.match.GameType;
 
 import java.util.ArrayList;
@@ -114,7 +115,7 @@ public class LeagueService {
         return stringMaxLeagueNr;
     }
 
-    public Map<Integer, List<Game>> createGamesFixtures(long leagueId) {
+    public void createGamesFixtures(long leagueId) {
 ////              I. 1-8, 2-7,3-6,4-5
 ////            II. 1-7, 8-6, 2-5, 3-4
 ////            III. 1-6, 7-5, 8-4, 2-3
@@ -123,7 +124,6 @@ public class LeagueService {
 ////            VI. 1-3, 4-2, 5-8, 6-7
 ////            VII. 1-2, 3-8, 4-7, 5-6
         League league=this.leagueRepository.findAllById(leagueId);
-        Map<Integer, List<Game>> roundsWithGames=new HashMap<>();
         List<Club> clubsList = this.clubRepository.findByClubLeagueId(leagueId);
         Club clubA = clubsList.get(0);
         Club clubB = clubsList.get(1);
@@ -172,18 +172,12 @@ public class LeagueService {
                 gameClubs.add(leagueFixtures[i][j].getGuestClub());
                 Game game =leagueFixtures[i][j];
                 game.setGameClubs(gameClubs);
+                game.setGameStatus(GameStatus.NOTPLAYED);
                 this.gameRepository.save(game);
-//                leagueFixtures[i][j].setGameClubs(gameClubs);
                 leagueAllGames.add(game);
                 league.setLeagueAllGames(leagueAllGames);
                 this.leagueRepository.save(league);
             }
-            roundsWithGames.put(i, leagueAllGames);
         }
-//        this.leagueRepository.findAllById(leagueId).setLeagueFixtures(rounds);
-//        this.leagueRepository.save(this.leagueRepository.findAllById(leagueId));
-        return roundsWithGames;
     }
-
 }
-

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.club.ClubService;
+import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerPosition;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
@@ -17,16 +18,21 @@ public class GameService {
     private ClubRepository clubRepository;
     private PlayerRepository playerRepository;
     private GameRepository gameRepository;
+    private LeagueRepository leagueRepository;
+
     private ClubService clubService;
 
     @Autowired
     public GameService(ClubRepository clubRepository, ClubService clubService,
                        PlayerRepository playerRepository,
-                       GameRepository gameRepository) {
+                       GameRepository gameRepository,
+                       LeagueRepository leagueRepository) {
         this.clubRepository = clubRepository;
         this.clubService = clubService;
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
+        this.leagueRepository = leagueRepository;
+
     }
 
     //    cały mecz event po evencie z komentarzami
@@ -74,6 +80,7 @@ public class GameService {
             }
             if (gameMinute > 90) {
                 playGame.setInProgress(false);
+                playGame.setGameStatus(GameStatus.PLAYED);
             }
         }
         String matchResult = "Koniec meczu. Na tablicy widnieje wynik" + playGame.getHostScore() + " : " + playGame.getGuestScore();
@@ -323,4 +330,27 @@ public class GameService {
             return true;
         } else return false;
     }
+
+    public int findRoundToPlay(long leagueId) {
+        List<Game> allByLeagueId = this.gameRepository.findAllByLeagueId(leagueId);
+        List<Integer> leagueRounds = this.leagueRepository.findAllById(leagueId).getLeagueRound();
+        int roundToPlay=0;
+//        List<Game> gamesToPlay = new ArrayList<>();
+
+        for (int r : leagueRounds
+        ) {
+            for (Game g : allByLeagueId
+            ) {
+                if (g.getGameStatus().equals(GameStatus.NOTPLAYED)) {
+                    roundToPlay = r;
+//                    gamesToPlay.add(g);
+//                    if (gamesToPlay.size() > 3) {
+//                        break;
+//                    }
+                }
+            }
+        }
+        return roundToPlay;
+    }
 }
+

@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
 import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
+import pl.com.k1313.g4g.domain.club.ClubService;
 import pl.com.k1313.g4g.domain.league.League;
 import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.league.LeagueService;
@@ -30,6 +30,7 @@ public class GameController {
 
     private AppUserRepository appUserRepository;
     private ClubRepository clubRepository;
+    private ClubService clubService;
     private LeagueRepository leagueRepository;
     private LeagueService leagueService;
 
@@ -39,12 +40,14 @@ public class GameController {
                           GameService gameService,
                           AppUserRepository appUserRepository,
                           ClubRepository clubRepository,
+                          ClubService clubService,
                           LeagueRepository leagueRepository,
                           LeagueService leagueService) {
         this.gameRepository = gameRepository;
         this.gameService = gameService;
         this.appUserRepository = appUserRepository;
         this.clubRepository = clubRepository;
+        this.clubService = clubService;
         this.leagueRepository = leagueRepository;
         this.leagueService = leagueService;
     }
@@ -59,7 +62,6 @@ public class GameController {
         Club hostClub = this.clubRepository.findByAppUser(appUser);
         Club guestClub = this.clubRepository.findByClubId(clubId);
         List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
-
 
         Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
         Game playGame = new Game();
@@ -94,38 +96,45 @@ public class GameController {
         return "gameview";
     }
 
-    @PostMapping("/leaguefixtures/{leagueId}")
-    public String leagueGames(@PathVariable long leagueId, Model model) {
-//        List<Game> leagueGames = this.gameRepository.findAllByLeagueId(leagueId);
-        //jestem tutaj, do zrobienia templatka oraz kontroller tutaj
+    @PostMapping("/playleagueround")
+    public String playLeagueRound(long leagueId, String appusertimestamp, Model model) throws InterruptedException {
         League league = this.leagueRepository.findAllById(leagueId);
-        List<Game> round1 = league.getLeagueAllGames().stream().limit(4).collect(Collectors.toList());
-        List<Game> round2 = league.getLeagueAllGames().stream().skip(4).limit(4).collect(Collectors.toList());
-        List<Game> round3 = league.getLeagueAllGames().stream().skip(8).limit(4).collect(Collectors.toList());
-        List<Game> round4 = league.getLeagueAllGames().stream().skip(12).limit(4).collect(Collectors.toList());
-        List<Game> round5 = league.getLeagueAllGames().stream().skip(16).limit(4).collect(Collectors.toList());
-        List<Game> round6 = league.getLeagueAllGames().stream().skip(20).limit(4).collect(Collectors.toList());
-        List<Game> round7 = league.getLeagueAllGames().stream().skip(24).limit(4).collect(Collectors.toList());
-        Map<Integer, List<Game>> allRounds = new TreeMap<>();
-        allRounds.put(1, round1);
-        allRounds.put(2, round2);
-        allRounds.put(3, round3);
-        allRounds.put(4, round4);
-        allRounds.put(5, round5);
-        allRounds.put(6, round6);
-        allRounds.put(7, round7);
-        model.addAttribute("allrounds", allRounds);
-        model.addAttribute("gamesinround1", round1);
-        model.addAttribute("gamesinround2", round2);
-        model.addAttribute("gamesinround3", round3);
-        model.addAttribute("gamesinround4", round4);
-        model.addAttribute("gamesinround5", round5);
-        model.addAttribute("gamesinround6", round6);
-        model.addAttribute("gamesinround7", round7);
+        List<List<Game>> rounds = new ArrayList<>();
+        rounds.add(league.getLeagueAllGames().stream().limit(4).collect(Collectors.toList()));
+        rounds.add(league.getLeagueAllGames().stream().skip(4).limit(4).collect(Collectors.toList()));
+        rounds.add(league.getLeagueAllGames().stream().skip(8).limit(4).collect(Collectors.toList()));
+        rounds.add(league.getLeagueAllGames().stream().skip(12).limit(4).collect(Collectors.toList()));
+        rounds.add(league.getLeagueAllGames().stream().skip(16).limit(4).collect(Collectors.toList()));
+        rounds.add(league.getLeagueAllGames().stream().skip(20).limit(4).collect(Collectors.toList()));
+        rounds.add(league.getLeagueAllGames().stream().skip(24).limit(4).collect(Collectors.toList()));
+        int roundToPlay = this.gameService.findRoundToPlay(leagueId);
+tutaj blad pokazuje roundtoplay 7 i daje same remisy
+        List<String> errors = new ArrayList<>();
+        List<Game> leagueGames = league.getLeagueAllGames();
+        List<Club> leagueSortedByPointsAndGoalsDiff;
 
-        return "leaguefixtures";
+        model.addAttribute("leaguegames", leagueGames);
+        model.addAttribute("appusertimestamp", appusertimestamp);
+        model.addAttribute("leagueId", leagueId);
+        model.addAttribute("league", league);
+        model.addAttribute("leaguerounds", rounds);
+
+        if (roundToPlay == 0) {
+            errors.add("All rounds have been already played!");
+        }
+        if (errors.isEmpty()) {
+            for (Game g : rounds.get(roundToPlay - 1)
+            ) {
+                this.gameService.handleGameEngine(g);
+            }
+            leagueSortedByPointsAndGoalsDiff = this.clubService.sortingByPointsAndGoalsDiff(leagueId);
+            model.addAttribute("clubslistsorted", leagueSortedByPointsAndGoalsDiff);
+            return "league";
+        } else
+            leagueSortedByPointsAndGoalsDiff = this.clubService.sortingByPointsAndGoalsDiff(leagueId);
+        model.addAttribute("clubslistsorted", leagueSortedByPointsAndGoalsDiff);
+        return "league";
     }
-
 
     @PostMapping("/test")
     public String appUserPage(String appusertimestamp, Long clubId, Model model) {
