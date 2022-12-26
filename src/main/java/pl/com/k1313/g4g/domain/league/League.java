@@ -3,15 +3,12 @@ package pl.com.k1313.g4g.domain.league;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.match.Game;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Setter(value = AccessLevel.NONE)
@@ -20,7 +17,7 @@ public class League {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long leagueId;
 
     private String leagueNumber;
     @ElementCollection
@@ -71,7 +68,7 @@ public class League {
     @Override
     public String toString() {
         return
-                "League Id:"+id   ;
+                "League Id:"+ leagueId;
     }
 
 }

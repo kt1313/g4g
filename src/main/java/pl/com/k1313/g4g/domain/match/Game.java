@@ -5,6 +5,7 @@ import lombok.Setter;
 import pl.com.k1313.g4g.domain.club.Club;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long gameId;
     @ManyToMany
     private List<Club> gameClubs;
     @OneToOne
@@ -29,6 +30,8 @@ public class Game {
     private GameStatus gameStatus;
     private long leagueId;
     private boolean gamePlayed;
+    @ManyToMany
+    private HashMap<Integer, String> gameCommentary;
 
     public List<Club> getGameClubs() {
         return gameClubs;
@@ -118,6 +121,18 @@ public class Game {
         this.gamePlayed = gamePlayed;
     }
 
+    public long getGameId() {
+        return gameId;
+    }
+
+    public HashMap<Integer, String> getGameCommentary() {
+        return gameCommentary;
+    }
+
+    public void setGameCommentary(HashMap<Integer, String> matchCommentary) {
+        this.gameCommentary = matchCommentary;
+    }
+
     public Game() {
     }
 
@@ -138,18 +153,18 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return id == game.id && hostScore == game.hostScore && guestScore == game.guestScore && isPenaltyScore == game.isPenaltyScore && inProgress == game.inProgress && Objects.equals(gameClubs, game.gameClubs);
+        return gameId == game.gameId && hostScore == game.hostScore && guestScore == game.guestScore && isPenaltyScore == game.isPenaltyScore && inProgress == game.inProgress && Objects.equals(gameClubs, game.gameClubs);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gameClubs, hostScore, guestScore, isPenaltyScore, inProgress);
+        return Objects.hash(gameId, gameClubs, hostScore, guestScore, isPenaltyScore, inProgress);
     }
 
     @Override
     public String toString() {
         return "Game{" +
-                "id=" + id +
+                "id=" + gameId +
                 ", gameClubs=" + gameClubs +
                 ", hostScore=" + hostScore +
                 ", guestScore=" + guestScore +

@@ -12,9 +12,7 @@ import pl.com.k1313.g4g.domain.match.GameStatus;
 import pl.com.k1313.g4g.domain.match.GameType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class LeagueService {
@@ -65,7 +63,7 @@ public class LeagueService {
         userLeague.setLeagueTeams(leagueTeams);
         userClub.setClubLeague(userLeague);
         this.clubRepository.save(userClub);
-        createGamesFixtures(userLeague.getId());
+        createGamesFixtures(userLeague.getLeagueId());
         this.leagueRepository.save(userLeague);
         return userLeague;
     }
@@ -75,7 +73,7 @@ public class LeagueService {
         List<League> leagues = this.leagueRepository.findAll();
         for (League l : leagues
         ) {
-            List<Club> leagueClubs = this.clubRepository.findByClubLeagueId(l.getId());
+            List<Club> leagueClubs = this.clubRepository.findByClubLeagueId(l.getLeagueId());
             List<AppUser> leagueAppUsers = new ArrayList<>();
             for (Club c : leagueClubs
             ) {

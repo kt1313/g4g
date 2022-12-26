@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
@@ -54,38 +55,47 @@ public class GameController {
 
     //tutaj stworzyc najpierw cos co utworzy Game z Id, zapisze do Repo, a potem
     //rozpocznie Game, a potem nowy POstMapping i bedzie do Game mozna wrocic w kazdym momencie
-    @PostMapping("/viewgame")
-    public String handleGame(String appusertimestamp, Long clubId, GameType gameType, ModelMap map, Model m) throws InterruptedException {
-        //ma pobrac JUŻ utworzony match z druzynami - nie. tylko z Id klubu wyzwanego, a klub wyzywajacego z ...?
+    @PostMapping("/viewgame/{gameId}/{appusertimestamp}")
+    public String handleGame(@PathVariable(required = false) long gameId, @PathVariable String appusertimestamp,
+                             Long clubId, GameType gameType, ModelMap map, Model m) throws InterruptedException {
+        //ma pobrac JUŻ utworzony match z druzynami - nie. Nie? a tak bo obejrzec rozegrany..
+        // tylko z Id klubu wyzwanego, a klub wyzywajacego z ...?
         //no, skad?
         AppUser appUser = this.appUserRepository.findByTimeStampAppUser(appusertimestamp);
         Club hostClub = this.clubRepository.findByAppUser(appUser);
         Club guestClub = this.clubRepository.findByClubId(clubId);
         List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
-
-        Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
         Game playGame = new Game();
-        playGame.setGameType(gameType);
-        if (playGameOptional.isPresent()) {
-            playGame = playGameOptional.get();
+        HashMap<Integer, String> gameCommentaryMap;
+        if (gameId != 0) {
+            playGame = this.gameRepository.getById(gameId);
+            gameCommentaryMap=playGame.getGameCommentary();
         } else {
-            playGame.setGameClubs(gameClubs);
-            playGame.setInProgress(Boolean.TRUE);
-        }
-        if (playGame.getGameType().equals(GameType.LG)) {
-            playGame.setLeagueId(hostClub.getClubLeague().getId());
-        }
+            Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
+            playGame.setGameType(gameType);
+            if (playGameOptional.isPresent()) {
+                playGame = playGameOptional.get();
+            } else {
+                playGame.setGameClubs(gameClubs);
+                playGame.setInProgress(Boolean.TRUE);
+            }
+            if (playGame.getGameType().equals(GameType.LG)) {
+                playGame.setLeagueId(hostClub.getClubLeague().getLeagueId());
+            }
 
-        this.gameRepository.save(playGame);
-        //ma teraz ROZEGRAC ten mecz
-        HashMap<Integer, String> matchCommentary = this.gameService.handleGameEngine(playGame);
-        map.addAttribute("matchCommentary", matchCommentary);
+            this.gameRepository.save(playGame);
 
+            //ma teraz ROZEGRAC ten mecz
+             gameCommentaryMap = this.gameService.handleGameEngine(playGame);
+
+            map.addAttribute("gameCommentary", gameCommentaryMap);
+        }
         //tu naglowek, nazwy druzyn i wynik
         String hostClubName = hostClub.getClubName();
         String guestClubName = guestClub.getClubName();
         Integer hostClubScore = playGame.getHostScore();
         Integer guestClubScore = playGame.getGuestScore();
+        m.addAttribute("gamecommentary", gameCommentaryMap);
         m.addAttribute("clubId", clubId);
         m.addAttribute("appusertimestamp", appusertimestamp);
         m.addAttribute("hostClubName", hostClubName);

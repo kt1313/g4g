@@ -47,7 +47,7 @@ public class GameService {
         Club clubDefending = new Club();
         Integer gameMinute = 0;
 
-        HashMap<Integer, String> gameCommentaryList = new HashMap<>();
+        HashMap<Integer, String> gameCommentaryMap = new HashMap<>();
         while (playGame.isInProgress()) {
             gameMinute++;
             Thread.sleep(10);
@@ -59,13 +59,13 @@ public class GameService {
             }
 //            komentarz o posiadaniu pilki, niech losuje tylko co...czwarty event(wiekszy od 3)
             if (randomAboutCommentary() > 3) {
-                gameCommentary(clubAttacking, 1, gameCommentaryList, gameMinute);
+                gameCommentary(clubAttacking, 1, gameCommentaryMap, gameMinute);
             }
             if (opportunitySucceed()) {
                 //komentarz o zawiązaniu akcji
-                gameCommentary(clubAttacking, 2, gameCommentaryList, gameMinute);
+                gameCommentary(clubAttacking, 2, gameCommentaryMap, gameMinute);
                 //to poniżej jako jedna metoda, bo zastosowanie też do kontrataku
-                opportunityEvent(clubAttacking, clubDefending, playGame, gameCommentaryList, gameMinute);
+                opportunityEvent(clubAttacking, clubDefending, playGame, gameCommentaryMap, gameMinute);
             } else {
 //                //jesli uda się kontra to wtedy niech sprawdzi szansę na bramkę(opportunityEvent)
 //                wazne!!!-------------wazne!!!
@@ -73,10 +73,10 @@ public class GameService {
                 int teamCA = 30;
                 if (randomCAChance(teamCA)) {
                     //komentarz o przejęciu piłki i kontrze
-                    gameCommentary(clubDefending, 3, gameCommentaryList, gameMinute);
+                    gameCommentary(clubDefending, 3, gameCommentaryMap, gameMinute);
                     //TUTAJ UWAGA: celowo zamiana teamInDefence z teamOnOpportunity, bo teraz
                     //broniący sie atakują
-                    opportunityEvent(clubDefending, clubAttacking, playGame, gameCommentaryList, gameMinute);
+                    opportunityEvent(clubDefending, clubAttacking, playGame, gameCommentaryMap, gameMinute);
                 }
             }
             if (gameMinute > 90) {
@@ -86,14 +86,14 @@ public class GameService {
             }
         }
         String matchResult = "Koniec meczu. Na tablicy widnieje wynik" + playGame.getHostScore() + " : " + playGame.getGuestScore();
-        gameCommentaryList.put(gameMinute, matchResult);
+        gameCommentaryMap.put(gameMinute, matchResult);
         System.out.println("Koniec. Wynik meczu: " + playGame.getHostScore() + " : " + playGame.getGuestScore());
         updateClubsValuesAfterGames(hostClub, guestClub, playGame);
+        playGame.setGameCommentary(gameCommentaryMap);
         this.gameRepository.save(playGame);
 //        tutaj przeslac gre do ligi i zapisac w repo lige z grami
-//        System.out.println(this.gameRepository.findAll());
 
-        return gameCommentaryList;
+        return gameCommentaryMap;
     }
 
     private void updateClubsValuesAfterGames(Club hostClub, Club guestClub, Game playGame) {
