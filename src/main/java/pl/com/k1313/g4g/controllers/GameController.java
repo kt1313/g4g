@@ -54,7 +54,7 @@ public class GameController {
 
     //tutaj stworzyc najpierw cos co utworzy Game z Id, zapisze do Repo, a potem
     //rozpocznie Game, a potem nowy POstMapping i bedzie do Game mozna wrocic w kazdym momencie
-    @PostMapping("/playgame")
+    @PostMapping("/viewgame")
     public String handleGame(String appusertimestamp, Long clubId, GameType gameType, ModelMap map, Model m) throws InterruptedException {
         //ma pobrac JUŻ utworzony match z druzynami - nie. tylko z Id klubu wyzwanego, a klub wyzywajacego z ...?
         //no, skad?

@@ -81,6 +81,7 @@ public class GameService {
             }
             if (gameMinute > 90) {
                 playGame.setInProgress(false);
+                playGame.setGamePlayed(true);
                 playGame.setGameStatus(GameStatus.PLAYED);
             }
         }
@@ -98,7 +99,7 @@ public class GameService {
     private void updateClubsValuesAfterGames(Club hostClub, Club guestClub, Game playGame) {
 
         //tutaj niech sprawdzi czy Friendly czy League Game i czy skonczona
-        if (playGame.getGameType() == GameType.LG & playGame.getGameStatus().equals(GameStatus.PLAYED)) {
+        if (playGame.getGameType() == GameType.LG & playGame.isGamePlayed()) {
             hostClub.setClubRounds(hostClub.getClubRounds() + 1);
             guestClub.setClubRounds(guestClub.getClubRounds() + 1);
             int goalsDifference = playGame.getHostScore() - playGame.getGuestScore();
@@ -348,7 +349,8 @@ public class GameService {
         for (int i = 0; i < leagueRounds.size(); i++) {
             Game game=rounds.get(i).get(0);
             GameStatus gameStatus=game.getGameStatus();
-            if (gameStatus.equals(GameStatus.NOTPLAYED))
+            if (!game.isGamePlayed())
+//            if (gameStatus.equals(GameStatus.NOTPLAYED))
             {
                 roundToPlay = i + 1;
                 break;

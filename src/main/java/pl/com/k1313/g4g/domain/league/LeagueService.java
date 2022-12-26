@@ -172,6 +172,7 @@ public class LeagueService {
                 gameClubs.add(leagueFixtures[i][j].getGuestClub());
                 Game game =leagueFixtures[i][j];
                 game.setGameClubs(gameClubs);
+                game.setGamePlayed(false);
                 game.setGameStatus(GameStatus.NOTPLAYED);
                 this.gameRepository.save(game);
                 leagueAllGames.add(game);

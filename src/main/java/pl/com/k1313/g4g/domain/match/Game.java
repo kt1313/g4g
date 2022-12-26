@@ -28,6 +28,7 @@ public class Game {
     private GameType gameType;
     private GameStatus gameStatus;
     private long leagueId;
+    private boolean gamePlayed;
 
     public List<Club> getGameClubs() {
         return gameClubs;
@@ -107,6 +108,14 @@ public class Game {
 
     public void setLeagueId(long leagueId) {
         this.leagueId = leagueId;
+    }
+
+    public boolean isGamePlayed() {
+        return gamePlayed;
+    }
+
+    public void setGamePlayed(boolean gamePlayed) {
+        this.gamePlayed = gamePlayed;
     }
 
     public Game() {
