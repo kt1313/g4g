@@ -66,10 +66,10 @@ public class GameController {
         Club guestClub = this.clubRepository.findByClubId(clubId);
         List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
         Game playGame = new Game();
-        HashMap<Integer, String> gameCommentaryMap;
+        List<String> gameCommentaryList;
         if (gameId != 0) {
             playGame = this.gameRepository.getById(gameId);
-            gameCommentaryMap=playGame.getGameCommentary();
+           gameCommentaryList=playGame.getGameCommentaryList();
         } else {
             Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
             playGame.setGameType(gameType);
@@ -80,22 +80,22 @@ public class GameController {
                 playGame.setInProgress(Boolean.TRUE);
             }
             if (playGame.getGameType().equals(GameType.LG)) {
-                playGame.setLeagueId(hostClub.getClubLeague().getLeagueId());
+                playGame.setLeagueId(hostClub.getClubLeague().getId());
             }
 
             this.gameRepository.save(playGame);
 
             //ma teraz ROZEGRAC ten mecz
-             gameCommentaryMap = this.gameService.handleGameEngine(playGame);
+            gameCommentaryList = this.gameService.handleGameEngine(playGame);
 
-            map.addAttribute("gameCommentary", gameCommentaryMap);
+            map.addAttribute("gameCommentary", gameCommentaryList);
         }
         //tu naglowek, nazwy druzyn i wynik
         String hostClubName = hostClub.getClubName();
         String guestClubName = guestClub.getClubName();
         Integer hostClubScore = playGame.getHostScore();
         Integer guestClubScore = playGame.getGuestScore();
-        m.addAttribute("gamecommentary", gameCommentaryMap);
+        m.addAttribute("gamecommentary", gameCommentaryList);
         m.addAttribute("clubId", clubId);
         m.addAttribute("appusertimestamp", appusertimestamp);
         m.addAttribute("hostClubName", hostClubName);

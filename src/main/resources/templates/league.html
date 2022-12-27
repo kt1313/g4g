@@ -151,20 +151,22 @@
 </div>
 <div class="headin">
     <table style="margin-left:auto;margin-right:auto;">
-        <thead>FIXTURES</thead>
+        <thead>LEAGUE FIXTURES</thead>
         <span th:if="${leaguegames != null}" th:each="r, state:${leaguerounds}">
-            <tr>
+            <tr th:align="left">
             <td>ROUND</td><td th:text="${state.count}"></td>
             </tr>
         <span th:each="g, iterStat:${leaguegames}">
-            <tr th:if="${iterStat.index}/4 - ${state.index}&lt;1 and ${iterStat.index}/4 - ${state.index}&gt;=0">
-
-                    <td th:text="${g.gameClubs.get(0).clubName}"></td>
+            <tr th:align="left"
+                th:if="${iterStat.index}/4 - ${state.index}&lt;1 and ${iterStat.index}/4 - ${state.index}&gt;=0">
+                <td th:text="'Game ' + ${g.getGameStatus()}"></td>
+<!--                <td th:text="_"></td>-->
+                <td th:text="${g.gameClubs.get(0).clubName}"></td>
                 <td th:text="${g.hostScore}"></td>
-                 <td th:text="${g.GameStatus.NOTPLAYED}?'-':${g.hostScore}"></td>
-                <!-- <td th:text="${g.GameStatus.NOTPLAYED} ?'-': ${g.guestScore}"></td>-->
                 <td th:text="${g.guestScore}"></td>
-                    <td th:text="${g.gameClubs.get(1).clubName}"></td>
+                <td th:text="${g.gameClubs.get(1).clubName}"></td>
+                <td th:if='${g.isGamePlayed()}'><a th:href="@{/game/viewgame/{id}(id=${g.getId()})}">View</a></td>
+                </td>
             </tr>
         </span>
         </span>

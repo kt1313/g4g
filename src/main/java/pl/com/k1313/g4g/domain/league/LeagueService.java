@@ -63,7 +63,7 @@ public class LeagueService {
         userLeague.setLeagueTeams(leagueTeams);
         userClub.setClubLeague(userLeague);
         this.clubRepository.save(userClub);
-        createGamesFixtures(userLeague.getLeagueId());
+        createGamesFixtures(userLeague.getId());
         this.leagueRepository.save(userLeague);
         return userLeague;
     }
@@ -73,7 +73,7 @@ public class LeagueService {
         List<League> leagues = this.leagueRepository.findAll();
         for (League l : leagues
         ) {
-            List<Club> leagueClubs = this.clubRepository.findByClubLeagueId(l.getLeagueId());
+            List<Club> leagueClubs = this.clubRepository.findByClubLeagueId(l.getId());
             List<AppUser> leagueAppUsers = new ArrayList<>();
             for (Club c : leagueClubs
             ) {

@@ -17,7 +17,7 @@ public class League {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long leagueId;
+    private long id;
 
     private String leagueNumber;
     @ElementCollection
@@ -68,7 +68,7 @@ public class League {
     @Override
     public String toString() {
         return
-                "League Id:"+ leagueId;
+                "League Id:"+ id;
     }
 
 }

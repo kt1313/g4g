@@ -36,7 +36,7 @@ public class GameService {
     }
 
     //    cały mecz event po evencie z komentarzami
-    public HashMap<Integer, String> handleGameEngine(Game playGame) throws InterruptedException {
+    public List< String> handleGameEngine(Game playGame) throws InterruptedException {
         playGame.setInProgress(true);
         Club hostClub = playGame.getGameClubs().get(0);
         Club guestClub = playGame.getGameClubs().get(1);
@@ -89,11 +89,19 @@ public class GameService {
         gameCommentaryMap.put(gameMinute, matchResult);
         System.out.println("Koniec. Wynik meczu: " + playGame.getHostScore() + " : " + playGame.getGuestScore());
         updateClubsValuesAfterGames(hostClub, guestClub, playGame);
-        playGame.setGameCommentary(gameCommentaryMap);
+        //teraz z Map zrob List, dodaj minute do commentary
+        List<String> commentaryList=new ArrayList<>();
+        for (Integer minute: gameCommentaryMap.keySet()
+             ) {
+            String commentary=gameCommentaryMap.get(minute);
+            commentaryList.add(commentary);
+        }
+        playGame.setGameCommentaryList(commentaryList);
         this.gameRepository.save(playGame);
 //        tutaj przeslac gre do ligi i zapisac w repo lige z grami
+        System.out.println(playGame.getGameCommentaryList());
 
-        return gameCommentaryMap;
+        return commentaryList;
     }
 
     private void updateClubsValuesAfterGames(Club hostClub, Club guestClub, Game playGame) {
@@ -161,7 +169,7 @@ public class GameService {
         return random.nextInt(4);
     }
 
-    private void gameCommentary(Club club, int typeOfCommentary, HashMap<Integer,
+    private void gameCommentary(Club club, int typeOfCommentary, Map<Integer,
             String> gameCommmentaryList, int gameMinute) {
         switch (typeOfCommentary) {
             case 1:

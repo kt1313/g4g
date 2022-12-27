@@ -49,30 +49,26 @@ public class PlayerService {
 
     public int randomFrom100() {
         Random r = new Random();
-        int result = r.nextInt(100);
-        return result;
+        return r.nextInt(100);
     }
 
     public String randomFirstName() {
         Random r = new Random();
-        List firstNamesList = new ArrayList<>(List.of(
+        List<String> firstNamesList = new ArrayList<>(List.of(
                 "Adam", "Obi-Wan", "Frankie", "Janusz", "Joshua", "One-One", "Kuling"));
-        String newFirstName = (String) firstNamesList.get(r.nextInt(7));
-        return newFirstName;
+        return  firstNamesList.get(r.nextInt(firstNamesList.size()));
     }
 
     public String randomLastName() {
         Random r = new Random();
-        List firstNamesList = new ArrayList<>(List.of(
+        List<String> lastNamesList = new ArrayList<>(List.of(
                 "Kaleka", "McWolny", "Anemikus", "Ci-Ho-Pek", "Omojboszszsz", "Nieten", "Aninietamten"));
-        String newFirstName = (String) firstNamesList.get(r.nextInt(7));
-        return newFirstName;
+        return  lastNamesList.get(r.nextInt(lastNamesList.size()));
     }
 
     public int randomAge() {
         Random r = new Random();
-        int result = r.nextInt(20) + 19;
-        return result;
+        return r.nextInt(20) + 19;
     }
 
     //tworzy goalkeepera - inny rozdzaj zawodnika
@@ -134,15 +130,12 @@ public class PlayerService {
             Player newPlayer = autoCreatePlayer();
             newPlayer.setPlayerClub(this.clubRepository.findByClubId(clubId));
             List<PlayerPosition> playersPosition=botPlayersPositions();
-            newPlayer.setPlayerPosition((PlayerPosition) playersPosition.get(i-1));
+            newPlayer.setPlayerPosition( playersPosition.get(i-1));
             newPlayer.setFirstSquadPlayer(Boolean.TRUE);
             newPlayer.setPlayerClub(club);
             players.add(newPlayer);
             this.playerRepository.save(newPlayer);
-
         }
-
-
         return players;
     }
 

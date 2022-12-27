@@ -15,7 +15,7 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long gameId;
+    private long id;
     @ManyToMany
     private List<Club> gameClubs;
     @OneToOne
@@ -30,8 +30,19 @@ public class Game {
     private GameStatus gameStatus;
     private long leagueId;
     private boolean gamePlayed;
-    @ManyToMany
-    private HashMap<Integer, String> gameCommentary;
+    @ElementCollection
+    public List<String> gameCommentaryList;
+
+
+//    @ElementCollection
+//    @CollectionTable(name = "game_gamecommentary_mapping",
+//            joinColumns = {@JoinColumn(name = "game_id", referencedColumnName = "id")})
+//    @MapKeyColumn(name = "minute")
+//    @Column(name = "commentary")
+//    private HashMap<Integer, String> gameCommentary;
+
+
+
 
     public List<Club> getGameClubs() {
         return gameClubs;
@@ -121,17 +132,25 @@ public class Game {
         this.gamePlayed = gamePlayed;
     }
 
-    public long getGameId() {
-        return gameId;
+    public long getId() {
+        return id;
     }
 
-    public HashMap<Integer, String> getGameCommentary() {
-        return gameCommentary;
+    public List<String> getGameCommentaryList() {
+        return gameCommentaryList;
     }
 
-    public void setGameCommentary(HashMap<Integer, String> matchCommentary) {
-        this.gameCommentary = matchCommentary;
+    public void setGameCommentaryList(List<String> gameCommentaryList) {
+        this.gameCommentaryList = gameCommentaryList;
     }
+    //
+//    public HashMap<Integer, String> getGameCommentary() {
+//        return gameCommentary;
+//    }
+//
+//    public void setGameCommentary(HashMap<Integer, String> gameCommentary) {
+//        this.gameCommentary = gameCommentary;
+//    }
 
     public Game() {
     }
@@ -153,18 +172,18 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return gameId == game.gameId && hostScore == game.hostScore && guestScore == game.guestScore && isPenaltyScore == game.isPenaltyScore && inProgress == game.inProgress && Objects.equals(gameClubs, game.gameClubs);
+        return id == game.id && hostScore == game.hostScore && guestScore == game.guestScore && isPenaltyScore == game.isPenaltyScore && inProgress == game.inProgress && Objects.equals(gameClubs, game.gameClubs);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gameId, gameClubs, hostScore, guestScore, isPenaltyScore, inProgress);
+        return Objects.hash(id, gameClubs, hostScore, guestScore, isPenaltyScore, inProgress);
     }
 
     @Override
     public String toString() {
         return "Game{" +
-                "id=" + gameId +
+                "id=" + id +
                 ", gameClubs=" + gameClubs +
                 ", hostScore=" + hostScore +
                 ", guestScore=" + guestScore +
