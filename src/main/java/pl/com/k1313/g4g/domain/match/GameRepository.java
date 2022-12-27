@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
 
+    Game findById(long gameId);
     List<Game> findAllByLeagueId(long leagueId );
     Optional<Game> findFirstByGameClubsInAndInProgress(List<Club> clubs, boolean inProgress);
 

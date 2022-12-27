@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +54,26 @@ public class GameController {
         this.leagueService = leagueService;
     }
 
+    @GetMapping("/viewgame/gameplayed/{id}/{appusertimestamp}")
+    public String showGameCommentary(@PathVariable("id") long gameId, @PathVariable(required = false) String appusertimestamp, Model m) {
+        List<String> gameCommentaryList;
+        Game playGame = this.gameRepository.getById(gameId);
+        gameCommentaryList = playGame.getGameCommentaryList();
+
+        String hostClubName = this.gameRepository.findById(gameId).getHostClub().getClubName();
+        String guestClubName = this.gameRepository.findById(gameId).getGuestClub().getClubName();
+        Integer hostClubScore = playGame.getHostScore();
+        Integer guestClubScore = playGame.getGuestScore();
+        m.addAttribute("gamecommentary", gameCommentaryList);
+        m.addAttribute("appusertimestamp", appusertimestamp);
+        m.addAttribute("hostClubName", hostClubName);
+        m.addAttribute("guestClubName", guestClubName);
+        m.addAttribute("hostClubScore", hostClubScore);
+        m.addAttribute("guestClubScore", guestClubScore);
+
+        return "gameview";
+    }
+
     //tutaj stworzyc najpierw cos co utworzy Game z Id, zapisze do Repo, a potem
     //rozpocznie Game, a potem nowy POstMapping i bedzie do Game mozna wrocic w kazdym momencie
     @PostMapping("/viewgame/{gameId}/{appusertimestamp}")
@@ -67,29 +88,26 @@ public class GameController {
         List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
         Game playGame = new Game();
         List<String> gameCommentaryList;
-        if (gameId != 0) {
-            playGame = this.gameRepository.getById(gameId);
-           gameCommentaryList=playGame.getGameCommentaryList();
+
+        Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
+        playGame.setGameType(gameType);
+        if (playGameOptional.isPresent()) {
+            playGame = playGameOptional.get();
         } else {
-            Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
-            playGame.setGameType(gameType);
-            if (playGameOptional.isPresent()) {
-                playGame = playGameOptional.get();
-            } else {
-                playGame.setGameClubs(gameClubs);
-                playGame.setInProgress(Boolean.TRUE);
-            }
-            if (playGame.getGameType().equals(GameType.LG)) {
-                playGame.setLeagueId(hostClub.getClubLeague().getId());
-            }
-
-            this.gameRepository.save(playGame);
-
-            //ma teraz ROZEGRAC ten mecz
-            gameCommentaryList = this.gameService.handleGameEngine(playGame);
-
-            map.addAttribute("gameCommentary", gameCommentaryList);
+            playGame.setGameClubs(gameClubs);
+            playGame.setInProgress(Boolean.TRUE);
         }
+        if (playGame.getGameType().equals(GameType.LG)) {
+            playGame.setLeagueId(hostClub.getClubLeague().getId());
+        }
+
+        this.gameRepository.save(playGame);
+
+        //ma teraz ROZEGRAC ten mecz
+        gameCommentaryList = this.gameService.handleGameEngine(playGame);
+
+        map.addAttribute("gameCommentary", gameCommentaryList);
+
         //tu naglowek, nazwy druzyn i wynik
         String hostClubName = hostClub.getClubName();
         String guestClubName = guestClub.getClubName();

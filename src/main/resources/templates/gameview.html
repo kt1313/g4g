@@ -68,28 +68,25 @@
         </table>
     </div>
     <br><br>
-    <form method="post" th:action="@{/appuser/club/{clubId}/{appusertimestamp}}">
-        <input type="hidden" th:value="${clubId}">
-        <input type="hidden" th:value="${appusertimestamp}">
-        <input type="button" th:value="Go Back">
-    </form>
+<!--    <form method="post" th:action="@{/appuser/club/{clubId}/}">-->
+<!--        <input type="hidden" th:value="${clubId}">-->
+<!--        <input type="hidden" th:value="${appusertimestamp}">-->
+<!--        <input type="button" th:value="Go to Your Club">-->
+<!--    </form>-->
     <!--        proba autorefreshingu-->
 
     <!--        odswiezajacy się komentarz-->
     <div>
-        <tr th:each="gameCom:${gameCommentary}">
+        <tr th:each="gameCom:${gamecommentary}">
             <td th:utext="('<br>'+${gameCom})"/>
             <!--a tu funkcja opoznienia w js-->
     </div>
 
     <!--        auto refresh przy uzyciu server-sent event-->
-    <div id="result"></div>
-    <form method="POST" th:action="@{/game/playgame}">
-
-        <input type="submit" value="Start Game">
-
-
-    </form>
+<!--    <div id="result"></div>-->
+<!--    <form method="POST" th:action="@{/game/playgame}">-->
+<!--        <input type="submit" value="Start Game">-->
+<!--    </form>-->
 </div>
 
 </div>
