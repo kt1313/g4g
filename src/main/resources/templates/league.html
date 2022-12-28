@@ -132,6 +132,7 @@
                     th:text="${club.getClubName()}">clubname</span></a>
                 <input type="hidden" th:value="${appusertimestamp}">
                 <input type="hidden" th:value="${club.getClubId()}"></td>
+            <input type="hidden" th:value="${club.getClubName()}"></td>
             <td th:utext="${club.clubRounds}">GamesPlayed</td>
             <td th:utext="${club.clubWins}">Wins</td>
             <td th:utext="${club.clubDraws}">Draws</td>
@@ -159,8 +160,8 @@
         <span th:each="g, iterStat:${leaguegames}">
             <tr th:align="left"
                 th:if="${iterStat.index}/4 - ${state.index}&lt;1 and ${iterStat.index}/4 - ${state.index}&gt;=0">
-                <td th:text="'Game ' + ${g.id}+' '+ ${g.getGameStatus()}"></td>
-<!--                <td th:text="_"></td>-->
+<!--                <td th:text="'Game ' + ${g.id}+' '+ ${g.getGameStatus()}"></td>-->
+                <td th:text="''"></td>
                 <td th:text="${g.gameClubs.get(0).clubName}"></td>
                 <td th:text="${g.hostScore}"></td>
                 <td th:text="${g.guestScore}"></td>

@@ -45,20 +45,18 @@ public class AppUserController {
         String clubOwnerName = byClubId.getAppUser().getAppUserName();
         String appUserNameByTimeStamp = this.repository.findByTimeStampAppUser(appusertimestamp).getAppUserName();
         AppUser appUser = this.repository.findByTimeStampAppUser(appusertimestamp);
-//        AppUser appUserByClubId = this.repository.findByClubId(clubId);
-//        String appUserName = appUserByClubId.getAppUserName();
-
-//        League league=byClubId.getClubLeague();
-//        int leaguerounds=7;
+        String appUserName= byClubId.getAppUser().getAppUserName();
+long leagueId=byClubId.getClubLeague().getId();
 
         model.addAttribute("appusertimestamp", appusertimestamp);
         model.addAttribute("appuser", appUser);
+        model.addAttribute("appusername", appUserName);
         model.addAttribute("clubOwnerName", clubOwnerName);
         model.addAttribute("appusernamebytimestamp", appUserNameByTimeStamp);
         model.addAttribute("club", byClubId);
         model.addAttribute("clubname", clubName);
         model.addAttribute("clubId", clubId);
-//        model.addAttribute("league", league);
+        model.addAttribute("leagueid", leagueId);
 //        model.addAttribute("leaguerounds", leaguerounds);
 
         return "appuserandclub";

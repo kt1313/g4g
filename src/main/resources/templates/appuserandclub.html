@@ -161,11 +161,11 @@
                                         th:text="${clubname}">clubname</span></a></h2>
                                 <div th:if="${appusernamebytimestamp!=clubOwnerName}">
                                      <div>
-                                        <form th:action="@{/game/playgame}" method="post">
+                                        <form th:action="@{/game/viegame/inprogress}" method="post">
                                             <input type="hidden" th:value="${clubId}" th:name="clubId">
                                             <input type="hidden" th:value="${appusertimestamp}"
                                                    th:name="appusertimestamp">
-                                            <input type="hidden" th:value="Friendly" th:name="gameType">
+                                            <input type="hidden" th:value="friendly" th:name="gameTypeString">
                                             <input type="submit" class="btn-primary" style="background-color: #0040ff"
                                                    value="Play Friendly"/>
                                         </form>

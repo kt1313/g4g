@@ -1,5 +1,6 @@
 package pl.com.k1313.g4g.controllers;
 
+import net.bytebuddy.dynamic.DynamicType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,10 +77,10 @@ public class GameController {
 
     //tutaj stworzyc najpierw cos co utworzy Game z Id, zapisze do Repo, a potem
     //rozpocznie Game, a potem nowy POstMapping i bedzie do Game mozna wrocic w kazdym momencie
-    @PostMapping("/viewgame/{gameId}/{appusertimestamp}")
-    public String handleGame(@PathVariable(required = false) long gameId, @PathVariable String appusertimestamp,
-                             Long clubId, GameType gameType, ModelMap map, Model m) throws InterruptedException {
-        //ma pobrac JUŻ utworzony match z druzynami - nie. Nie? a tak bo obejrzec rozegrany..
+    @PostMapping("/viegame/inprogress")
+    public String handleGame( String appusertimestamp, Long clubId, String gameTypeString,
+                              ModelMap map, Model m) throws InterruptedException {
+        //ma pobrac JUŻ utworzony match z druzynami - nie.
         // tylko z Id klubu wyzwanego, a klub wyzywajacego z ...?
         //no, skad?
         AppUser appUser = this.appUserRepository.findByTimeStampAppUser(appusertimestamp);
@@ -87,10 +88,21 @@ public class GameController {
         Club guestClub = this.clubRepository.findByClubId(clubId);
         List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
         Game playGame = new Game();
+        switch (gameTypeString) {
+            case "friendly":
+                playGame.setGameType(GameType.FG);
+                break;
+            case "cup":
+                playGame.setGameType(GameType.CG);
+                break;
+            case "league":
+                playGame.setGameType(GameType.LG);
+                break;
+
+        }
         List<String> gameCommentaryList;
 
-        Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
-        playGame.setGameType(gameType);
+        Optional<Game> playGameOptional=this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
         if (playGameOptional.isPresent()) {
             playGame = playGameOptional.get();
         } else {
