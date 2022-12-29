@@ -58,7 +58,7 @@ public class GameService {
                 clubDefending = hostClub;
             }
 //            komentarz o posiadaniu pilki, niech losuje tylko co...czwarty event(wiekszy od 3)
-            if (randomAboutCommentary() > 3) {
+            if (randomPickUpCommentary() > 3) {
                 gameCommentary(clubAttacking, 1, gameCommentaryMap, gameMinute);
             }
             if (opportunitySucceed()) {
@@ -164,38 +164,59 @@ public class GameService {
         }
     }
 
-    private int randomAboutCommentary() {
+    private int randomPickUpCommentary() {
         Random random = new Random();
         return random.nextInt(4);
     }
 
     private void gameCommentary(Club club, int typeOfCommentary, Map<Integer,
             String> gameCommmentaryList, int gameMinute) {
+        Random random = new Random();
+        List<String> ballPossesionCommentaryList=new ArrayList<>(List.of("min. Uwijają się jak mrówki i wygrali walkę o piłkę w środku pola piłkarze ",
+                "min. Dwoją się i troją na boisku, a może to już mi sie dwoi i troi w oczach, ale nie! Przejęli piłkę ",
+                "min. Ale to pograli! Czapki z głów za grę w środku pola dla ",
+                "min. Czuć moc w nogach. Dzielą i rządzą na boisku zawodnicy ",
+                "min. Im dłużej my przy piłce, tym krócej oni - wprowadzają w grę tę maksymę piłkarze "));
+        List<String> chanceCreationCommentaryList=new ArrayList<>(List.of("min. Ruszył teraz na przeciwnika z balem przy nodze grajek zespołu ",
+                "min. Minął jednego, dwóch, trzech...! O Hegemonie futbolu! Ma przed sobą tylko bramkarza piłkarz  ",
+                "min. I znów okazja! Grają, jakby się nażarli surowego mięsa zawodnicy ",
+                "min. Obrońcy mają nogi ciężkie jak z waty, a wiatr niesie atakujących ",
+                "min. To skoro było tak dobrze, to dlaczego było tak źle? - zastanawiają sie obrońcy, bo z akcją sunie ",
+                "min. Próbują w obronie często zmieniać pozycje, ale nie mogą zadowolić trenera, a tymczasem z kolejnym atakiem sunie "));
+        List<String> counterAttackCommentaryList=new ArrayList<>(List.of("min. Oni są jak stal, nieugięci w obronie. Odbiór i mkną z kontrą jak torpeda zawodnicy ",
+                "min. Środkowy obrońca gra dziś czołowe skrzypce: odbiór i kontra ",
+                "min. Asysta pomocnika, to taka truskawka na torcie... wgnieciona, bo po odbiorze akcja ",
+                "min. To nie był błąd piłkarza, to był błąd murawy. Za to mają teraz szansę ",
+                "min. Trener trzyma rozkłada ręce trzymając się za głowę, bo jest strata i będzie szansa dla "));
+        List<String> goalCommentaryList=new ArrayList<>(List.of("min. Gooooooooooooooooooool!!!! Stadiony świata!!! Bramka dla ",
+                "To już ostatnie sekundy! ... szuka szczęścia między nogami bramkarza... Trafił!!! ",
+                "min. Aj, Jezus Maria!! a jednak nie! Jeeeeeeest! Bramka dla ",
+                "min. Teraz! Teraz! Teraz! Aaaaaaa, jeeeeeest, jest, jest, jest!! Gol dla "));
         switch (typeOfCommentary) {
             case 1:
-                String commentaryBallPossesion1 = gameMinute
-                        + "min. Uwijają się jak mrówki i wygrali walkę o piłkę w środku pola piłkarze "
+                String commentaryBallPossesion = gameMinute
+                        + ballPossesionCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
                         + club.getClubName() + "\r\n";
-                System.out.println(commentaryBallPossesion1);
-                gameCommmentaryList.put(gameMinute, commentaryBallPossesion1);
+                System.out.println(commentaryBallPossesion);
+                gameCommmentaryList.put(gameMinute, commentaryBallPossesion);
                 break;
             case 2:
                 String commentaryCreationChance1 = gameMinute
-                        + "min. Ruszył teraz na przeciwnika z balem przy nodze grajek zespołu "
+                        + chanceCreationCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
                         + club.getClubName() + "\r\n";
                 System.out.println(commentaryCreationChance1);
                 gameCommmentaryList.put(gameMinute, commentaryCreationChance1);
                 break;
             case 3:
                 String commentaryCA1 = gameMinute
-                        + "min. Oni są jak stal, nieugięci w obronie. Odbiór i mkną z kontrą jak torpeda zawodnicy "
+                        + counterAttackCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
                         + club.getClubName() + "\r\n";
                 System.out.println(commentaryCA1);
                 gameCommmentaryList.put(gameMinute, commentaryCA1);
                 break;
             case 4:
                 String commentaryGoal1 = gameMinute
-                        + "min. Gooooooooooooooooooool!!!! Stadiony świata!!! Bramka dla "
+                        + goalCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
                         + club.getClubName() + "\r\n";
                 System.out.println(commentaryGoal1);
                 gameCommmentaryList.put(gameMinute, commentaryGoal1);

@@ -56,10 +56,10 @@ public class ClubService {
 
     public String botClubNameCreation() {
         Random r = new Random();
-        List clubNames = new ArrayList<>(List.of
+        List<String> clubNames = new ArrayList<>(List.of
                 ("FC BigDaddy", "A-Team", "Strongmen FC", "L-losers", "Handycaps Club", "WeWinOnWednesday United",
                         "NeverSeeYourGoal CF", "FC True Team", "WeWillChewYourMeat Utd", "FC GiveUp"));
-        String clubName = (String) clubNames.get(r.nextInt(10));
+        String clubName =  clubNames.get(r.nextInt(10));
         return clubName;
     }
 
