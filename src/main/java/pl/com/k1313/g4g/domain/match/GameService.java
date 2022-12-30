@@ -47,8 +47,8 @@ public class GameService {
         Club clubDefending = new Club();
         Integer gameMinute = 0;
 
-        HashMap<Integer, String> gameCommentaryMap = new HashMap<>();
-        while (playGame.isInProgress()) {
+        TreeMap<Integer, String> gameCommentaryMap = new TreeMap<>();
+        while (gameMinute<91) {
             gameMinute++;
             Thread.sleep(10);
             clubAttacking = clubWithGreaterBallPossesion(hostClub, guestClub);
@@ -58,12 +58,13 @@ public class GameService {
                 clubDefending = hostClub;
             }
 //            komentarz o posiadaniu pilki, niech losuje tylko co...czwarty event(wiekszy od 3)
-            if (randomPickUpCommentary() > 3) {
-                gameCommentary(clubAttacking, 1, gameCommentaryMap, gameMinute);
-            }
+            int ran=randomPickUpCommentary();
+            if (ran > 3) {
+                gameCommentary(clubAttacking, playGame,1, gameCommentaryMap, gameMinute);
+
             if (opportunitySucceed()) {
                 //komentarz o zawiązaniu akcji
-                gameCommentary(clubAttacking, 2, gameCommentaryMap, gameMinute);
+                gameCommentary(clubAttacking, playGame,2, gameCommentaryMap, gameMinute);
                 //to poniżej jako jedna metoda, bo zastosowanie też do kontrataku
                 opportunityEvent(clubAttacking, clubDefending, playGame, gameCommentaryMap, gameMinute);
             } else {
@@ -73,12 +74,12 @@ public class GameService {
                 int teamCA = 30;
                 if (randomCAChance(teamCA)) {
                     //komentarz o przejęciu piłki i kontrze
-                    gameCommentary(clubDefending, 3, gameCommentaryMap, gameMinute);
+                    gameCommentary(clubDefending, playGame,3, gameCommentaryMap, gameMinute);
                     //TUTAJ UWAGA: celowo zamiana teamInDefence z teamOnOpportunity, bo teraz
                     //broniący sie atakują
                     opportunityEvent(clubDefending, clubAttacking, playGame, gameCommentaryMap, gameMinute);
                 }
-            }
+            }}
             if (gameMinute > 90) {
                 playGame.setInProgress(false);
                 playGame.setGamePlayed(true);
@@ -166,10 +167,10 @@ public class GameService {
 
     private int randomPickUpCommentary() {
         Random random = new Random();
-        return random.nextInt(4);
+        return random.nextInt(5);
     }
 
-    private void gameCommentary(Club club, int typeOfCommentary, Map<Integer,
+    private void gameCommentary(Club club, Game playGame, int typeOfCommentary, Map<Integer,
             String> gameCommmentaryList, int gameMinute) {
         Random random = new Random();
         List<String> ballPossesionCommentaryList=new ArrayList<>(List.of("min. Uwijają się jak mrówki i wygrali walkę o piłkę w środku pola piłkarze ",
@@ -187,37 +188,42 @@ public class GameService {
                 "min. Środkowy obrońca gra dziś czołowe skrzypce: odbiór i kontra ",
                 "min. Asysta pomocnika, to taka truskawka na torcie... wgnieciona, bo po odbiorze akcja ",
                 "min. To nie był błąd piłkarza, to był błąd murawy. Za to mają teraz szansę ",
-                "min. Trener trzyma rozkłada ręce trzymając się za głowę, bo jest strata i będzie szansa dla "));
+                "min. Trener przeciwników rozkłada ręce trzymając się za głowę, bo jest strata i będzie szansa dla "));
         List<String> goalCommentaryList=new ArrayList<>(List.of("min. Gooooooooooooooooooool!!!! Stadiony świata!!! Bramka dla ",
-                "To już ostatnie sekundy! ... szuka szczęścia między nogami bramkarza... Trafił!!! ",
+                "min. To już ostatnie sekundy zdaje mu się ... szuka szczęścia między nogami bramkarza... Trafił!!! ",
                 "min. Aj, Jezus Maria!! a jednak nie! Jeeeeeeest! Bramka dla ",
-                "min. Teraz! Teraz! Teraz! Aaaaaaa, jeeeeeest, jest, jest, jest!! Gol dla "));
+                "min. Teraz! Teraz! Teraz! Aaaaaaa, jeeeeeest, jest, jest, jest!! Gol dla ",
+                "min. Gol dla "));
         switch (typeOfCommentary) {
             case 1:
                 String commentaryBallPossesion = gameMinute
                         + ballPossesionCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
-                        + club.getClubName() + "\r\n";
+                        + club.getClubName() +
+                        "\r\n";
                 System.out.println(commentaryBallPossesion);
                 gameCommmentaryList.put(gameMinute, commentaryBallPossesion);
                 break;
             case 2:
                 String commentaryCreationChance1 = gameMinute
-                        + chanceCreationCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
-                        + club.getClubName() + "\r\n";
+                        + chanceCreationCommentaryList.get(random.nextInt(chanceCreationCommentaryList.size()))
+                        + club.getClubName()
+                        + "\r\n";
                 System.out.println(commentaryCreationChance1);
                 gameCommmentaryList.put(gameMinute, commentaryCreationChance1);
                 break;
             case 3:
                 String commentaryCA1 = gameMinute
-                        + counterAttackCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
-                        + club.getClubName() + "\r\n";
+                        + counterAttackCommentaryList.get(random.nextInt(counterAttackCommentaryList.size()))
+                        + club.getClubName() +"\r\n";
                 System.out.println(commentaryCA1);
                 gameCommmentaryList.put(gameMinute, commentaryCA1);
                 break;
             case 4:
                 String commentaryGoal1 = gameMinute
-                        + goalCommentaryList.get(random.nextInt(ballPossesionCommentaryList.size()))
-                        + club.getClubName() + "\r\n";
+                        + goalCommentaryList.get(random.nextInt(goalCommentaryList.size()))
+                        + club.getClubName()+" "
+                        + playGame.getHostScore()+"-"
+                        +playGame.getGuestScore()+ "\r\n";
                 System.out.println(commentaryGoal1);
                 gameCommmentaryList.put(gameMinute, commentaryGoal1);
                 break;
@@ -227,7 +233,7 @@ public class GameService {
     }
 
     private void opportunityEvent(Club clubAttacking
-            , Club clubDefending, Game playGame, HashMap<Integer,
+            , Club clubDefending, Game playGame, TreeMap<Integer,
             String> gameCommentaryList, int gameMinute) {
         Club hostClub = playGame.getGameClubs().get(0);
         Club guestClub = playGame.getGameClubs().get(1);
@@ -238,7 +244,7 @@ public class GameService {
             int goalkeeperSkill = this.clubService.getClubFirst11Values(clubDefending).get(0);
             if (forwardScoresVsGoalkeeper(goalkeeperSkill, forwarderAttack)) {
                 goalEvent(playGame, clubAttacking);
-                gameCommentary(clubAttacking, 4, gameCommentaryList, gameMinute);
+                gameCommentary(clubAttacking, playGame,4, gameCommentaryList, gameMinute);
                 //i tu odsieżyc wynik na stronie/ po kazdym evencie
                 //i dodac methodMatchCommentary()
             }
