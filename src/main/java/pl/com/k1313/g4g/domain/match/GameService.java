@@ -86,7 +86,7 @@ public class GameService {
                 playGame.setGameStatus(GameStatus.PLAYED);
             }
         }
-        String matchResult = "Koniec meczu. Na tablicy widnieje wynik" + playGame.getHostScore() + " : " + playGame.getGuestScore();
+        String matchResult = "Koniec meczu. Na tablicy widnieje rezultat " + playGame.getHostScore() + " : " + playGame.getGuestScore();
         gameCommentaryMap.put(gameMinute, matchResult);
         System.out.println("Koniec. Wynik meczu: " + playGame.getHostScore() + " : " + playGame.getGuestScore());
         updateClubsValuesAfterGames(hostClub, guestClub, playGame);
@@ -186,7 +186,7 @@ public class GameService {
                 "min. Próbują w obronie często zmieniać pozycje, ale nie mogą zadowolić trenera, a tymczasem z kolejnym atakiem sunie "));
         List<String> counterAttackCommentaryList=new ArrayList<>(List.of("min. Oni są jak stal, nieugięci w obronie. Odbiór i mkną z kontrą jak torpeda zawodnicy ",
                 "min. Środkowy obrońca gra dziś czołowe skrzypce: odbiór i kontra ",
-                "min. Asysta pomocnika, to taka truskawka na torcie... wgnieciona, bo po odbiorze akcja ",
+                "min. Asysta pomocnika, to taka truskawka na torcie... wgnieciona, bo po odbiorze rusza akcja ",
                 "min. To nie był błąd piłkarza, to był błąd murawy. Za to mają teraz szansę ",
                 "min. Trener przeciwników rozkłada ręce trzymając się za głowę, bo jest strata i będzie szansa dla "));
         List<String> goalCommentaryList=new ArrayList<>(List.of("min. Gooooooooooooooooooool!!!! Stadiony świata!!! Bramka dla ",

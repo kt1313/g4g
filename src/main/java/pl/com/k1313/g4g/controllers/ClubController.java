@@ -83,7 +83,6 @@ public class ClubController {
             if (!p.equals("0"))
                 notemptyPlayerPos.add(p);
         }
-
         //powyzej mozna wstawic ograniczenie dot. ilosci? czyu to nie za pozno?? w kontrolerze?
         List<PlayerPosition> playerPositions = new ArrayList<>(notemptyPlayerPos.size());
         for (int i = 0; i < notemptyPlayerPos.size(); i++) {
@@ -91,7 +90,6 @@ public class ClubController {
         }
         try {
             long clubId = Long.parseLong(stringClubId);
-
             if (!ids.isEmpty()) {
                 this.playerService.confirmFirst11(ids, clubId);
                 Club club = this.clubRepository.findByClubId(clubId);
@@ -101,10 +99,6 @@ public class ClubController {
                     firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));
                     this.playerRepository.save(firstsquadplayers.get(i));
                 }
-//                System.out.println("Dane o zawodniku, Imie: "
-//                        + firstsquadplayers.stream().findFirst().get().getFirstName()
-//                        + " pozycja: "
-//                        + firstsquadplayers.stream().findFirst().get().getPlayerPosition()) ;
 
 
                 Optional<Player> goalkeeper = firstsquadplayers.stream()
