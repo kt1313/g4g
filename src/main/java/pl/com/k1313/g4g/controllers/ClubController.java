@@ -68,6 +68,7 @@ public class ClubController {
     }
 
     @PostMapping("/firstsquadplayers")
+//            poprawa zmiany pozycji u zawodnika
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
                                    @RequestParam(value = "clubId", required = true) String stringClubId,
                                    @RequestParam(value = "createnewplayerposition") List<String> stringPlayerPos,
@@ -82,6 +83,8 @@ public class ClubController {
             if (!p.equals("0"))
                 notemptyPlayerPos.add(p);
         }
+
+        //powyzej mozna wstawic ograniczenie dot. ilosci? czyu to nie za pozno?? w kontrolerze?
         List<PlayerPosition> playerPositions = new ArrayList<>(notemptyPlayerPos.size());
         for (int i = 0; i < notemptyPlayerPos.size(); i++) {
             playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));
