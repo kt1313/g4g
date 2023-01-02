@@ -20,8 +20,10 @@ import pl.com.k1313.g4g.domain.club.ClubService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
-import java.util.stream.Collectors;
-
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Controller
 @RequestMapping("/team")
@@ -67,6 +69,7 @@ public class ClubController {
         return "league";
     }
 
+
     @PostMapping("/firstsquadplayers")
 //            poprawa zmiany pozycji u zawodnika
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
@@ -93,7 +96,6 @@ public class ClubController {
             if (!ids.isEmpty()) {
                 this.playerService.confirmFirst11(ids, clubId);
                 Club club = this.clubRepository.findByClubId(clubId);
-//                TUTAJ SPRAWDZ, LECI TYLKO PO GOALKEEPERZE
                 List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
                 for (int i = 0; i < firstsquadplayers.size(); i++) {
                     firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));
@@ -184,4 +186,5 @@ public class ClubController {
         }
         return "redirect:/players";
     }
+
 }

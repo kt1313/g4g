@@ -12,6 +12,9 @@ import pl.com.k1313.g4g.domain.player.PlayerService;
 import pl.com.k1313.g4g.domain.player.dto.PlayerUpdateDTO;
 import pl.com.k1313.g4g.domain.club.ClubService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -43,6 +46,46 @@ public class PlayerController {
         model.addAttribute("clubId", clubId);
         model.addAttribute("clubName", club.getClubName());
         return "players";
+    }
+
+    @PostMapping("/sortedby")
+    public String sortPlayersBy(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
+                                @RequestParam(value = "clubId", required = true) String stringClubId,
+                                String sortplayers,
+                                @RequestParam(value = "createnewplayerposition", required = false) List<String> stringPlayerPos,
+                                Model model, HttpSession session, HttpServletRequest request) {
+        long clubId = Long.parseLong(stringClubId);
+        Club club = this.clubRepository.findByClubId(clubId);
+
+        List<Player> sortedPlayers = this.playerRepository.findAllByPlayerClub(club);
+        switch (sortplayers) {
+            case "goalkeeping":
+                Comparator<Player> compGoalkeepingAsc = Comparator.comparing(Player::getGoalkeeping);
+                sortedPlayers.sort(compGoalkeepingAsc.reversed());
+                break;
+            case "interception":
+                Comparator<Player> compDefendingAsc = Comparator.comparing(Player::getInterception);
+                sortedPlayers.sort(compDefendingAsc.reversed());
+                break;
+            case "ballcontrol":
+                Comparator<Player> compMidfieldAsc = Comparator.comparing(Player::getBallControl);
+                sortedPlayers.sort(compMidfieldAsc.reversed());
+                break;
+            case "passing":
+                Comparator<Player> compPassingAsc = Comparator.comparing(Player::getPassing);
+                sortedPlayers.sort(compPassingAsc.reversed());
+                break;
+            case "attacking":
+                Comparator<Player> compAttackingAsc = Comparator.comparing(Player::getAttacking);
+                sortedPlayers.sort(compAttackingAsc.reversed());
+                break;
+
+        }
+        model.addAttribute("players", sortedPlayers);
+        model.addAttribute("clubId", clubId);
+        model.addAttribute("clubname", club.getClubName());
+
+        return "/players";
     }
 
     //unit test done-  working
