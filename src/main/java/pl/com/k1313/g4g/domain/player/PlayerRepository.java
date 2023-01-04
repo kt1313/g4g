@@ -13,6 +13,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<Player> findAllByPlayerClubAndFirstSquadPlayer(Club club, boolean first11Player);
 
     List<Player> findAllByPlayerClub(Club club);
+    Player findById(long id);
 
     List<Player> findAllByFirstSquadPlayer(boolean first11Player);
     //przyklad ..jakich komand? nwm..sprawdz

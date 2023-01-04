@@ -38,6 +38,10 @@ public class Club {
     @ElementCollection(targetClass = Player.class)
     private List<Player> clubFirst11;
 
+    public List<Player> getClubPlayers() {
+        return clubPlayers;
+    }
+
     public Club(String clubName, AppUser appUser, List<Player> clubPlayers) {
         this.clubName = clubName;
         this.appUser = appUser;

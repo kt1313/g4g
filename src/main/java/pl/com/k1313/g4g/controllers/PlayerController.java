@@ -57,6 +57,11 @@ public class PlayerController {
         long clubId = Long.parseLong(stringClubId);
         Club club = this.clubRepository.findByClubId(clubId);
 
+        //test:
+
+                Club club1=this.clubRepository.findByClubId(clubId);
+        List<Player> players =club1.getClubPlayers();
+
         List<Player> sortedPlayers = this.playerRepository.findAllByPlayerClub(club);
         switch (sortplayers) {
             case "goalkeeping":

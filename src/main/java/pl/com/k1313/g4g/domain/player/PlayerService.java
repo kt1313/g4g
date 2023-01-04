@@ -107,7 +107,7 @@ public class PlayerService {
             String pString=String.valueOf(p.getId());
             isFound=ids.contains(pString);
             if (!isFound){
-//                p.setPlayerPosition(PlayerPosition.NoPosition);
+                p.setPlayerPosition(PlayerPosition.NoPosition);
                 p.setFirstSquadPlayer(false);
                 this.playerRepository.save(p);
             }

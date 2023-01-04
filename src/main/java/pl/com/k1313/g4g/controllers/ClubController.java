@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/team")
@@ -76,115 +77,159 @@ public class ClubController {
                                    @RequestParam(value = "clubId", required = true) String stringClubId,
                                    @RequestParam(value = "createnewplayerposition") List<String> stringPlayerPos,
                                    Model model, HttpSession session, HttpServletRequest request) {
+List<String> stringPlayerPosition=new ArrayList<>();
+        for (String s : stringPlayerPos
+        ) {
+            if (!s.equals("0")) {
+stringPlayerPosition.add(s);            }
+        }
+        long clubId = Long.parseLong(stringClubId);
+        Club club = this.clubRepository.findByClubId(clubId);
+        List<Long> idsLongList = new ArrayList<>();
+        for (String i : ids
+        ) {
+            idsLongList.add(Long.parseLong(i));
+        }
+//        List<PlayerPosition> playerPositionList = new ArrayList<>();
+//        for (String pos : stringPlayerPos
+//        ) {
+//            playerPositionList.add(PlayerPosition.valueOf(pos));
+//        }
+        List<Player> playerByIdsList = new ArrayList<>();
+        for (long i : idsLongList
+        ) {
+            playerByIdsList.add(this.playerRepository.findById(i));
+        }
+        for (Player player : this.playerRepository.findAllByPlayerClub(club)
+        ) {
+            player.setFirstSquadPlayer(false);
+            player.setPlayerPosition(PlayerPosition.NoPosition);
+        }
+
+        for (Player p : playerByIdsList
+        ) {
+            long id = p.getId();
+            for (long i : idsLongList) {
+                if (i == id) {
+                    p.setFirstSquadPlayer(true);
+//                    tutaj ponizej bierze pozycje ze stringPlayerPos, ktora ma WSZYSTKICH graczy
+//                            a potrzebujemy tylko firstSquad
+                    p.setPlayerPosition(PlayerPosition.valueOf(stringPlayerPosition.get(playerByIdsList.indexOf(p))));
+                    this.playerRepository.save(p);
+                }
+            }
+        }
+        List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
+
 
 //        System.out.println("pozycja"+stringPlayerPos);
         //musi w players po wybraniu pozycji kazdemu playerowi
         //isc do kazdego z osobna playera i mu zmienic pozycje i save w repo zrobic
-        List<String> notemptyPlayerPos = new ArrayList<>();
-        for (String p : stringPlayerPos
-        ) {
-            if (!p.equals("0"))
-                notemptyPlayerPos.add(p);
-        }
-        //powyzej mozna wstawic ograniczenie dot. ilosci? czyu to nie za pozno?? w kontrolerze?
-        List<PlayerPosition> playerPositions = new ArrayList<>(notemptyPlayerPos.size());
-        for (int i = 0; i < notemptyPlayerPos.size(); i++) {
-            playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));
-        }
-        try {
-            long clubId = Long.parseLong(stringClubId);
-            if (!ids.isEmpty()) {
-                this.playerService.confirmFirst11(ids, clubId);
-                Club club = this.clubRepository.findByClubId(clubId);
-                List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
-                for (int i = 0; i < firstsquadplayers.size(); i++) {
-                    firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));
-                    this.playerRepository.save(firstsquadplayers.get(i));
-                }
+//        List<String> notemptyPlayerPos = new ArrayList<>();
+//        for (String p : stringPlayerPos
+//        ) {
+//            if (!p.equals("0"))
+//                notemptyPlayerPos.add(p);
+//        }
+//        //powyzej mozna wstawic ograniczenie dot. ilosci? czyu to nie za pozno?? w kontrolerze?
+//        List<PlayerPosition> playerPositions = new ArrayList<>(notemptyPlayerPos.size());
+//        for (int i = 0; i < notemptyPlayerPos.size(); i++) {
+//            playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));
+//        }
+//        try {
+//            long clubId = Long.parseLong(stringClubId);
+//            if (!ids.isEmpty()) {
+//                this.playerService.confirmFirst11(ids, clubId);
+//                Club club = this.clubRepository.findByClubId(clubId);
+//                List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
+//                for (int i = 0; i < firstsquadplayers.size(); i++) {
+//                    firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));
+//                    this.playerRepository.save(firstsquadplayers.get(i));
+//                }
 
 
-                Optional<Player> goalkeeper = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.GK))
-                        .findFirst();
-                goalkeeper.ifPresent(p -> model.addAttribute("goalkeeper", goalkeeper));
-                System.out.println("goalkeeper" + goalkeeper);
+        Optional<Player> goalkeeper = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.GK))
+                .findFirst();
+        goalkeeper.ifPresent(p -> model.addAttribute("goalkeeper", goalkeeper));
+        System.out.println("goalkeeper" + goalkeeper);
 
-                Optional<Player> rightWingback = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RWB))
-                        .findFirst();
-                rightWingback.ifPresent(p -> model.addAttribute("rightWingback", rightWingback));
-                System.out.println("rightWingback" + rightWingback);
+        Optional<Player> rightWingback = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RWB))
+                .findFirst();
+        rightWingback.ifPresent(p -> model.addAttribute("rightWingback", rightWingback));
+        System.out.println("rightWingback" + rightWingback);
 
-                Optional<Player> rightCentreback = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RCB))
-                        .findFirst();
-                rightCentreback.ifPresent(p -> model.addAttribute("rightCentreback", rightCentreback));
+        Optional<Player> rightCentreback = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RCB))
+                .findFirst();
+        rightCentreback.ifPresent(p -> model.addAttribute("rightCentreback", rightCentreback));
 
-                Optional<Player> centreback = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CB))
-                        .findFirst();
-                centreback.ifPresent(p -> model.addAttribute("centreback", centreback));
+        Optional<Player> centreback = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CB))
+                .findFirst();
+        centreback.ifPresent(p -> model.addAttribute("centreback", centreback));
 
-                Optional<Player> leftCentreback = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LCB))
-                        .findFirst();
-                leftCentreback.ifPresent(p -> model.addAttribute("leftCentreback", leftCentreback));
+        Optional<Player> leftCentreback = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LCB))
+                .findFirst();
+        leftCentreback.ifPresent(p -> model.addAttribute("leftCentreback", leftCentreback));
 
-                Optional<Player> leftWingback = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LWB))
-                        .findFirst();
-                leftWingback.ifPresent(p -> model.addAttribute("leftWingback", leftWingback));
+        Optional<Player> leftWingback = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LWB))
+                .findFirst();
+        leftWingback.ifPresent(p -> model.addAttribute("leftWingback", leftWingback));
 
-                Optional<Player> rightWinger = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RW))
-                        .findFirst();
-                rightWinger.ifPresent(p -> model.addAttribute("rightWinger", rightWinger));
+        Optional<Player> rightWinger = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RW))
+                .findFirst();
+        rightWinger.ifPresent(p -> model.addAttribute("rightWinger", rightWinger));
 
-                Optional<Player> centreMidDef = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CMD))
-                        .findFirst();
-                centreMidDef.ifPresent(p -> model.addAttribute("centreMidDef", centreMidDef));
+        Optional<Player> centreMidDef = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CMD))
+                .findFirst();
+        centreMidDef.ifPresent(p -> model.addAttribute("centreMidDef", centreMidDef));
 
-                Optional<Player> centreMid = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CM))
-                        .findFirst();
-                centreMid.ifPresent(p -> model.addAttribute("centreMid", centreMid));
+        Optional<Player> centreMid = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CM))
+                .findFirst();
+        centreMid.ifPresent(p -> model.addAttribute("centreMid", centreMid));
 
-                Optional<Player> centreMidAtt = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CMA))
-                        .findFirst();
-                centreMidAtt.ifPresent(p -> model.addAttribute("centreMidAtt", centreMidAtt));
+        Optional<Player> centreMidAtt = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CMA))
+                .findFirst();
+        centreMidAtt.ifPresent(p -> model.addAttribute("centreMidAtt", centreMidAtt));
 
-                Optional<Player> leftWinger = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LW))
-                        .findFirst();
-                leftWinger.ifPresent(p -> model.addAttribute("leftWinger", leftWinger));
+        Optional<Player> leftWinger = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LW))
+                .findFirst();
+        leftWinger.ifPresent(p -> model.addAttribute("leftWinger", leftWinger));
 
-                Optional<Player> leftForward = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LF))
-                        .findFirst();
-                leftForward.ifPresent(p -> model.addAttribute("leftForward", leftForward));
+        Optional<Player> leftForward = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LF))
+                .findFirst();
+        leftForward.ifPresent(p -> model.addAttribute("leftForward", leftForward));
 
-                Optional<Player> centreForward = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CF))
-                        .findFirst();
-                centreForward.ifPresent(p -> model.addAttribute("centreForward", centreForward));
+        Optional<Player> centreForward = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CF))
+                .findFirst();
+        centreForward.ifPresent(p -> model.addAttribute("centreForward", centreForward));
 
-                Optional<Player> rightForward = firstsquadplayers.stream()
-                        .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RF))
-                        .findFirst();
-                rightForward.ifPresent(p -> model.addAttribute("rightForward", rightForward));
+        Optional<Player> rightForward = firstsquadplayers.stream()
+                .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RF))
+                .findFirst();
+        rightForward.ifPresent(p -> model.addAttribute("rightForward", rightForward));
 
 
-                model.addAttribute("firstsquadplayers", firstsquadplayers);
-                return "firstsquadplayers";
-            } else {
-                return "redirect:/players";
-            }
-        } catch (NumberFormatException ex) {
-            // handle your exception
-        }
-        return "redirect:/players";
+        model.addAttribute("firstsquadplayers", firstsquadplayers);
+        return "firstsquadplayers";
+//            } else {
+//                return "redirect:/players";
+//            }
+//        } catch (NumberFormatException ex) {
+//            // handle your exception
+//    }
+//        return "redirect:/players";
     }
 
 }
