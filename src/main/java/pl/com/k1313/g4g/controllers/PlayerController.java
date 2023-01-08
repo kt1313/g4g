@@ -39,9 +39,10 @@ public class PlayerController {
     }
 
     //unit test done- not working
-    @GetMapping("/{clubId}")
-    public String players(@PathVariable long clubId, Model model) {
+    @GetMapping("/{clubId}/{appusertimestamp}")
+    public String players(@PathVariable long clubId, @PathVariable String appusertimestamp,Model model) {
         Club club = this.clubRepository.findByClubId(clubId);
+        model.addAttribute("appusertimestamp", appusertimestamp);
         model.addAttribute("players", this.playerRepository.findAllByPlayerClub(club));
         model.addAttribute("clubId", clubId);
         model.addAttribute("clubName", club.getClubName());
@@ -51,6 +52,7 @@ public class PlayerController {
     @PostMapping("/sortedby")
     public String sortPlayersBy(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
                                 @RequestParam(value = "clubId") String stringClubId,
+                                @RequestParam(value = "appusertimestamp") String appUserTimeStamp,
                                 String sortplayers,
                                 @RequestParam(value = "createnewplayerposition", required = false) List<String> stringPlayerPos,
                                 Model model) {
@@ -61,7 +63,7 @@ public class PlayerController {
 
         List<Player> sortedPlayers = this.playerRepository.findAllByPlayerClub(club);
         this.playerService.sortPlayersBy(sortplayers, sortedPlayers);
-
+        model.addAttribute("appusertimestamp", appUserTimeStamp);
         model.addAttribute("sortplayersbypos", sortplayers);
         model.addAttribute("players", sortedPlayers);
         model.addAttribute("clubId", clubId);

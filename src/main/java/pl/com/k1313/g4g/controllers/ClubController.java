@@ -76,7 +76,7 @@ public class ClubController {
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
                                    @RequestParam(value = "clubId") String stringClubId,
                                    @RequestParam(value = "sortplayersbypos", required = false) String sortPlayersByPos,
-                                   @RequestParam(value = "createnewplayerposition") List<String> stringPlayerPos,
+                                   @RequestParam(value = "createnewplayerposition", required = false) List<String> stringPlayerPos,
                                    Model model ) {
 
         long clubId = Long.parseLong(stringClubId);

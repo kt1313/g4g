@@ -23,7 +23,14 @@
                 <a class="nav-link" href="/">Main<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/team">Club</a>
+                <form action="@{/appuser/club/{clubId}/{appusertimestamp}
+            (clubId=${clubId}, appusertimestamp=${appusertimestamp})}" method="get">
+                <a th:href="@{/appuser/club/{clubId}/{appusertimestamp}
+            (clubId=${clubId}, appusertimestamp=${appusertimestamp})}"><span
+                        th:text="${clubName}">clubname</span></a>
+                <input type="hidden" th:value="${appusertimestamp}">
+                <input type="hidden" th:value="${clubId}">
+                </form>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/players">Players</a>
@@ -87,20 +94,37 @@
     }
 </style>
 <div>
-<form method="post" th:action="@{/players/sortedby}">
-    <select name="sortplayers" id="sortplayers" value=" ">
-        <option value=" " >Sort By...</option>
-        <option value="goalkeeping" >goalkeeping</option>
-        <option value="interception" >interception</option>
-        <option value="ballcontrol" >ballcontrol</option>
-        <option value="passing" >passing</option>
-        <option value="attacking" >attacking</option>
-    </select>
-    <input type="hidden" th:name="clubId" th:value="${clubId}"/>
-<!--    <input type="hidden" th:name="firstSquadPlayer" th:value="${player.id}">-->
+    <table>
+<tr>
+    <td>
+        <form method="post" th:action="@{/players/sortedby}">
+            <select name="sortplayers" id="sortplayers" value=" ">
+                <option value=" " >Sort By...</option>
+                <option value="goalkeeping" >goalkeeping</option>
+                <option value="interception" >interception</option>
+                <option value="ballcontrol" >ballcontrol</option>
+                <option value="passing" >passing</option>
+                <option value="attacking" >attacking</option>
+            </select>
+            <input type="hidden" th:name="clubId" th:value="${clubId}"/>
+            <input type="hidden" th:name="appusertimestamp" th:value="${appusertimestamp}"/>
+            <input type="submit" value="Sort By"/>
+        </form>
+    </td>
+    <td>
 
-    <input type="submit" value="Sort By">
-</form>
+            <form th:action="@{/appuser/club/{clubId}/{appusertimestamp}
+            (clubId=${clubId}, appusertimestamp=${appusertimestamp})}" method="get">
+                <input type="hidden" th:value="${clubId}" th:name="clubId">
+                <input type="hidden" th:value="${appusertimestamp}"
+                       th:name="appusertimestamp">
+                <input type="hidden" th:value="backclub" th:name="backclub">
+                <input type="submit" class="btn-primary" style="background-color: #0040ff"
+                       value="Back to Club"/>
+            </form>
+    </td>
+</tr>
+    </table>
 </div>
 <div class="container">
     <form method="POST" th:action="@{/team/firstsquadplayers}">
@@ -181,7 +205,6 @@
                     </div>
                     <hr>
                 </div>
-
             </div>
         </div>
         <a th:if="${sortplayersbypos!=null}"><input type="hidden" th:name="sortplayersbypos" th:value="${sortplayersbypos}"/></a>
@@ -189,8 +212,6 @@
         <input type="hidden" th:name="clubId" th:value="${clubId}"/>
         <input type="submit" class="btn-primary" style="background-color: #0040ff"
                value="Confirm first 11"/>
-        <!---->
-        <!---->
     </form>
 </div>
 
