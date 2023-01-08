@@ -97,6 +97,8 @@
         <option value="attacking" >attacking</option>
     </select>
     <input type="hidden" th:name="clubId" th:value="${clubId}"/>
+<!--    <input type="hidden" th:name="firstSquadPlayer" th:value="${player.id}">-->
+
     <input type="submit" value="Sort By">
 </form>
 </div>
@@ -182,6 +184,8 @@
 
             </div>
         </div>
+        <a th:if="${sortplayersbypos!=null}"><input type="hidden" th:name="sortplayersbypos" th:value="${sortplayersbypos}"/></a>
+        <input type="hidden" th:name="sortplayers" th:value="${players}"/>
         <input type="hidden" th:name="clubId" th:value="${clubId}"/>
         <input type="submit" class="btn-primary" style="background-color: #0040ff"
                value="Confirm first 11"/>

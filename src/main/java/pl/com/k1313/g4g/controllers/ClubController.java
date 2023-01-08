@@ -74,80 +74,19 @@ public class ClubController {
     @PostMapping("/firstsquadplayers")
 //            poprawa zmiany pozycji u zawodnika
     public String handleFirstSquad(@RequestParam(value = "firstSquadPlayer", required = false) List<String> ids,
-                                   @RequestParam(value = "clubId", required = true) String stringClubId,
+                                   @RequestParam(value = "clubId") String stringClubId,
+                                   @RequestParam(value = "sortplayersbypos", required = false) String sortPlayersByPos,
                                    @RequestParam(value = "createnewplayerposition") List<String> stringPlayerPos,
-                                   Model model, HttpSession session, HttpServletRequest request) {
-List<String> stringPlayerPosition=new ArrayList<>();
-        for (String s : stringPlayerPos
-        ) {
-            if (!s.equals("0")) {
-stringPlayerPosition.add(s);            }
-        }
+                                   Model model ) {
+
         long clubId = Long.parseLong(stringClubId);
         Club club = this.clubRepository.findByClubId(clubId);
-        List<Long> idsLongList = new ArrayList<>();
-        for (String i : ids
-        ) {
-            idsLongList.add(Long.parseLong(i));
-        }
-//        List<PlayerPosition> playerPositionList = new ArrayList<>();
-//        for (String pos : stringPlayerPos
-//        ) {
-//            playerPositionList.add(PlayerPosition.valueOf(pos));
-//        }
-        List<Player> playerByIdsList = new ArrayList<>();
-        for (long i : idsLongList
-        ) {
-            playerByIdsList.add(this.playerRepository.findById(i));
-        }
-        for (Player player : this.playerRepository.findAllByPlayerClub(club)
-        ) {
-            player.setFirstSquadPlayer(false);
-            player.setPlayerPosition(PlayerPosition.NoPosition);
-        }
+//        if(sortPlayersByPos!=null) {
+            this.playerService.assignPlayerPosition(clubId, ids, stringPlayerPos, sortPlayersByPos);
+//        }else{
 
-        for (Player p : playerByIdsList
-        ) {
-            long id = p.getId();
-            for (long i : idsLongList) {
-                if (i == id) {
-                    p.setFirstSquadPlayer(true);
-//                    tutaj ponizej bierze pozycje ze stringPlayerPos, ktora ma WSZYSTKICH graczy
-//                            a potrzebujemy tylko firstSquad
-                    p.setPlayerPosition(PlayerPosition.valueOf(stringPlayerPosition.get(playerByIdsList.indexOf(p))));
-                    this.playerRepository.save(p);
-                }
-            }
-        }
+//        }
         List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
-
-
-//        System.out.println("pozycja"+stringPlayerPos);
-        //musi w players po wybraniu pozycji kazdemu playerowi
-        //isc do kazdego z osobna playera i mu zmienic pozycje i save w repo zrobic
-//        List<String> notemptyPlayerPos = new ArrayList<>();
-//        for (String p : stringPlayerPos
-//        ) {
-//            if (!p.equals("0"))
-//                notemptyPlayerPos.add(p);
-//        }
-//        //powyzej mozna wstawic ograniczenie dot. ilosci? czyu to nie za pozno?? w kontrolerze?
-//        List<PlayerPosition> playerPositions = new ArrayList<>(notemptyPlayerPos.size());
-//        for (int i = 0; i < notemptyPlayerPos.size(); i++) {
-//            playerPositions.add(PlayerPosition.valueOf(notemptyPlayerPos.get(i)));
-//        }
-//        try {
-//            long clubId = Long.parseLong(stringClubId);
-//            if (!ids.isEmpty()) {
-//                this.playerService.confirmFirst11(ids, clubId);
-//                Club club = this.clubRepository.findByClubId(clubId);
-//                List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
-//                for (int i = 0; i < firstsquadplayers.size(); i++) {
-//                    firstsquadplayers.get(i).setPlayerPosition(playerPositions.get(i));
-//                    this.playerRepository.save(firstsquadplayers.get(i));
-//                }
-
-
         Optional<Player> goalkeeper = firstsquadplayers.stream()
                 .filter(p -> p.getPlayerPosition().equals(PlayerPosition.GK))
                 .findFirst();

@@ -6,8 +6,10 @@ import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -56,14 +58,14 @@ public class PlayerService {
         Random r = new Random();
         List<String> firstNamesList = new ArrayList<>(List.of(
                 "Adam", "Obi-Wan", "Frankie", "Janusz", "Joshua", "One-One", "Kuling"));
-        return  firstNamesList.get(r.nextInt(firstNamesList.size()));
+        return firstNamesList.get(r.nextInt(firstNamesList.size()));
     }
 
     public String randomLastName() {
         Random r = new Random();
         List<String> lastNamesList = new ArrayList<>(List.of(
                 "Kaleka", "McWolny", "Anemikus", "Ci-Ho-Pek", "Omojboszszsz", "Nieten", "Aninietamten"));
-        return  lastNamesList.get(r.nextInt(lastNamesList.size()));
+        return lastNamesList.get(r.nextInt(lastNamesList.size()));
     }
 
     public int randomAge() {
@@ -89,8 +91,8 @@ public class PlayerService {
     public void confirmFirst11(List<String> ids, Long clubId) {
 //        tu ma zasejwowac firstSquadPlayerow na true a pozostalym wyczyscic FirstSquadPlayer
         List<Player> firstSquadPlayers = new ArrayList<>();
-        Club club=this.clubRepository.findByClubId(clubId);
-        List<Player> allClubPlayers=this.playerRepository.findAllByPlayerClub(club);
+        Club club = this.clubRepository.findByClubId(clubId);
+        List<Player> allClubPlayers = this.playerRepository.findAllByPlayerClub(club);
 
         if (!ids.isEmpty()) {
             for (String playerId : ids) {
@@ -101,12 +103,12 @@ public class PlayerService {
                 this.playerRepository.save(first11Player);
             }
         }
-        boolean isFound=false;
-        for (Player p:allClubPlayers
-             ) {
-            String pString=String.valueOf(p.getId());
-            isFound=ids.contains(pString);
-            if (!isFound){
+        boolean isFound = false;
+        for (Player p : allClubPlayers
+        ) {
+            String pString = String.valueOf(p.getId());
+            isFound = ids.contains(pString);
+            if (!isFound) {
                 p.setPlayerPosition(PlayerPosition.NoPosition);
                 p.setFirstSquadPlayer(false);
                 this.playerRepository.save(p);
@@ -115,22 +117,22 @@ public class PlayerService {
     }
 
     public List<Player> botPlayersCreation(long clubId) {
-        List<Player> players=new ArrayList<>();
+        List<Player> players = new ArrayList<>();
 
-        Player newGoalkeeper=autoCreateGoalkeeper();
+        Player newGoalkeeper = autoCreateGoalkeeper();
         newGoalkeeper.setPlayerClub(this.clubRepository.findByClubId(clubId));
         newGoalkeeper.setPlayerPosition(PlayerPosition.GK);
         newGoalkeeper.setFirstSquadPlayer(Boolean.TRUE);
-        Club club=this.clubRepository.findByClubId(clubId);
+        Club club = this.clubRepository.findByClubId(clubId);
         newGoalkeeper.setPlayerClub(club);
         players.add(newGoalkeeper);
         this.playerRepository.save(newGoalkeeper);
 
-        for (int i = 1; i < 11 ; i++) {
+        for (int i = 1; i < 11; i++) {
             Player newPlayer = autoCreatePlayer();
             newPlayer.setPlayerClub(this.clubRepository.findByClubId(clubId));
-            List<PlayerPosition> playersPosition=botPlayersPositions();
-            newPlayer.setPlayerPosition( playersPosition.get(i-1));
+            List<PlayerPosition> playersPosition = botPlayersPositions();
+            newPlayer.setPlayerPosition(playersPosition.get(i - 1));
             newPlayer.setFirstSquadPlayer(Boolean.TRUE);
             newPlayer.setPlayerClub(club);
             players.add(newPlayer);
@@ -145,5 +147,92 @@ public class PlayerService {
                 PlayerPosition.RW, PlayerPosition.CMD, PlayerPosition.CMA, PlayerPosition.LW,
                 PlayerPosition.RF, PlayerPosition.LF));
         return playersPositions;
+    }
+
+    public List<Player> sortPlayersBy(String sortPlayersBy, List<Player> sortedPlayers) {
+        switch (sortPlayersBy) {
+            case "goalkeeping":
+                Comparator<Player> compGoalkeepingAsc = Comparator.comparing(Player::getGoalkeeping);
+                sortedPlayers.sort(compGoalkeepingAsc.reversed());
+                break;
+            case "interception":
+                Comparator<Player> compDefendingAsc = Comparator.comparing(Player::getInterception);
+                sortedPlayers.sort(compDefendingAsc.reversed());
+                break;
+            case "ballcontrol":
+                Comparator<Player> compMidfieldAsc = Comparator.comparing(Player::getBallControl);
+                sortedPlayers.sort(compMidfieldAsc.reversed());
+                break;
+            case "passing":
+                Comparator<Player> compPassingAsc = Comparator.comparing(Player::getPassing);
+                sortedPlayers.sort(compPassingAsc.reversed());
+                break;
+            case "attacking":
+                Comparator<Player> compAttackingAsc = Comparator.comparing(Player::getAttacking);
+                sortedPlayers.sort(compAttackingAsc.reversed());
+                break;
+        }
+        return sortedPlayers;
+    }
+
+    //pobiera clubId, liste firstSquad z numerami Id graczy i liste z pozycjami i przyporzadkowuje
+//    wyrzucajac nadmiarowe pozycje z poprzednich przegladow
+    public void assignPlayerPosition(long clubId, List<String> ids,
+                                     List<String> stringPlayerPos, String sortPlayersByPos) {
+        //czysci wszystkim graczom z klubu firstsquad i position
+        Club club = this.clubRepository.findByClubId(clubId);
+        List<Long> idsLongList = new ArrayList<>();
+        List<String> stringPlayerPositionList = new ArrayList<>();
+        List<Player> allClubPlayers = this.playerRepository.findAllByPlayerClub(club);
+        if (sortPlayersByPos != null) {
+            sortPlayersBy(sortPlayersByPos, allClubPlayers);
+        }
+        for (Player player : allClubPlayers
+        ) {
+            player.setFirstSquadPlayer(false);
+            player.setPlayerPosition(PlayerPosition.NoPosition);
+        }
+// zamiana ids string na long
+        for (String i : ids
+        ) {
+            idsLongList.add(Long.parseLong(i));
+        }
+
+        List<Player> playerByIdsList = new ArrayList<>();
+        List<Integer> indexPosOfPlayers = new ArrayList<>();
+        for (long i : idsLongList
+        ) {
+            Player player=this.playerRepository.findById(i);
+            playerByIdsList.add(player);
+            indexPosOfPlayers.add(allClubPlayers.indexOf(player));
+            stringPlayerPositionList.add(stringPlayerPos.get(allClubPlayers.indexOf(player)));
+        }
+
+        //teraz wybiera ze wszystkich pozycji telko te wg indexuPosOfPlayer i
+        // tworzy nowa Liste poprawnych Positions
+//        tu problem
+//        for (long i : idsLongList
+//        ) {
+//            Player player=this.playerRepository.findById(i);
+//            playerByIdsList.add(player);
+//            indexPosOfPlayers.add(allClubPlayers.indexOf(player));
+//        }
+//        for (int i : indexPosOfPlayers
+//        ) {
+//            String s=stringPlayerPos.stream().filter(s1 -> s1.)
+//            for (int i : indexPosOfPlayers
+//            ) {
+//                if (stringPlayerPos.indexOf(s) == i) {
+//                    stringPlayerPositionList.add(s);
+//                }
+//            }
+//        }
+//i teraz ustawia pozycje w playerByIdsList graczom wg stringPlayerPOsitionList
+// i dodaje doFirst11 i save w Repo
+        for (int i = 0; i < stringPlayerPositionList.size(); i++) {
+            playerByIdsList.get(i).setPlayerPosition(PlayerPosition.valueOf(stringPlayerPositionList.get(i)));
+            playerByIdsList.get(i).setFirstSquadPlayer(true);
+            this.playerRepository.save(playerByIdsList.get(i));
+        }
     }
 }
