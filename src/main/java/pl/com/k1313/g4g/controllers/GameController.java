@@ -61,10 +61,25 @@ public class GameController {
         Game playGame = this.gameRepository.getById(gameId);
         gameCommentaryList = playGame.getGameCommentaryList();
 
+        float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession()))*100 ;
+        float guestBallPossession = (playGame.getHostBallPossession()  / (playGame.getHostBallPossession()  + playGame.getGuestBallPossession())) * 100;
+        int hostShotsOnGoal = playGame.getHostShotsOnGoal();
+        int hostCounterAttacks = playGame.getHostCounterAttacks();
+        int guestShotsOnGoal = playGame.getGuestShotsOnGoal();
+        int guestCounterAttacks = playGame.getGuestCounterAttacks();
+        int hostBallPossessionInt=(int)hostBallPossession;
+        int guestBallPossessionInt=(int)guestBallPossession;
+
         String hostClubName = this.gameRepository.findById(gameId).getHostClub().getClubName();
         String guestClubName = this.gameRepository.findById(gameId).getGuestClub().getClubName();
         Integer hostClubScore = playGame.getHostScore();
         Integer guestClubScore = playGame.getGuestScore();
+        m.addAttribute("hostBallPossession", hostBallPossessionInt);
+        m.addAttribute("hostCounterAttacks", hostCounterAttacks);
+        m.addAttribute("hostShotsOnGoal", hostShotsOnGoal);
+        m.addAttribute("guestBallPossession", guestBallPossessionInt);
+        m.addAttribute("guestShotsOnGoal", guestShotsOnGoal);
+        m.addAttribute("guestCounterAttacks", guestCounterAttacks);
         m.addAttribute("gamecommentary", gameCommentaryList);
         m.addAttribute("appusertimestamp", appusertimestamp);
         m.addAttribute("hostClubName", hostClubName);
@@ -78,8 +93,8 @@ public class GameController {
     //tutaj stworzyc najpierw cos co utworzy Game z Id, zapisze do Repo, a potem
     //rozpocznie Game, a potem nowy POstMapping i bedzie do Game mozna wrocic w kazdym momencie
     @PostMapping("/viegame/inprogress")
-    public String handleGame( String appusertimestamp, Long clubId, String gameTypeString,
-                              ModelMap map, Model m) throws InterruptedException {
+    public String handleGame(String appusertimestamp, Long clubId, String gameTypeString,
+                             ModelMap map, Model m) throws InterruptedException {
         //ma pobrac JUŻ utworzony match z druzynami - nie.
         // tylko z Id klubu wyzwanego, a klub wyzywajacego z ...?
         //no, skad?
@@ -102,7 +117,7 @@ public class GameController {
         }
         List<String> gameCommentaryList;
 
-        Optional<Game> playGameOptional=this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
+        Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
         if (playGameOptional.isPresent()) {
             playGame = playGameOptional.get();
         } else {
@@ -116,8 +131,18 @@ public class GameController {
         this.gameRepository.save(playGame);
 
         //ma teraz ROZEGRAC ten mecz
-        gameCommentaryList = this.gameService.handleGameEngine(playGame);
 
+        gameCommentaryList = this.gameService.handleGameEngine(playGame);
+//pobranie statystyk
+
+        float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession()))*100 ;
+        float guestBallPossession = (playGame.getHostBallPossession()  / (playGame.getHostBallPossession()  + playGame.getGuestBallPossession())) * 100;
+        int hostShotsOnGoal = playGame.getHostShotsOnGoal();
+        int hostCounterAttacks = playGame.getHostCounterAttacks();
+        int guestShotsOnGoal = playGame.getGuestShotsOnGoal();
+        int guestCounterAttacks = playGame.getGuestCounterAttacks();
+        int hostBallPossessionInt=(int)hostBallPossession;
+        int guestBallPossessionInt=(int)guestBallPossession;
         map.addAttribute("gameCommentary", gameCommentaryList);
 
         //tu naglowek, nazwy druzyn i wynik
@@ -125,6 +150,12 @@ public class GameController {
         String guestClubName = guestClub.getClubName();
         Integer hostClubScore = playGame.getHostScore();
         Integer guestClubScore = playGame.getGuestScore();
+        m.addAttribute("hostBallPossession", hostBallPossessionInt);
+        m.addAttribute("hostCounterAttacks", hostCounterAttacks);
+        m.addAttribute("hostShotsOnGoal", hostShotsOnGoal);
+        m.addAttribute("guestBallPossession", guestBallPossessionInt);
+        m.addAttribute("guestShotsOnGoal", guestShotsOnGoal);
+        m.addAttribute("guestCounterAttacks", guestCounterAttacks);
         m.addAttribute("gamecommentary", gameCommentaryList);
         m.addAttribute("clubId", clubId);
         m.addAttribute("appusertimestamp", appusertimestamp);
@@ -163,6 +194,7 @@ public class GameController {
             for (Game g : rounds.get(roundToPlay - 1)
             ) {
                 this.gameService.handleGameEngine(g);
+                this.gameRepository.save(g);
             }
             leagueSortedByPointsAndGoalsDiff = this.clubService.sortingByPointsAndGoalsDiff(leagueId);
             List<Game> leagueGames = league.getLeagueAllGames();

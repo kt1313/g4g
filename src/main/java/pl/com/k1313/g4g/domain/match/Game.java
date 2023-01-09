@@ -5,7 +5,6 @@ import lombok.Setter;
 import pl.com.k1313.g4g.domain.club.Club;
 
 import javax.persistence.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +29,12 @@ public class Game {
     private GameStatus gameStatus;
     private long leagueId;
     private boolean gamePlayed;
+    private int hostBallPossession;
+    private int guestBallPossession;
+    private int hostShotsOnGoal;
+    private int guestShotsOnGoal;
+    private int hostCounterAttacks;
+    private  int guestCounterAttacks;
     @ElementCollection
     public List<String> gameCommentaryList;
 
@@ -143,14 +148,54 @@ public class Game {
     public void setGameCommentaryList(List<String> gameCommentaryList) {
         this.gameCommentaryList = gameCommentaryList;
     }
-    //
-//    public HashMap<Integer, String> getGameCommentary() {
-//        return gameCommentary;
-//    }
-//
-//    public void setGameCommentary(HashMap<Integer, String> gameCommentary) {
-//        this.gameCommentary = gameCommentary;
-//    }
+
+    public int getHostBallPossession() {
+        return hostBallPossession;
+    }
+
+    public void setHostBallPossession(int hostBallPosession) {
+        this.hostBallPossession = hostBallPosession;
+    }
+
+    public int getGuestBallPossession() {
+        return guestBallPossession;
+    }
+
+    public void setGuestBallPossession(int guestBallPosession) {
+        this.guestBallPossession = guestBallPosession;
+    }
+
+    public int getHostShotsOnGoal() {
+        return hostShotsOnGoal;
+    }
+
+    public void setHostShotsOnGoal(int hostShotsOnGoal) {
+        this.hostShotsOnGoal = hostShotsOnGoal;
+    }
+
+    public int getGuestShotsOnGoal() {
+        return guestShotsOnGoal;
+    }
+
+    public void setGuestShotsOnGoal(int guestShotsOnGoal) {
+        this.guestShotsOnGoal = guestShotsOnGoal;
+    }
+
+    public int getHostCounterAttacks() {
+        return hostCounterAttacks;
+    }
+
+    public void setHostCounterAttacks(int hostCounterAttacks) {
+        this.hostCounterAttacks = hostCounterAttacks;
+    }
+
+    public int getGuestCounterAttacks() {
+        return guestCounterAttacks;
+    }
+
+    public void setGuestCounterAttacks(int guestCounterAttacks) {
+        this.guestCounterAttacks = guestCounterAttacks;
+    }
 
     public Game() {
     }

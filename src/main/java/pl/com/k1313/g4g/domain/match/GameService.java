@@ -40,6 +40,7 @@ public class GameService {
         playGame.setInProgress(true);
         Club hostClub = playGame.getGameClubs().get(0);
         Club guestClub = playGame.getGameClubs().get(1);
+
         //get both teams values
 //        List<Integer> hostClubValues = this.clubService.getClubFirst11Values(hostClub);
 //        List<Integer> guestClubValues = this.clubService.getClubFirst11Values(guestClub);
@@ -54,8 +55,10 @@ public class GameService {
             clubAttacking = clubWithGreaterBallPossesion(hostClub, guestClub);
             if (clubAttacking.equals(hostClub)) {
                 clubDefending = guestClub;
+                playGame.setHostBallPossession(playGame.getHostBallPossession()+1);
             } else {
                 clubDefending = hostClub;
+                playGame.setGuestBallPossession(playGame.getGuestBallPossession()+1);
             }
 //            komentarz o posiadaniu pilki, niech losuje tylko co...czwarty event(wiekszy od 3)
             int ran=randomPickUpCommentary();
@@ -75,6 +78,11 @@ public class GameService {
                 if (randomCAChance(teamCA)) {
                     //komentarz o przejęciu piłki i kontrze
                     gameCommentary(clubDefending, playGame,3, gameCommentaryMap, gameMinute);
+                    if (clubDefending.equals(playGame.getHostClub()))
+                    {playGame.setHostCounterAttacks(playGame.getHostCounterAttacks()+1);
+                    playGame.setHostBallPossession(playGame.getHostBallPossession()+1);}
+                    else{playGame.setGuestCounterAttacks(playGame.getGuestCounterAttacks()+1);
+                    playGame.setGuestBallPossession(playGame.getGuestBallPossession()+1);}
                     //TUTAJ UWAGA: celowo zamiana teamInDefence z teamOnOpportunity, bo teraz
                     //broniący sie atakują
                     opportunityEvent(clubDefending, clubAttacking, playGame, gameCommentaryMap, gameMinute);
@@ -84,6 +92,7 @@ public class GameService {
                 playGame.setInProgress(false);
                 playGame.setGamePlayed(true);
                 playGame.setGameStatus(GameStatus.PLAYED);
+                this.gameRepository.save(playGame);
             }
         }
         String matchResult = "Koniec meczu. Na tablicy widnieje rezultat " + playGame.getHostScore() + " : " + playGame.getGuestScore();
@@ -239,6 +248,8 @@ public class GameService {
         Club guestClub = playGame.getGameClubs().get(1);
         List<Club> clubsList = new ArrayList<>(List.of(hostClub, guestClub));
         if (attackSucceedOverDefence(clubAttacking, playGame)) {
+            if (clubAttacking.equals(playGame.getHostClub())){playGame.setHostShotsOnGoal(playGame.getHostShotsOnGoal()+1);}
+            else{playGame.setGuestShotsOnGoal(playGame.getGuestShotsOnGoal()+1);}
 //                System.out.println("MatchServ, opportunityEvent, aatackSucceedOverDef ");
             int forwarderAttack = getForwarderAttack(clubAttacking, hostClub, guestClub);
             int goalkeeperSkill = this.clubService.getClubFirst11Values(clubDefending).get(0);
