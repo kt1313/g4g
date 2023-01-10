@@ -61,14 +61,18 @@ public class GameController {
         Game playGame = this.gameRepository.getById(gameId);
         gameCommentaryList = playGame.getGameCommentaryList();
 
-        float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession()))*100 ;
-        float guestBallPossession = (playGame.getHostBallPossession()  / (playGame.getHostBallPossession()  + playGame.getGuestBallPossession())) * 100;
+        AppUser appUser = this.appUserRepository.findByTimeStampAppUser(appusertimestamp);
+        Club club = this.clubRepository.findByAppUser(appUser);
+        long clubId=club.getClubId();
+
+        float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
+        float guestBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
         int hostShotsOnGoal = playGame.getHostShotsOnGoal();
         int hostCounterAttacks = playGame.getHostCounterAttacks();
         int guestShotsOnGoal = playGame.getGuestShotsOnGoal();
         int guestCounterAttacks = playGame.getGuestCounterAttacks();
-        int hostBallPossessionInt=(int)hostBallPossession;
-        int guestBallPossessionInt=(int)guestBallPossession;
+        int hostBallPossessionInt = (int) hostBallPossession;
+        int guestBallPossessionInt = (int) guestBallPossession;
 
         String hostClubName = this.gameRepository.findById(gameId).getHostClub().getClubName();
         String guestClubName = this.gameRepository.findById(gameId).getGuestClub().getClubName();
@@ -81,6 +85,7 @@ public class GameController {
         m.addAttribute("guestShotsOnGoal", guestShotsOnGoal);
         m.addAttribute("guestCounterAttacks", guestCounterAttacks);
         m.addAttribute("gamecommentary", gameCommentaryList);
+        m.addAttribute("clubId", clubId);
         m.addAttribute("appusertimestamp", appusertimestamp);
         m.addAttribute("hostClubName", hostClubName);
         m.addAttribute("guestClubName", guestClubName);
@@ -135,14 +140,14 @@ public class GameController {
         gameCommentaryList = this.gameService.handleGameEngine(playGame);
 //pobranie statystyk
 
-        float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession()))*100 ;
-        float guestBallPossession = (playGame.getHostBallPossession()  / (playGame.getHostBallPossession()  + playGame.getGuestBallPossession())) * 100;
+        float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
+        float guestBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
         int hostShotsOnGoal = playGame.getHostShotsOnGoal();
         int hostCounterAttacks = playGame.getHostCounterAttacks();
         int guestShotsOnGoal = playGame.getGuestShotsOnGoal();
         int guestCounterAttacks = playGame.getGuestCounterAttacks();
-        int hostBallPossessionInt=(int)hostBallPossession;
-        int guestBallPossessionInt=(int)guestBallPossession;
+        int hostBallPossessionInt = (int) hostBallPossession;
+        int guestBallPossessionInt = (int) guestBallPossession;
         map.addAttribute("gameCommentary", gameCommentaryList);
 
         //tu naglowek, nazwy druzyn i wynik

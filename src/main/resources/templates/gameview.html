@@ -62,7 +62,17 @@
 <div class="container">
     <table style="margin-left:auto;margin-right:auto;">
 
-        <thead >
+        <form th:action="@{/appuser/club/{clubId}/{appusertimestamp}
+            (clubId=${clubId}, appusertimestamp=${appusertimestamp})}" method="get">
+            <input type="hidden" th:value="${clubId}" th:name="clubId">
+            <input type="hidden" th:value="${appusertimestamp}"
+                   th:name="appusertimestamp">
+            <input type="hidden" th:value="backclub" th:name="backclub">
+            <input type="submit" class="btn-primary" style="background-color: #0040ff"
+                   value="Back to Club"/>
+        </form>
+
+        <thead style="margin-left:auto;margin-right:auto;">
         <h3>Game Stats</h3>
         </thead>
         <tr>
