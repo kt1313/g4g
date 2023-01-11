@@ -95,8 +95,8 @@
 </style>
 
 <div style="margin-left:auto;margin-right:auto;">
-    <tr bgcolor="#ffdab9" th:if="${not #lists.isEmpty(duplicatePosErrorList)}">
-        <h3>Login Error</h3>
+    <tr style="background: peachpuff; margin-left: auto; margin-right: auto "  th:if="${not #lists.isEmpty(duplicatePosErrorList)}">
+        <h3 style="font-weight: bold">Login Error</h3>
 
             <a th:each="error : ${duplicatePosErrorList}"><span th:text="${duplicatePosErrorList}"></span></a>
     </tr>
@@ -208,7 +208,7 @@
 <!--                            <div th:unless="${customer.anonymous}">-->
 <!--                                <div th:text=" 'Hi,' + ${customer.name}">Hi, User</div>-->
 <!--                            </div>-->
-                            <div th:if="${teamusertimestamp==appusertimestamp}">
+                            <div th:if="${!botUser}">
                                 <div>First 11:</div>
                                 <input type="checkbox" th:name="firstSquadPlayer"
                                        th:value="${player.id}" th:checked="${player.firstSquadPlayer}"/>
@@ -223,7 +223,7 @@
                 </div>
             </div>
         </div>
-        <div th:if="${teamusertimestamp==appusertimestamp}">
+        <div th:if="${!botUser}">
 
         <a th:if="${sortplayersbypos!=null}"><input type="hidden" th:name="sortplayersbypos" th:value="${sortplayersbypos}"/></a>
         <input type="hidden" th:name="sortplayers" th:value="${players}"/>

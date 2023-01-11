@@ -45,10 +45,10 @@ public class PlayerController {
     public String players(@PathVariable long clubId, @PathVariable String appusertimestamp, Model model) {
         Club club = this.clubRepository.findByClubId(clubId);
         AppUser teamUser = this.appUserRepository.findByClubId(clubId);
-//        AppUser teamUser2 = this.appUserRepository.findByClubname(club.getClubName());
+boolean botUser=!teamUser.equals(this.appUserRepository.findByTimeStampAppUser(appusertimestamp));
         String teamUserTimeStamp = teamUser.getTimeStampAppUser();
         model.addAttribute("appusertimestamp", appusertimestamp);
-        model.addAttribute("teamUserTimeStamp", teamUserTimeStamp);
+        model.addAttribute("botUser", botUser);
         model.addAttribute("players", this.playerRepository.findAllByPlayerClub(club));
         model.addAttribute("clubId", clubId);
         model.addAttribute("clubName", club.getClubName());
@@ -66,12 +66,13 @@ public class PlayerController {
         Club club = this.clubRepository.findByClubId(clubId);
 
         AppUser teamUser = this.appUserRepository.findByClubId(clubId);
+        boolean botUser=!teamUser.equals(this.appUserRepository.findByTimeStampAppUser(appUserTimeStamp));
         String teamUserTimeStamp = teamUser.getTimeStampAppUser();
 
         List<Player> sortedPlayers = this.playerRepository.findAllByPlayerClub(club);
         this.playerService.sortPlayersBy(sortplayers, sortedPlayers);
         model.addAttribute("appusertimestamp", appUserTimeStamp);
-        model.addAttribute("teamUserTimeStamp", teamUserTimeStamp);
+        model.addAttribute("botUser", botUser);
         model.addAttribute("sortplayersbypos", sortplayers);
         model.addAttribute("players", sortedPlayers);
         model.addAttribute("clubId", clubId);
