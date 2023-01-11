@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
 @Setter(value = AccessLevel.NONE)
 @Entity
 public class AppUser {
@@ -49,9 +48,10 @@ public class AppUser {
         this.registered = registered;
     }
 
-    public AppUser(String appUserName, String clubname) {
+    public AppUser(String appUserName, String clubname, long clubId) {
         this.appUserName = appUserName;
         this.clubname = clubname;
+        this.clubId=clubId;
     }
 
     public AppUser(String appusername, String clubname, String userEmail, String password, String timeStampAppUser) {
@@ -64,6 +64,66 @@ public class AppUser {
 
     public AppUser() {
 
+    }
+
+    public long getAppUserId() {
+        return appUserId;
+    }
+
+    public String getAppUserName() {
+        return appUserName;
+    }
+
+    public void setAppUserName(String appUserName) {
+        this.appUserName = appUserName;
+    }
+
+    public String getClubname() {
+        return clubname;
+    }
+
+    public void setClubname(String clubname) {
+        this.clubname = clubname;
+    }
+
+    public String getAppUserPassword() {
+        return appUserPassword;
+    }
+
+    public void setAppUserPassword(String appUserPassword) {
+        this.appUserPassword = appUserPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public long getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(long clubId) {
+        this.clubId = clubId;
+    }
+
+    public String getTimeStampAppUser() {
+        return timeStampAppUser;
+    }
+
+    public void setTimeStampAppUser(String timeStampAppUser) {
+        this.timeStampAppUser = timeStampAppUser;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 
     public void confirmRegistry() {

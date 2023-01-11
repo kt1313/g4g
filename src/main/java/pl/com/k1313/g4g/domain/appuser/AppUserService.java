@@ -66,6 +66,8 @@ public class AppUserService {
             System.out.println(" Goalkeeper nr " + i + " " + newGoalkeeper);
         }
         this.clubRepository.save(newClub);
+        appUser.setClubId(newClub.getClubId());
+        this.appUserRepository.save(appUser);
         League newLeague = this.leagueService.createLeague(newClub.getClubId());
   }
 
@@ -82,7 +84,8 @@ public class AppUserService {
     }
 
     public AppUser botAppUserCreation(Club club){
-        AppUser appUser=new AppUser("Teddy Bot", club.getClubName());
+        long clubId=club.getClubId();
+        AppUser appUser=new AppUser("Teddy Bot", club.getClubName(), clubId);
         this.appUserRepository.save(appUser);
         return appUser;
     }

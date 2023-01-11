@@ -2,6 +2,7 @@ package pl.com.k1313.g4g.domain.club;
 
 import org.springframework.stereotype.Service;
 import pl.com.k1313.g4g.domain.appuser.AppUser;
+import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.league.LeagueRepository;
 import pl.com.k1313.g4g.domain.player.Player;
 import pl.com.k1313.g4g.domain.player.PlayerPosition;
@@ -17,14 +18,15 @@ import java.util.stream.Collectors;
 @Service
 public class ClubService {
     public ClubService(ClubRepository clubRepository, PlayerRepository playerRepository,
-                       PlayerService playerService, LeagueRepository leagueRepository
+                       PlayerService playerService, LeagueRepository leagueRepository,
+                       AppUserRepository appUserRepository
 //            , AppUserService appUserService
     ) {
         this.clubRepository = clubRepository;
         this.playerRepository = playerRepository;
         this.leagueRepository = leagueRepository;
         this.playerService = playerService;
-//        this.appUserService=appUserService;
+        this.appUserRepository=appUserRepository;
     }
 
     //    private AppUserService appUserService;
@@ -32,6 +34,7 @@ public class ClubService {
     private LeagueRepository leagueRepository;
     private PlayerRepository playerRepository;
     private ClubRepository clubRepository;
+    private AppUserRepository appUserRepository;
 
     //
     public Club clubCreation(AppUser appUser, String clubname) {
@@ -42,10 +45,14 @@ public class ClubService {
 
     public Club botClubCreation() {
         Club newClub = new Club();
-        newClub.setClubName(botClubNameCreation());
-        newClub.setAppUser(new AppUser("Teddy Bot", newClub.getClubName()));
         this.clubRepository.save(newClub);
+        newClub.setClubName(botClubNameCreation());
+        AppUser newBotUser=new AppUser("Teddy Bot", newClub.getClubName(), newClub.getClubId());
+        newClub.setAppUser(newBotUser);
+        this.appUserRepository.save(newBotUser);
         setBotClubPlayers(newClub.getClubId());
+        this.clubRepository.save(newClub);
+
         return newClub;
     }
 

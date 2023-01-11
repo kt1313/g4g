@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.com.k1313.g4g.domain.appuser.AppUser;
+import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.league.League;
 import pl.com.k1313.g4g.domain.league.LeagueRepository;
@@ -35,18 +37,21 @@ public class ClubController {
     private ClubService clubService;
     private LeagueRepository leagueRepository;
     private GameRepository gameRepository;
+        private AppUserRepository appUserRepository;
+
 
     @Autowired
     public ClubController(
             PlayerRepository playerRepository, PlayerService playerService,
             ClubRepository clubRepository, ClubService clubService,
-            LeagueRepository leagueRepository, GameRepository gameRepository) {
+            LeagueRepository leagueRepository, GameRepository gameRepository, AppUserRepository appUserRepository) {
         this.playerRepository = playerRepository;
         this.playerService = playerService;
         this.clubRepository = clubRepository;
         this.clubService = clubService;
         this.leagueRepository = leagueRepository;
         this.gameRepository = gameRepository;
+        this.appUserRepository=appUserRepository;
     }
 
     @GetMapping("/takeover")
@@ -81,6 +86,9 @@ public class ClubController {
 
         long clubId = Long.parseLong(stringClubId);
         Club club = this.clubRepository.findByClubId(clubId);
+        AppUser teamUser=this.appUserRepository.findByClubId(clubId);
+        String teamUserTimeStamp=teamUser.getTimeStampAppUser();
+
         String clubName=club.getClubName();
         List<Player> players=this.playerRepository.findAllByPlayerClub(club);
         List<String> duplicatePosErrorList = new ArrayList<>();
@@ -176,6 +184,7 @@ public class ClubController {
         } else {
             model.addAttribute("duplicatePosErrorList", duplicatePosErrorList);
             model.addAttribute("appusertimestamp", appusertimestamp);
+            model.addAttribute("teamusertimestamp", teamUserTimeStamp);
             model.addAttribute("clubId", clubId);
             model.addAttribute("clubname",clubName);
             model.addAttribute("players",players);

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.com.k1313.g4g.domain.appuser.AppUser;
+import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.player.Player;
@@ -12,9 +14,6 @@ import pl.com.k1313.g4g.domain.player.PlayerService;
 import pl.com.k1313.g4g.domain.player.dto.PlayerUpdateDTO;
 import pl.com.k1313.g4g.domain.club.ClubService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -25,24 +24,31 @@ public class PlayerController {
     private ClubService clubService;
     private ClubRepository clubRepository;
     private PlayerRepository playerRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     public PlayerController(PlayerRepository playerRepository,
                             PlayerService playerService,
                             ClubService clubService,
-                            ClubRepository clubRepository
+                            ClubRepository clubRepository,
+                            AppUserRepository appUserRepository
     ) {
         this.playerRepository = playerRepository;
         this.playerService = playerService;
         this.clubService = clubService;
         this.clubRepository = clubRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     //unit test done- not working
     @GetMapping("/{clubId}/{appusertimestamp}")
-    public String players(@PathVariable long clubId, @PathVariable String appusertimestamp,Model model) {
+    public String players(@PathVariable long clubId, @PathVariable String appusertimestamp, Model model) {
         Club club = this.clubRepository.findByClubId(clubId);
+        AppUser teamUser = this.appUserRepository.findByClubId(clubId);
+//        AppUser teamUser2 = this.appUserRepository.findByClubname(club.getClubName());
+        String teamUserTimeStamp = teamUser.getTimeStampAppUser();
         model.addAttribute("appusertimestamp", appusertimestamp);
+        model.addAttribute("teamUserTimeStamp", teamUserTimeStamp);
         model.addAttribute("players", this.playerRepository.findAllByPlayerClub(club));
         model.addAttribute("clubId", clubId);
         model.addAttribute("clubName", club.getClubName());
@@ -58,12 +64,14 @@ public class PlayerController {
                                 Model model) {
         long clubId = Long.parseLong(stringClubId);
         Club club = this.clubRepository.findByClubId(clubId);
-//ale tu trzeba sprawdzic czy stringPlayerPos nie jest puste
-//        this.playerService.assignPlayerPosition(clubId,ids,stringPlayerPos);
+
+        AppUser teamUser = this.appUserRepository.findByClubId(clubId);
+        String teamUserTimeStamp = teamUser.getTimeStampAppUser();
 
         List<Player> sortedPlayers = this.playerRepository.findAllByPlayerClub(club);
         this.playerService.sortPlayersBy(sortplayers, sortedPlayers);
         model.addAttribute("appusertimestamp", appUserTimeStamp);
+        model.addAttribute("teamUserTimeStamp", teamUserTimeStamp);
         model.addAttribute("sortplayersbypos", sortplayers);
         model.addAttribute("players", sortedPlayers);
         model.addAttribute("clubId", clubId);
