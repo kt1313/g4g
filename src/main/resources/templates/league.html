@@ -142,17 +142,16 @@
         </tr>
     </table>
 </div>
-<div>
+<div class="p-3 text-center bg-light">
     <form method="post" th:action="@{/game/playleagueround}">
         <input type="hidden" th:value="${leagueId}" th:name="leagueId">
         <input type="hidden" th:value="${appusertimestamp}" th:name="appusertimestamp">
-
-        <input type="submit" value="Play Next League Round">
+        <h2><input type="submit" size="" value="Play Next League Round"></h2>
     </form>
 </div>
 <div class="headin">
     <table style="margin-left:auto;margin-right:auto;">
-        <thead>LEAGUE FIXTURES</thead>
+        <h3><thead>LEAGUE FIXTURES</thead></h3>
         <span th:if="${leaguegames != null}" th:each="r, state:${leaguerounds}">
             <tr th:align="left">
             <td>ROUND</td><td th:text="${state.count}"></td>

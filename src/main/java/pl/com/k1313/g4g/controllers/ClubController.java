@@ -88,10 +88,11 @@ public class ClubController {
         Club club = this.clubRepository.findByClubId(clubId);
         AppUser teamUser=this.appUserRepository.findByClubId(clubId);
         String teamUserTimeStamp=teamUser.getTimeStampAppUser();
+        boolean botUser=!teamUser.equals(this.appUserRepository.findByTimeStampAppUser(appusertimestamp));
 
         String clubName=club.getClubName();
         List<Player> players=this.playerRepository.findAllByPlayerClub(club);
-        List<String> duplicatePosErrorList = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         for (String s : stringPlayerPos
         ) {
             int a = 0;
@@ -99,11 +100,11 @@ public class ClubController {
                 a = Collections.frequency(stringPlayerPos, s);
             }
             if (a > 1) {
-                duplicatePosErrorList.add("One of Squad position is duplicated");
+                errors.add("One of position is duplicated");
                 break;
             }
         }
-        if (duplicatePosErrorList.isEmpty()) {
+        if (errors.isEmpty()) {
             this.playerService.assignPlayerPosition(clubId, ids, stringPlayerPos, sortPlayersByPos);
 
             List<Player> firstsquadplayers = this.clubService.findFirst11Players(club);
@@ -182,9 +183,9 @@ public class ClubController {
             model.addAttribute("firstsquadplayers", firstsquadplayers);
             return "firstsquadplayers";
         } else {
-            model.addAttribute("duplicatePosErrorList", duplicatePosErrorList);
+            model.addAttribute("errors", errors);
             model.addAttribute("appusertimestamp", appusertimestamp);
-            model.addAttribute("teamusertimestamp", teamUserTimeStamp);
+            model.addAttribute("botUser", botUser);
             model.addAttribute("clubId", clubId);
             model.addAttribute("clubname",clubName);
             model.addAttribute("players",players);

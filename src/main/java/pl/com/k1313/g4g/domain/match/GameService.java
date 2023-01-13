@@ -417,5 +417,35 @@ public class GameService {
 //        }
         return roundToPlay;
     }
+
+    public String checkFirstSquadNumbers(List<String> errors,
+                                         List<Player> hostFirsSquadPlayers,
+                                         List<Player> guestFirsSquadPlayers) {
+       String squadError="";
+        if (hostFirsSquadPlayers.size() > 11) {
+            squadError = "host>11";
+        } else if (hostFirsSquadPlayers.size() < 8) {
+            squadError = "host<8";
+        } else if (guestFirsSquadPlayers.size() > 11) {
+            squadError = "guest>11";
+        } else if (guestFirsSquadPlayers.size() < 8) {
+            squadError = "guest<8";
+        }
+        switch (squadError) {
+            case "host>11":
+                errors.add("Maximum number of players: 11");
+                break;
+            case "host<8":
+                errors.add("Minimum number of players: 8");
+                break;
+            case "guest>11":
+                errors.add("Maximum number of players: 11");
+                break;
+            case "guest<8":
+                errors.add("Minimum number of players: 8");
+                break;
+        }
+        return squadError;
+    }
 }
 

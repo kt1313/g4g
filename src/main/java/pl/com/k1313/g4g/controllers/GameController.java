@@ -21,6 +21,8 @@ import pl.com.k1313.g4g.domain.match.Game;
 import pl.com.k1313.g4g.domain.match.GameRepository;
 import pl.com.k1313.g4g.domain.match.GameService;
 import pl.com.k1313.g4g.domain.match.GameType;
+import pl.com.k1313.g4g.domain.player.Player;
+import pl.com.k1313.g4g.domain.player.PlayerRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +38,7 @@ public class GameController {
     private ClubService clubService;
     private LeagueRepository leagueRepository;
     private LeagueService leagueService;
+    private PlayerRepository playerRepository;
 
 
     @Autowired
@@ -45,7 +48,8 @@ public class GameController {
                           ClubRepository clubRepository,
                           ClubService clubService,
                           LeagueRepository leagueRepository,
-                          LeagueService leagueService) {
+                          LeagueService leagueService,
+                          PlayerRepository playerRepository) {
         this.gameRepository = gameRepository;
         this.gameService = gameService;
         this.appUserRepository = appUserRepository;
@@ -53,6 +57,7 @@ public class GameController {
         this.clubService = clubService;
         this.leagueRepository = leagueRepository;
         this.leagueService = leagueService;
+        this.playerRepository = playerRepository;
     }
 
     @GetMapping("/viewgame/gameplayed/{id}/{appusertimestamp}")
@@ -63,7 +68,7 @@ public class GameController {
 
         AppUser appUser = this.appUserRepository.findByTimeStampAppUser(appusertimestamp);
         Club club = this.clubRepository.findByAppUser(appUser);
-        long clubId=club.getClubId();
+        long clubId = club.getClubId();
 
         float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
         float guestBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
@@ -100,77 +105,102 @@ public class GameController {
     @PostMapping("/viegame/inprogress")
     public String handleGame(String appusertimestamp, Long clubId, String gameTypeString,
                              ModelMap map, Model m) throws InterruptedException {
-        //ma pobrac JUŻ utworzony match z druzynami - nie.
-        // tylko z Id klubu wyzwanego, a klub wyzywajacego z ...?
-        //no, skad?
+
+
+        AppUser teamUser = this.appUserRepository.findByClubId(clubId);
+        boolean botUser = !teamUser.equals(this.appUserRepository.findByTimeStampAppUser(appusertimestamp));
         AppUser appUser = this.appUserRepository.findByTimeStampAppUser(appusertimestamp);
         Club hostClub = this.clubRepository.findByAppUser(appUser);
         Club guestClub = this.clubRepository.findByClubId(clubId);
-        List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
-        Game playGame = new Game();
-        switch (gameTypeString) {
-            case "friendly":
-                playGame.setGameType(GameType.FG);
-                break;
-            case "cup":
-                playGame.setGameType(GameType.CG);
-                break;
-            case "league":
-                playGame.setGameType(GameType.LG);
-                break;
+        List<Player> hostFirsSquadPlayers = this.clubService.findFirst11Players(hostClub);
+        List<Player> guestFirsSquadPlayers = this.clubService.findFirst11Players(guestClub);
+        List<String> errors = new ArrayList<>();
+        String squadError = this.gameService.checkFirstSquadNumbers(errors, hostFirsSquadPlayers, guestFirsSquadPlayers);
 
-        }
-        List<String> gameCommentaryList;
+        if (errors.isEmpty()) {
+            List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
+            Game playGame = new Game();
+//            gameTypeString=this.gameService.
+            switch (gameTypeString) {
+                case "friendly":
+                    playGame.setGameType(GameType.FG);
+                    break;
+                case "cup":
+                    playGame.setGameType(GameType.CG);
+                    break;
+                case "league":
+                    playGame.setGameType(GameType.LG);
+                    break;
 
-        Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
-        if (playGameOptional.isPresent()) {
-            playGame = playGameOptional.get();
-        } else {
-            playGame.setGameClubs(gameClubs);
-            playGame.setInProgress(Boolean.TRUE);
-        }
-        if (playGame.getGameType().equals(GameType.LG)) {
-            playGame.setLeagueId(hostClub.getClubLeague().getId());
-        }
+            }
+            List<String> gameCommentaryList;
 
-        this.gameRepository.save(playGame);
+            Optional<Game> playGameOptional = this.gameRepository.findFirstByGameClubsInAndInProgress(gameClubs, Boolean.TRUE);
+            if (playGameOptional.isPresent()) {
+                playGame = playGameOptional.get();
+            } else {
+                playGame.setGameClubs(gameClubs);
+                playGame.setInProgress(Boolean.TRUE);
+            }
+            if (playGame.getGameType().equals(GameType.LG)) {
+                playGame.setLeagueId(hostClub.getClubLeague().getId());
+            }
 
-        //ma teraz ROZEGRAC ten mecz
+            this.gameRepository.save(playGame);
 
-        gameCommentaryList = this.gameService.handleGameEngine(playGame);
+            //ma teraz ROZEGRAC ten mecz
+
+            gameCommentaryList = this.gameService.handleGameEngine(playGame);
 //pobranie statystyk
 
-        float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
-        float guestBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
-        int hostShotsOnGoal = playGame.getHostShotsOnGoal();
-        int hostCounterAttacks = playGame.getHostCounterAttacks();
-        int guestShotsOnGoal = playGame.getGuestShotsOnGoal();
-        int guestCounterAttacks = playGame.getGuestCounterAttacks();
-        int hostBallPossessionInt = (int) hostBallPossession;
-        int guestBallPossessionInt = (int) guestBallPossession;
-        map.addAttribute("gameCommentary", gameCommentaryList);
+            float hostBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
+            float guestBallPossession = (playGame.getHostBallPossession() / (playGame.getHostBallPossession() + playGame.getGuestBallPossession())) * 100;
+            int hostShotsOnGoal = playGame.getHostShotsOnGoal();
+            int hostCounterAttacks = playGame.getHostCounterAttacks();
+            int guestShotsOnGoal = playGame.getGuestShotsOnGoal();
+            int guestCounterAttacks = playGame.getGuestCounterAttacks();
+            int hostBallPossessionInt = (int) hostBallPossession;
+            int guestBallPossessionInt = (int) guestBallPossession;
+            map.addAttribute("gameCommentary", gameCommentaryList);
 
-        //tu naglowek, nazwy druzyn i wynik
-        String hostClubName = hostClub.getClubName();
-        String guestClubName = guestClub.getClubName();
-        Integer hostClubScore = playGame.getHostScore();
-        Integer guestClubScore = playGame.getGuestScore();
-        m.addAttribute("hostBallPossession", hostBallPossessionInt);
-        m.addAttribute("hostCounterAttacks", hostCounterAttacks);
-        m.addAttribute("hostShotsOnGoal", hostShotsOnGoal);
-        m.addAttribute("guestBallPossession", guestBallPossessionInt);
-        m.addAttribute("guestShotsOnGoal", guestShotsOnGoal);
-        m.addAttribute("guestCounterAttacks", guestCounterAttacks);
-        m.addAttribute("gamecommentary", gameCommentaryList);
-        m.addAttribute("clubId", clubId);
+            //tu naglowek, nazwy druzyn i wynik
+            String hostClubName = hostClub.getClubName();
+            String guestClubName = guestClub.getClubName();
+            Integer hostClubScore = playGame.getHostScore();
+            Integer guestClubScore = playGame.getGuestScore();
+            m.addAttribute("hostBallPossession", hostBallPossessionInt);
+            m.addAttribute("hostCounterAttacks", hostCounterAttacks);
+            m.addAttribute("hostShotsOnGoal", hostShotsOnGoal);
+            m.addAttribute("guestBallPossession", guestBallPossessionInt);
+            m.addAttribute("guestShotsOnGoal", guestShotsOnGoal);
+            m.addAttribute("guestCounterAttacks", guestCounterAttacks);
+            m.addAttribute("gamecommentary", gameCommentaryList);
+            m.addAttribute("clubId", clubId);
+            m.addAttribute("appusertimestamp", appusertimestamp);
+            m.addAttribute("hostClubName", hostClubName);
+            m.addAttribute("guestClubName", guestClubName);
+            m.addAttribute("hostClubScore", hostClubScore);
+            m.addAttribute("guestClubScore", guestClubScore);
+
+            return "gameview";
+        } else {
+            if (squadError.equals("host>11") || squadError.equals("host<8")) {
+                m.addAttribute("errors", errors);
+                m.addAttribute("players", this.playerRepository.findAllByPlayerClub(hostClub));
+                m.addAttribute("clubId", hostClub.getClubId());
+                m.addAttribute("clubName", hostClub.getClubName());
+            } else {
+                m.addAttribute("errors", errors);
+                m.addAttribute("players", this.playerRepository.findAllByPlayerClub(guestClub));
+                m.addAttribute("clubId", guestClub.getClubId());
+                m.addAttribute("clubName", guestClub.getClubName());
+            }
+        }
         m.addAttribute("appusertimestamp", appusertimestamp);
-        m.addAttribute("hostClubName", hostClubName);
-        m.addAttribute("guestClubName", guestClubName);
-        m.addAttribute("hostClubScore", hostClubScore);
-        m.addAttribute("guestClubScore", guestClubScore);
-
-        return "gameview";
+        m.addAttribute("botUser", botUser);
+        return "players";
     }
+
 
     @PostMapping("/playleagueround")
     public String playLeagueRound(long leagueId, String appusertimestamp, Model model) throws InterruptedException {
@@ -198,8 +228,32 @@ public class GameController {
         if (errors.isEmpty()) {
             for (Game g : rounds.get(roundToPlay - 1)
             ) {
-                this.gameService.handleGameEngine(g);
-                this.gameRepository.save(g);
+                Club hostClub = g.getHostClub();
+                Club guestClub = g.getGuestClub();
+                List<Player> hostFirsSquadPlayers = g.getHostClub().getClubFirst11();
+                List<Player> guestFirsSquadPlayers = g.getGuestClub().getClubFirst11();
+                String squadError = this.gameService.checkFirstSquadNumbers(errors, hostFirsSquadPlayers, guestFirsSquadPlayers);
+                if (errors.isEmpty()) {
+                    this.gameService.handleGameEngine(g);
+                    this.gameRepository.save(g);
+                } else {
+                    if (squadError.equals("host>11") || squadError.equals("host<8")) {
+                        model.addAttribute("errors", errors);
+                        model.addAttribute("players", this.playerRepository.findAllByPlayerClub(hostClub));
+                        model.addAttribute("clubId", hostClub.getClubId());
+                        model.addAttribute("clubName", hostClub.getClubName());
+                    } else {
+                        model.addAttribute("errors", errors);
+                        model.addAttribute("players", this.playerRepository.findAllByPlayerClub(guestClub));
+                        model.addAttribute("clubId", guestClub.getClubId());
+                        model.addAttribute("clubName", guestClub.getClubName());
+                    }
+                //tutaj zakladamy ze nie jest to botUser, bo First11 w botach ustawia komp(na przyszlosc)
+                    boolean botUser =false;
+                    model.addAttribute("appusertimestamp", appusertimestamp);
+                    model.addAttribute("botUser", botUser);
+                    return "players";
+                }
             }
             leagueSortedByPointsAndGoalsDiff = this.clubService.sortingByPointsAndGoalsDiff(leagueId);
             List<Game> leagueGames = league.getLeagueAllGames();
@@ -219,7 +273,6 @@ public class GameController {
         String test = appusertimestamp;
         model.addAttribute("appusertimestamp", appusertimestamp);
         model.addAttribute("clubId", clubId);
-
         return "test";
     }
 }
