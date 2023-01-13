@@ -83,6 +83,7 @@ public class GameController {
         String guestClubName = this.gameRepository.findById(gameId).getGuestClub().getClubName();
         Integer hostClubScore = playGame.getHostScore();
         Integer guestClubScore = playGame.getGuestScore();
+        m.addAttribute("playgame",playGame);
         m.addAttribute("hostBallPossession", hostBallPossessionInt);
         m.addAttribute("hostCounterAttacks", hostCounterAttacks);
         m.addAttribute("hostShotsOnGoal", hostShotsOnGoal);
@@ -168,6 +169,7 @@ public class GameController {
             String guestClubName = guestClub.getClubName();
             Integer hostClubScore = playGame.getHostScore();
             Integer guestClubScore = playGame.getGuestScore();
+            m.addAttribute("playgame", playGame);
             m.addAttribute("hostBallPossession", hostBallPossessionInt);
             m.addAttribute("hostCounterAttacks", hostCounterAttacks);
             m.addAttribute("hostShotsOnGoal", hostShotsOnGoal);
@@ -230,8 +232,8 @@ public class GameController {
             ) {
                 Club hostClub = g.getHostClub();
                 Club guestClub = g.getGuestClub();
-                List<Player> hostFirsSquadPlayers = g.getHostClub().getClubFirst11();
-                List<Player> guestFirsSquadPlayers = g.getGuestClub().getClubFirst11();
+                List<Player> hostFirsSquadPlayers = this.clubService.findFirst11Players(hostClub);
+                List<Player> guestFirsSquadPlayers = this.clubService.findFirst11Players(guestClub);
                 String squadError = this.gameService.checkFirstSquadNumbers(errors, hostFirsSquadPlayers, guestFirsSquadPlayers);
                 if (errors.isEmpty()) {
                     this.gameService.handleGameEngine(g);

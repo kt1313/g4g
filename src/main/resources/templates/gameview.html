@@ -87,7 +87,7 @@
             <td th:id="guestClubName" th:text="${guestClubName}"/>
         </tr>
         <tr>
-            <td th:id="${hostBallPossession}" th:text="${hostBallPossession+' '}"></td>
+            <td th:id="${hostBallPossession}" th:text="${playgame.getHostBallPossession()+' '}"></td>
             <td></td>
             <td></td>
             <td></td>
@@ -95,7 +95,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td th:id="${guestBallPossession}" th:text="${guestBallPossession+' '}"/>
+            <td th:id="${guestBallPossession}" th:text="${playgame.getGuestBallPossession()+' '}"/>
         </tr>
         <tr>
             <td th:id="${hostShotsOnGoal}" th:text="${hostShotsOnGoal}"></td>

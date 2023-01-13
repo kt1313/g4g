@@ -276,8 +276,6 @@ public class GameService {
             double defPartDouble = ((this.clubService.getClubFirst11Values(guestClub).get(1) / sumAttackDefence) * 100);
             int defPart = (int) defPartDouble;
             int succeed = random.nextInt(100) + 1;
-//                System.out.println("MatchServ, attackSucceedOverDef, random:"+succeed+" attackPart: "
-//                        + attackPart+" defPart: "+defPart);
             if (succeed <= attackPart) {
                 attackSucceed = true;
             } else {
@@ -336,16 +334,8 @@ public class GameService {
     public void goalEvent(Game playGame, Club club) {
         // wez z kontrollera
         List<Integer> matchScore = new ArrayList<>();
-
-//        Optional<Game> gameOptional = this.gameRepository.findFirstByInProgress(Boolean.TRUE);
-//        Game game = new Game();
-//        if (gameOptional.isPresent()) {
-//            game = gameOptional.get();
-//        }
-
         Club hostClub = playGame.getGameClubs().get(0);
         Club guestClub = playGame.getGameClubs().get(1);
-//tu jest porownywany Optional do Club.......
         if ((club.getClubId()) == (hostClub.getClubId())) {
             playGame.setHostScore(playGame.getHostScore() + 1);
             System.out.println("Match score: Gospodarze: " + playGame.getHostScore() + " Goście: " + playGame.getGuestScore());
@@ -396,25 +386,12 @@ public class GameService {
             Game game=rounds.get(i).get(0);
             GameStatus gameStatus=game.getGameStatus();
             if (!game.isGamePlayed())
-//            if (gameStatus.equals(GameStatus.NOTPLAYED))
             {
                 roundToPlay = i + 1;
                 break;
             }
         }
-//        for (int r : leagueRounds
-//        ) {
-//            for (Game g : allByLeagueId
-//            ) {
-//                if (g.getGameStatus().equals(GameStatus.NOTPLAYED)) {
-//                    roundToPlay = r;
-//                    gamesToPlay.add(g);
-//                    if (gamesToPlay.size() > 3) {
-//                        break;
-//                    }
-//                }
-//            }
-//        }
+
         return roundToPlay;
     }
 
