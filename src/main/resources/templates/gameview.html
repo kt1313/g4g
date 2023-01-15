@@ -72,11 +72,11 @@
                    value="Back to Club"/>
         </form>
 
-        <thead style="margin-left:auto;margin-right:auto;">
+        <thead style="text-align: center">
         <h3>Game Stats</h3>
         </thead>
         <tr>
-            <td th:id="hostClubName" th:text="${hostClubName} "/>
+            <td style="text-align: center" th:text="${hostClubName} "/>
             <td></td>
             <td></td>
             <td></td>
@@ -84,10 +84,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td th:id="guestClubName" th:text="${guestClubName}"/>
+            <td style="text-align: center" th:id="guestClubName" th:text="${guestClubName}"/>
         </tr>
         <tr>
-            <td th:id="${hostBallPossession}" th:text="${playgame.getHostBallPossession()+' '}"></td>
+            <td th:align="center" th:id="${hostBallPossession}" th:text="${playgame.getHostBallPossession()+' '}"></td>
             <td></td>
             <td></td>
             <td></td>
@@ -95,10 +95,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td th:id="${guestBallPossession}" th:text="${playgame.getGuestBallPossession()+' '}"/>
+            <td style="text-align: center" th:id="${guestBallPossession}" th:text="${playgame.getGuestBallPossession()+' '}"/>
         </tr>
         <tr>
-            <td th:id="${hostShotsOnGoal}" th:text="${hostShotsOnGoal}"></td>
+            <td style="text-align: center" th:id="${hostShotsOnGoal}" th:text="${hostShotsOnGoal}"></td>
             <td></td>
             <td></td>
             <td></td>
@@ -106,11 +106,11 @@
             <td></td>
             <td></td>
             <td></td>
-            <td th:id="${guestShotsOnGoal}" th:text="${guestShotsOnGoal}"/>
+            <td style="text-align: center" th:id="${guestShotsOnGoal}" th:text="${guestShotsOnGoal}"/>
         </tr>
         <tr>
         <tr>
-            <td th:id="${hostCounterAttacks}" th:text="${hostCounterAttacks}"></td>
+            <td style="text-align: center" th:id="${hostCounterAttacks}" th:text="${hostCounterAttacks}"></td>
             <td></td>
             <td></td>
             <td></td>
@@ -118,7 +118,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td th:id="${guestCounterAttacks}" th:text="${guestCounterAttacks}"/>
+            <td style="text-align: center" th:id="${guestCounterAttacks}" th:text="${guestCounterAttacks}"/>
         </tr>
         <tr>
         </tr>

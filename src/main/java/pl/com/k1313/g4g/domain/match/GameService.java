@@ -92,6 +92,11 @@ public class GameService {
                 playGame.setInProgress(false);
                 playGame.setGamePlayed(true);
                 playGame.setGameStatus(GameStatus.PLAYED);
+                double sumBallPoss= (playGame.getHostBallPossession()+playGame.getGuestBallPossession());
+                double hostBallControllPercentage=playGame.getHostBallPossession()/sumBallPoss;
+                       ;
+                playGame.setHostBallPossession((int)(hostBallControllPercentage*100));
+                playGame.setGuestBallPossession((int)(100-hostBallControllPercentage*100));
                 this.gameRepository.save(playGame);
             }
         }
