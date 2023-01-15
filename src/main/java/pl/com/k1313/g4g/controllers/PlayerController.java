@@ -9,12 +9,14 @@ import pl.com.k1313.g4g.domain.appuser.AppUserRepository;
 import pl.com.k1313.g4g.domain.club.Club;
 import pl.com.k1313.g4g.domain.club.ClubRepository;
 import pl.com.k1313.g4g.domain.player.Player;
+import pl.com.k1313.g4g.domain.player.PlayerPosition;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 import pl.com.k1313.g4g.domain.player.PlayerService;
 import pl.com.k1313.g4g.domain.player.dto.PlayerUpdateDTO;
 import pl.com.k1313.g4g.domain.club.ClubService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/players")
@@ -114,8 +116,85 @@ boolean botUser=!teamUser.equals(this.appUserRepository.findByTimeStampAppUser(a
         this.playerRepository.save(p);
         return "redirect:/players";
     }
+//obsluga auto ustawienia first11
+@PostMapping("/autofirst11")
+    public String handleAutoSetUpFirst11(long clubId, Model model){
+        List <Player>firstsquadplayers=this.playerService.autoSetUpFirst11(clubId);
+    Optional<Player> goalkeeper = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.GK))
+            .findFirst();
+    goalkeeper.ifPresent(p -> model.addAttribute("goalkeeper", goalkeeper));
+    System.out.println("goalkeeper" + goalkeeper);
 
+    Optional<Player> rightWingback = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RWB))
+            .findFirst();
+    rightWingback.ifPresent(p -> model.addAttribute("rightWingback", rightWingback));
+    System.out.println("rightWingback" + rightWingback);
 
+    Optional<Player> rightCentreback = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RCB))
+            .findFirst();
+    rightCentreback.ifPresent(p -> model.addAttribute("rightCentreback", rightCentreback));
+
+    Optional<Player> centreback = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CB))
+            .findFirst();
+    centreback.ifPresent(p -> model.addAttribute("centreback", centreback));
+
+    Optional<Player> leftCentreback = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LCB))
+            .findFirst();
+    leftCentreback.ifPresent(p -> model.addAttribute("leftCentreback", leftCentreback));
+
+    Optional<Player> leftWingback = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LWB))
+            .findFirst();
+    leftWingback.ifPresent(p -> model.addAttribute("leftWingback", leftWingback));
+
+    Optional<Player> rightWinger = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RW))
+            .findFirst();
+    rightWinger.ifPresent(p -> model.addAttribute("rightWinger", rightWinger));
+
+    Optional<Player> centreMidDef = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CMD))
+            .findFirst();
+    centreMidDef.ifPresent(p -> model.addAttribute("centreMidDef", centreMidDef));
+
+    Optional<Player> centreMid = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CM))
+            .findFirst();
+    centreMid.ifPresent(p -> model.addAttribute("centreMid", centreMid));
+
+    Optional<Player> centreMidAtt = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CMA))
+            .findFirst();
+    centreMidAtt.ifPresent(p -> model.addAttribute("centreMidAtt", centreMidAtt));
+
+    Optional<Player> leftWinger = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LW))
+            .findFirst();
+    leftWinger.ifPresent(p -> model.addAttribute("leftWinger", leftWinger));
+
+    Optional<Player> leftForward = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.LF))
+            .findFirst();
+    leftForward.ifPresent(p -> model.addAttribute("leftForward", leftForward));
+
+    Optional<Player> centreForward = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.CF))
+            .findFirst();
+    centreForward.ifPresent(p -> model.addAttribute("centreForward", centreForward));
+
+    Optional<Player> rightForward = firstsquadplayers.stream()
+            .filter(p -> p.getPlayerPosition().equals(PlayerPosition.RF))
+            .findFirst();
+    rightForward.ifPresent(p -> model.addAttribute("rightForward", rightForward));
+
+    model.addAttribute("firstsquadplayers", firstsquadplayers);
+    return "firstsquadplayers";
+}
     //unit test done-  working
     //obsluga powolan do 11
     //pobiera wszystkie checkboxy o nazwie firstsquadplayer i sprawdza czy tickniete

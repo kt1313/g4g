@@ -202,7 +202,7 @@ public class PlayerService {
         List<Integer> indexPosOfPlayers = new ArrayList<>();
         for (long i : idsLongList
         ) {
-            Player player=this.playerRepository.findById(i);
+            Player player = this.playerRepository.findById(i);
             playerByIdsList.add(player);
             indexPosOfPlayers.add(allClubPlayers.indexOf(player));
             stringPlayerPositionList.add(stringPlayerPos.get(allClubPlayers.indexOf(player)));
@@ -234,5 +234,66 @@ public class PlayerService {
             playerByIdsList.get(i).setFirstSquadPlayer(true);
             this.playerRepository.save(playerByIdsList.get(i));
         }
+    }
+//automatycznie wyznacza First11 (na razie zastosowany do buttonu u AppUsera tylko)
+    public List<Player> autoSetUpFirst11(long clubId) {
+        Club club = this.clubRepository.findByClubId(clubId);
+        List<String> sortPlayersByString = new ArrayList<>(List.of("goalkeeping", "interception", "ballcontrol", "attacking"));
+        List<Player> allClubPlayers = this.playerRepository.findAllByPlayerClub(club);
+        List<Player> playersWithoutPosition=new ArrayList<>();
+        //czysci Position i First11
+        for (Player player : allClubPlayers
+        ) {
+            player.setFirstSquadPlayer(false);
+            player.setPlayerPosition(PlayerPosition.NoPosition);
+        }
+        for (int i = 0; i < sortPlayersByString.size(); i++) {
+            sortPlayersBy(sortPlayersByString.get(i), allClubPlayers);
+            switch (sortPlayersByString.get(i)) {
+                case "goalkeeping":
+                    allClubPlayers.get(0).setPlayerPosition(PlayerPosition.GK);
+                    allClubPlayers.get(0).setFirstSquadPlayer(true);
+                    break;
+                case "interception":
+                     playersWithoutPosition=
+                            allClubPlayers.stream().filter(player -> player.getPlayerPosition().equals(PlayerPosition.NoPosition)).collect(Collectors.toList());
+                    playersWithoutPosition.get(0).setPlayerPosition(PlayerPosition.LCB);
+                    playersWithoutPosition.get(0).setFirstSquadPlayer(true);
+                    playersWithoutPosition.get(1).setPlayerPosition(PlayerPosition.RCB);
+                    playersWithoutPosition.get(1).setFirstSquadPlayer(true);
+                    playersWithoutPosition.get(2).setPlayerPosition(PlayerPosition.CB);
+                    playersWithoutPosition.get(2).setFirstSquadPlayer(true);
+                    break;
+                case "ballcontrol":
+                     playersWithoutPosition=
+                            allClubPlayers.stream().filter(player -> player.getPlayerPosition().equals(PlayerPosition.NoPosition)).collect(Collectors.toList());
+                    playersWithoutPosition.get(0).setPlayerPosition(PlayerPosition.CM);
+                    playersWithoutPosition.get(0).setFirstSquadPlayer(true);
+                    playersWithoutPosition.get(1).setPlayerPosition(PlayerPosition.CMD);
+                    playersWithoutPosition.get(1).setFirstSquadPlayer(true);
+                    playersWithoutPosition.get(2).setPlayerPosition(PlayerPosition.CMA);
+                    playersWithoutPosition.get(2).setFirstSquadPlayer(true);
+                    playersWithoutPosition.get(3).setPlayerPosition(PlayerPosition.LW);
+                    playersWithoutPosition.get(3).setFirstSquadPlayer(true);
+                    playersWithoutPosition.get(4).setPlayerPosition(PlayerPosition.RW);
+                    playersWithoutPosition.get(4).setFirstSquadPlayer(true);
+                    break;
+                case "attacking":
+                    playersWithoutPosition=
+                            allClubPlayers.stream().filter(player -> player.getPlayerPosition().equals(PlayerPosition.NoPosition)).collect(Collectors.toList());
+                    playersWithoutPosition.get(0).setPlayerPosition(PlayerPosition.RF);
+                    playersWithoutPosition.get(0).setFirstSquadPlayer(true);
+                    playersWithoutPosition.get(1).setPlayerPosition(PlayerPosition.LF);
+                    playersWithoutPosition.get(1).setFirstSquadPlayer(true);
+                    break;
+            }
+        }
+        for (Player p:this.playerRepository.findAllByPlayerClub(club)
+                .stream().filter(player -> player.isFirstSquadPlayer()).collect(Collectors.toList())
+             ) {
+            this.playerRepository.save(p);
+        }
+        return this.playerRepository.findAllByPlayerClub(club)
+                .stream().filter(player -> player.isFirstSquadPlayer()).collect(Collectors.toList());
     }
 }

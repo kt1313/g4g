@@ -130,6 +130,16 @@
                            value="Back to Club"/>
                 </form>
             </td>
+            <td>
+                <form th:action="@{/players/autofirst11}" method="post">
+                    <input type="hidden" th:value="${clubId}" th:name="clubId">
+<!--                    <input type="hidden" th:value="${appusertimestamp}"-->
+<!--                           th:name="appusertimestamp">-->
+<!--                    <input type="hidden" th:value="backclub" th:name="backclub">-->
+                    <input type="submit" class="btn-primary" style="background-color: #0040ff"
+                           value="Auto SetUp First11"/>
+                </form>
+            </td>
         </tr>
     </table>
 </div>
