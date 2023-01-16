@@ -11,6 +11,7 @@ import pl.com.k1313.g4g.domain.player.PlayerPosition;
 import pl.com.k1313.g4g.domain.player.PlayerRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -36,7 +37,7 @@ public class GameService {
     }
 
     //    cały mecz event po evencie z komentarzami
-    public List< String> handleGameEngine(Game playGame) throws InterruptedException {
+    public List<String> handleGameEngine(Game playGame) throws InterruptedException {
         playGame.setInProgress(true);
         Club hostClub = playGame.getGameClubs().get(0);
         Club guestClub = playGame.getGameClubs().get(1);
@@ -49,54 +50,61 @@ public class GameService {
         Integer gameMinute = 0;
 
         TreeMap<Integer, String> gameCommentaryMap = new TreeMap<>();
-        while (gameMinute<91) {
+        while (gameMinute < 91) {
             gameMinute++;
             Thread.sleep(10);
             clubAttacking = clubWithGreaterBallPossesion(hostClub, guestClub);
             if (clubAttacking.equals(hostClub)) {
                 clubDefending = guestClub;
-                playGame.setHostBallPossession(playGame.getHostBallPossession()+1);
+                playGame.setHostBallPossession(playGame.getHostBallPossession() + 1);
             } else {
                 clubDefending = hostClub;
-                playGame.setGuestBallPossession(playGame.getGuestBallPossession()+1);
+                playGame.setGuestBallPossession(playGame.getGuestBallPossession() + 1);
             }
 //            komentarz o posiadaniu pilki, niech losuje tylko co...czwarty event(wiekszy od 3)
-            int ran=randomPickUpCommentary();
+            int ran = randomPickUpCommentary();
             if (ran > 3) {
-                gameCommentary(clubAttacking, playGame,1, gameCommentaryMap, gameMinute);
+                gameCommentary(clubAttacking, playGame, 1, gameCommentaryMap, gameMinute);
 
-            if (opportunitySucceed()) {
-                //komentarz o zawiązaniu akcji
-                gameCommentary(clubAttacking, playGame,2, gameCommentaryMap, gameMinute);
-                //to poniżej jako jedna metoda, bo zastosowanie też do kontrataku
-                opportunityEvent(clubAttacking, clubDefending, playGame, gameCommentaryMap, gameMinute);
-            } else {
+                if (opportunitySucceed()) {
+                    //komentarz o zawiązaniu akcji
+                    gameCommentary(clubAttacking, playGame, 2, gameCommentaryMap, gameMinute);
+                    //to poniżej jako jedna metoda, bo zastosowanie też do kontrataku
+                    opportunityEvent(clubAttacking, clubDefending, playGame, gameCommentaryMap, gameMinute);
+                } else {
 //                //jesli uda się kontra to wtedy niech sprawdzi szansę na bramkę(opportunityEvent)
 //                wazne!!!-------------wazne!!!
 //                //wrzucimy sztucznie/tymczasowo  poziom kontrataku
-                int teamCA = 30;
-                if (randomCAChance(teamCA)) {
-                    //komentarz o przejęciu piłki i kontrze
-                    gameCommentary(clubDefending, playGame,3, gameCommentaryMap, gameMinute);
-                    if (clubDefending.equals(playGame.getHostClub()))
-                    {playGame.setHostCounterAttacks(playGame.getHostCounterAttacks()+1);
-                    playGame.setHostBallPossession(playGame.getHostBallPossession()+1);}
-                    else{playGame.setGuestCounterAttacks(playGame.getGuestCounterAttacks()+1);
-                    playGame.setGuestBallPossession(playGame.getGuestBallPossession()+1);}
-                    //TUTAJ UWAGA: celowo zamiana teamInDefence z teamOnOpportunity, bo teraz
-                    //broniący sie atakują
-                    opportunityEvent(clubDefending, clubAttacking, playGame, gameCommentaryMap, gameMinute);
+                    int teamCA = 30;
+                    if (randomCAChance(teamCA)) {
+                        //komentarz o przejęciu piłki i kontrze
+                        gameCommentary(clubDefending, playGame, 3, gameCommentaryMap, gameMinute);
+                        if (clubDefending.equals(playGame.getHostClub())) {
+                            playGame.setHostCounterAttacks(playGame.getHostCounterAttacks() + 1);
+                            playGame.setHostBallPossession(playGame.getHostBallPossession() + 1);
+                        } else {
+                            playGame.setGuestCounterAttacks(playGame.getGuestCounterAttacks() + 1);
+                            playGame.setGuestBallPossession(playGame.getGuestBallPossession() + 1);
+                        }
+                        //TUTAJ UWAGA: celowo zamiana teamInDefence z teamOnOpportunity, bo teraz
+                        //broniący sie atakują
+                        opportunityEvent(clubDefending, clubAttacking, playGame, gameCommentaryMap, gameMinute);
+                    }
                 }
-            }}
+            }
             if (gameMinute > 90) {
                 playGame.setInProgress(false);
                 playGame.setGamePlayed(true);
                 playGame.setGameStatus(GameStatus.PLAYED);
-                double sumBallPoss= (playGame.getHostBallPossession()+playGame.getGuestBallPossession());
-                double hostBallControllPercentage=playGame.getHostBallPossession()/sumBallPoss;
-                       ;
-                playGame.setHostBallPossession((int)(hostBallControllPercentage*100));
-                playGame.setGuestBallPossession((int)(100-hostBallControllPercentage*100));
+                double sumBallPoss = (playGame.getHostBallPossession() + playGame.getGuestBallPossession());
+                double hostBallControllPercentage = playGame.getHostBallPossession() / sumBallPoss;
+                double guestBallControllPercentage = playGame.getGuestBallPossession() / sumBallPoss;
+
+                playGame.setHostBallPossession((int) (hostBallControllPercentage * 100));
+                if (hostBallControllPercentage + guestBallControllPercentage < 100) {
+                    guestBallControllPercentage = +1;
+                }
+                playGame.setGuestBallPossession((int) (guestBallControllPercentage * 100));
                 this.gameRepository.save(playGame);
             }
         }
@@ -105,10 +113,10 @@ public class GameService {
         System.out.println("Koniec. Wynik meczu: " + playGame.getHostScore() + " : " + playGame.getGuestScore());
         updateClubsValuesAfterGames(hostClub, guestClub, playGame);
         //teraz z Map zrob List, dodaj minute do commentary
-        List<String> commentaryList=new ArrayList<>();
-        for (Integer minute: gameCommentaryMap.keySet()
-             ) {
-            String commentary=gameCommentaryMap.get(minute);
+        List<String> commentaryList = new ArrayList<>();
+        for (Integer minute : gameCommentaryMap.keySet()
+        ) {
+            String commentary = gameCommentaryMap.get(minute);
             commentaryList.add(commentary);
         }
         playGame.setGameCommentaryList(commentaryList);
@@ -187,23 +195,23 @@ public class GameService {
     private void gameCommentary(Club club, Game playGame, int typeOfCommentary, Map<Integer,
             String> gameCommmentaryList, int gameMinute) {
         Random random = new Random();
-        List<String> ballPossesionCommentaryList=new ArrayList<>(List.of("min. Uwijają się jak mrówki i wygrali walkę o piłkę w środku pola piłkarze ",
+        List<String> ballPossesionCommentaryList = new ArrayList<>(List.of("min. Uwijają się jak mrówki i wygrali walkę o piłkę w środku pola piłkarze ",
                 "min. Dwoją się i troją na boisku, a może to już mi sie dwoi i troi w oczach, ale nie! Przejęli piłkę ",
                 "min. Ale to pograli! Czapki z głów za grę w środku pola dla ",
                 "min. Czuć moc w nogach. Dzielą i rządzą na boisku zawodnicy ",
                 "min. Im dłużej my przy piłce, tym krócej oni - wprowadzają w grę tę maksymę piłkarze "));
-        List<String> chanceCreationCommentaryList=new ArrayList<>(List.of("min. Ruszył teraz na przeciwnika z balem przy nodze grajek zespołu ",
+        List<String> chanceCreationCommentaryList = new ArrayList<>(List.of("min. Ruszył teraz na przeciwnika z balem przy nodze grajek zespołu ",
                 "min. Minął jednego, dwóch, trzech...! O Hegemonie futbolu! Ma przed sobą tylko bramkarza piłkarz  ",
                 "min. I znów okazja! Grają, jakby się nażarli surowego mięsa zawodnicy ",
                 "min. Obrońcy mają nogi ciężkie jak z waty, a wiatr niesie atakujących ",
                 "min. To skoro było tak dobrze, to dlaczego było tak źle? - zastanawiają sie obrońcy, bo z akcją sunie ",
                 "min. Próbują w obronie często zmieniać pozycje, ale nie mogą zadowolić trenera, a tymczasem z kolejnym atakiem sunie "));
-        List<String> counterAttackCommentaryList=new ArrayList<>(List.of("min. Oni są jak stal, nieugięci w obronie. Odbiór i mkną z kontrą jak torpeda zawodnicy ",
+        List<String> counterAttackCommentaryList = new ArrayList<>(List.of("min. Oni są jak stal, nieugięci w obronie. Odbiór i mkną z kontrą jak torpeda zawodnicy ",
                 "min. Środkowy obrońca gra dziś czołowe skrzypce: odbiór i kontra ",
                 "min. Asysta pomocnika, to taka truskawka na torcie... wgnieciona, bo po odbiorze rusza akcja ",
                 "min. To nie był błąd piłkarza, to był błąd murawy. Za to mają teraz szansę ",
                 "min. Trener przeciwników rozkłada ręce trzymając się za głowę, bo jest strata i będzie szansa dla "));
-        List<String> goalCommentaryList=new ArrayList<>(List.of("min. Gooooooooooooooooooool!!!! Stadiony świata!!! Bramka dla ",
+        List<String> goalCommentaryList = new ArrayList<>(List.of("min. Gooooooooooooooooooool!!!! Stadiony świata!!! Bramka dla ",
                 "min. To już ostatnie sekundy zdaje mu się ... szuka szczęścia między nogami bramkarza... Trafił!!! ",
                 "min. Aj, Jezus Maria!! a jednak nie! Jeeeeeeest! Bramka dla ",
                 "min. Teraz! Teraz! Teraz! Aaaaaaa, jeeeeeest, jest, jest, jest!! Gol dla ",
@@ -228,16 +236,16 @@ public class GameService {
             case 3:
                 String commentaryCA1 = gameMinute
                         + counterAttackCommentaryList.get(random.nextInt(counterAttackCommentaryList.size()))
-                        + club.getClubName() +"\r\n";
+                        + club.getClubName() + "\r\n";
                 System.out.println(commentaryCA1);
                 gameCommmentaryList.put(gameMinute, commentaryCA1);
                 break;
             case 4:
                 String commentaryGoal1 = gameMinute
                         + goalCommentaryList.get(random.nextInt(goalCommentaryList.size()))
-                        + club.getClubName()+" "
-                        + playGame.getHostScore()+"-"
-                        +playGame.getGuestScore()+ "\r\n";
+                        + club.getClubName() + " "
+                        + playGame.getHostScore() + "-"
+                        + playGame.getGuestScore() + "\r\n";
                 System.out.println(commentaryGoal1);
                 gameCommmentaryList.put(gameMinute, commentaryGoal1);
                 break;
@@ -253,14 +261,17 @@ public class GameService {
         Club guestClub = playGame.getGameClubs().get(1);
         List<Club> clubsList = new ArrayList<>(List.of(hostClub, guestClub));
         if (attackSucceedOverDefence(clubAttacking, playGame)) {
-            if (clubAttacking.equals(playGame.getHostClub())){playGame.setHostShotsOnGoal(playGame.getHostShotsOnGoal()+1);}
-            else{playGame.setGuestShotsOnGoal(playGame.getGuestShotsOnGoal()+1);}
+            if (clubAttacking.equals(playGame.getHostClub())) {
+                playGame.setHostShotsOnGoal(playGame.getHostShotsOnGoal() + 1);
+            } else {
+                playGame.setGuestShotsOnGoal(playGame.getGuestShotsOnGoal() + 1);
+            }
 //                System.out.println("MatchServ, opportunityEvent, aatackSucceedOverDef ");
             int forwarderAttack = getForwarderAttack(clubAttacking, hostClub, guestClub);
             int goalkeeperSkill = this.clubService.getClubFirst11Values(clubDefending).get(0);
             if (forwardScoresVsGoalkeeper(goalkeeperSkill, forwarderAttack)) {
                 goalEvent(playGame, clubAttacking);
-                gameCommentary(clubAttacking, playGame,4, gameCommentaryList, gameMinute);
+                gameCommentary(clubAttacking, playGame, 4, gameCommentaryList, gameMinute);
                 //i tu odsieżyc wynik na stronie/ po kazdym evencie
                 //i dodac methodMatchCommentary()
             }
@@ -388,10 +399,9 @@ public class GameService {
         int roundToPlay = 0;
 
         for (int i = 0; i < leagueRounds.size(); i++) {
-            Game game=rounds.get(i).get(0);
-            GameStatus gameStatus=game.getGameStatus();
-            if (!game.isGamePlayed())
-            {
+            Game game = rounds.get(i).get(0);
+            GameStatus gameStatus = game.getGameStatus();
+            if (!game.isGamePlayed()) {
                 roundToPlay = i + 1;
                 break;
             }
@@ -399,11 +409,11 @@ public class GameService {
 
         return roundToPlay;
     }
-
-    public String checkFirstSquadNumbers(List<String> errors,
-                                         List<Player> hostFirsSquadPlayers,
-                                         List<Player> guestFirsSquadPlayers) {
-       String squadError="";
+//sprawdza czy sklady maja min8 i max 11 zawodnikow i czy jest bramkarz i napastnik
+    public String checkFirstSquad(List<String> errors,
+                                  List<Player> hostFirsSquadPlayers,
+                                  List<Player> guestFirsSquadPlayers) {
+        String squadError = "";
         if (hostFirsSquadPlayers.size() > 11) {
             squadError = "host>11";
         } else if (hostFirsSquadPlayers.size() < 8) {
@@ -412,7 +422,28 @@ public class GameService {
             squadError = "guest>11";
         } else if (guestFirsSquadPlayers.size() < 8) {
             squadError = "guest<8";
+        } else if (hostFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.GK)).collect(Collectors.toList()).isEmpty()){
+            squadError="hostNoGoalkeeper";
+        }else if (hostFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.LF)).collect(Collectors.toList()).isEmpty()
+        ||hostFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.CF)).collect(Collectors.toList()).isEmpty()
+        ||hostFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.RF)).collect(Collectors.toList()).isEmpty()) {
+            squadError = "hostNoForward";
+        } else if (guestFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.GK)).collect(Collectors.toList()).isEmpty()){
+            squadError="guestNoGoalkeeper";
+        }else if (guestFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.LF)).collect(Collectors.toList()).isEmpty()
+                ||guestFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.CF)).collect(Collectors.toList()).isEmpty()
+                ||guestFirsSquadPlayers.stream()
+                .filter(player -> player.getPlayerPosition().equals(PlayerPosition.RF)).collect(Collectors.toList()).isEmpty()) {
+            squadError = "guestNoForward";
         }
+
         switch (squadError) {
             case "host>11":
                 errors.add("Maximum number of players: 11");
@@ -425,6 +456,18 @@ public class GameService {
                 break;
             case "guest<8":
                 errors.add("Minimum number of players: 8");
+                break;
+            case "hostNoGoalkeeper":
+                errors.add("No goalkeeper in the Squad");
+                break;
+            case "hostNoForward":
+                errors.add("No Forward in the Squad");
+                break;
+            case "guestNoGoalkeeper":
+                errors.add("No goalkeeper in the Squad");
+                break;
+            case "guestNoForward":
+                errors.add("No Forward in the Squad");
                 break;
         }
         return squadError;

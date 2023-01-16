@@ -1,6 +1,5 @@
 package pl.com.k1313.g4g.controllers;
 
-import net.bytebuddy.dynamic.DynamicType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,7 +115,7 @@ public class GameController {
         List<Player> hostFirsSquadPlayers = this.clubService.findFirst11Players(hostClub);
         List<Player> guestFirsSquadPlayers = this.clubService.findFirst11Players(guestClub);
         List<String> errors = new ArrayList<>();
-        String squadError = this.gameService.checkFirstSquadNumbers(errors, hostFirsSquadPlayers, guestFirsSquadPlayers);
+        String squadError = this.gameService.checkFirstSquad(errors, hostFirsSquadPlayers, guestFirsSquadPlayers);
 
         if (errors.isEmpty()) {
             List<Club> gameClubs = new ArrayList<>(List.of(hostClub, guestClub));
@@ -234,7 +233,7 @@ public class GameController {
                 Club guestClub = g.getGuestClub();
                 List<Player> hostFirsSquadPlayers = this.clubService.findFirst11Players(hostClub);
                 List<Player> guestFirsSquadPlayers = this.clubService.findFirst11Players(guestClub);
-                String squadError = this.gameService.checkFirstSquadNumbers(errors, hostFirsSquadPlayers, guestFirsSquadPlayers);
+                String squadError = this.gameService.checkFirstSquad(errors, hostFirsSquadPlayers, guestFirsSquadPlayers);
                 if (errors.isEmpty()) {
                     this.gameService.handleGameEngine(g);
                     this.gameRepository.save(g);
