@@ -427,9 +427,9 @@ public class GameService {
             squadError="hostNoGoalkeeper";
         }else if (hostFirsSquadPlayers.stream()
                 .filter(player -> player.getPlayerPosition().equals(PlayerPosition.LF)).collect(Collectors.toList()).isEmpty()
-        ||hostFirsSquadPlayers.stream()
+        &&hostFirsSquadPlayers.stream()
                 .filter(player -> player.getPlayerPosition().equals(PlayerPosition.CF)).collect(Collectors.toList()).isEmpty()
-        ||hostFirsSquadPlayers.stream()
+        &&hostFirsSquadPlayers.stream()
                 .filter(player -> player.getPlayerPosition().equals(PlayerPosition.RF)).collect(Collectors.toList()).isEmpty()) {
             squadError = "hostNoForward";
         } else if (guestFirsSquadPlayers.stream()
@@ -437,9 +437,9 @@ public class GameService {
             squadError="guestNoGoalkeeper";
         }else if (guestFirsSquadPlayers.stream()
                 .filter(player -> player.getPlayerPosition().equals(PlayerPosition.LF)).collect(Collectors.toList()).isEmpty()
-                ||guestFirsSquadPlayers.stream()
+                &&guestFirsSquadPlayers.stream()
                 .filter(player -> player.getPlayerPosition().equals(PlayerPosition.CF)).collect(Collectors.toList()).isEmpty()
-                ||guestFirsSquadPlayers.stream()
+                &&guestFirsSquadPlayers.stream()
                 .filter(player -> player.getPlayerPosition().equals(PlayerPosition.RF)).collect(Collectors.toList()).isEmpty()) {
             squadError = "guestNoForward";
         }
@@ -461,13 +461,13 @@ public class GameService {
                 errors.add("No goalkeeper in the Squad");
                 break;
             case "hostNoForward":
-                errors.add("No Forward in the Squad");
+                errors.add("Host has no Forward in the Squad");
                 break;
             case "guestNoGoalkeeper":
                 errors.add("No goalkeeper in the Squad");
                 break;
             case "guestNoForward":
-                errors.add("No Forward in the Squad");
+                errors.add("Guest has no Forward in the Squad");
                 break;
         }
         return squadError;

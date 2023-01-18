@@ -238,7 +238,7 @@ public class GameController {
                     this.gameService.handleGameEngine(g);
                     this.gameRepository.save(g);
                 } else {
-                    if (squadError.equals("host>11") || squadError.equals("host<8")) {
+                    if (squadError.equals("host>11") || squadError.equals("host<8") || squadError.equals(("Host has no Forward in the Squad"))) {
                         model.addAttribute("errors", errors);
                         model.addAttribute("players", this.playerRepository.findAllByPlayerClub(hostClub));
                         model.addAttribute("clubId", hostClub.getClubId());
