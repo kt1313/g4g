@@ -101,8 +101,8 @@ public class GameService {
                 double guestBallControllPercentage = playGame.getGuestBallPossession() / sumBallPoss;
 
                 playGame.setHostBallPossession((int) (hostBallControllPercentage * 100));
-                if (hostBallControllPercentage + guestBallControllPercentage < 100) {
-                    guestBallControllPercentage = +1;
+                if ((hostBallControllPercentage + guestBallControllPercentage) < 0.99) {
+                    guestBallControllPercentage = 1-hostBallControllPercentage;
                 }
                 playGame.setGuestBallPossession((int) (guestBallControllPercentage * 100));
                 this.gameRepository.save(playGame);
