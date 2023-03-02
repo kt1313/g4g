@@ -14,4 +14,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     AppUser findByAppUserId(long appUserId);
     Optional<AppUser> findByAppUserName(String appusername);
 
+
 }

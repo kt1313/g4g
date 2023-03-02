@@ -26,7 +26,7 @@ public class AppUser {
     private boolean registered = false;
 
 
-    AppUser(long appUserId, String appUserName, String userPassword, String userEmail) {
+    public AppUser(long appUserId, String appUserName, String userPassword, String userEmail) {
         this.appUserId = appUserId;
         this.appUserName = appUserName;
         this.appUserPassword = userPassword;

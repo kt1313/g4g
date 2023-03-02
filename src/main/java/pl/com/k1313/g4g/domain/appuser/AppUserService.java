@@ -44,7 +44,7 @@ public class AppUserService {
         this.leagueService = leagueService;
     }
 
-    public void createAppUser(String appusername, String clubname, String email, String password) {
+    public AppUser createAppUser(String appusername, String clubname, String email, String password) {
 
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
         AppUser appUser = new AppUser(appusername, clubname, email, password, timeStamp);
@@ -69,7 +69,7 @@ public class AppUserService {
         appUser.setClubId(newClub.getClubId());
         this.appUserRepository.save(appUser);
         League newLeague = this.leagueService.createLeague(newClub.getClubId());
-  }
+  return appUser;}
 
     public boolean confirmRegistration(long appUserId) {
 

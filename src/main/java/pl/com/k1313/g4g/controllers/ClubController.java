@@ -62,7 +62,6 @@ public class ClubController {
     @GetMapping("/league/{leagueId}/{appusertimestamp}")
     public String league(@PathVariable long leagueId, @PathVariable String appusertimestamp, Model model) {
         League league = this.leagueRepository.findAllById(leagueId);
-//        List<Game> leagueGames1=this.gameRepository.findAllByLeagueId(leagueId);
         List<Game> leagueGames = league.getLeagueAllGames();
         List<Club> clubsSortedByPointsAndGoalsDiff = this.clubService.sortingByPointsAndGoalsDiff(leagueId);
         List<Integer> leaguerounds = league.getLeagueRound();
@@ -87,7 +86,7 @@ public class ClubController {
         long clubId = Long.parseLong(stringClubId);
         Club club = this.clubRepository.findByClubId(clubId);
         AppUser teamUser=this.appUserRepository.findByClubId(clubId);
-        String teamUserTimeStamp=teamUser.getTimeStampAppUser();
+//        String teamUserTimeStamp=teamUser.getTimeStampAppUser();
         boolean botUser=!teamUser.equals(this.appUserRepository.findByTimeStampAppUser(appusertimestamp));
 
         String clubName=club.getClubName();

@@ -129,30 +129,20 @@ long leagueId=byClubId.getClubLeague().getId();
         }
     }
 
-    //do wykorzystania kiedy user jest zalogowany(??)
-//    @GetMapping("/registration/confirmed/{appUserName}")
-//    public String confirmRegistration(@PathVariable String appUserName, Model model) {
-//        Optional<AppUser> appUser = this.repository.findByAppUserName(appUserName);
-//        long appUserId = appUser.get().getAppUserId();
-//        boolean success = this.appUserService.confirmRegistration(appUserId);
-//        model.addAttribute("success", success);
-//        model.addAttribute("appUserId", this.repository.findByAppUserName(appUserName).get().getAppUserId());
-//        return "/registrationConfirmed";
-//    }
-
     @PostMapping("/login")
     public String loginConfirmed(String appusername, String password, Model model) {
 
         List<String> errors = new ArrayList<>();
         Optional<AppUser> appUser = this.repository.findByAppUserName(appusername);
-        String clubname = appUser.get().getClubname();
+        //tutaj w testach wysypuyje, sprawdz
+//        String clubname = appUser.get().getClubname();
         if (appUser.isEmpty() || !appUser.get().getAppUserPassword().equals(password)) {
             errors.add("Wrong password or username");
         }
         if (errors.isEmpty()) {
             boolean loginsuccess = true;
             model.addAttribute("appusername", appusername);
-            model.addAttribute("clubname", clubname);
+            model.addAttribute("clubname", appUser.get().getClubname());
             model.addAttribute("loginsuccess", loginsuccess);
             return "appuserandclub";
         } else {
